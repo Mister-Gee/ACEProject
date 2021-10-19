@@ -1,3 +1,4 @@
+using ACE.Domain.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -14,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace ACE
 {
@@ -37,6 +40,9 @@ namespace ACE
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ACE", Version = "v1" });
             });
+            services.AddDbContext<ACEContext>(options => options.UseSqlServer(
+                Configuration.GetConnectionString("ACEContext")
+                ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

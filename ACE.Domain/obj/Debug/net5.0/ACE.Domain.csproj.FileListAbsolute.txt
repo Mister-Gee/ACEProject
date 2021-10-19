@@ -1,0 +1,5 @@
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.csproj.AssemblyReference.cache
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.AssemblyInfoInputs.cache
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.AssemblyInfo.cs
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.csproj.CoreCompileInputs.cache

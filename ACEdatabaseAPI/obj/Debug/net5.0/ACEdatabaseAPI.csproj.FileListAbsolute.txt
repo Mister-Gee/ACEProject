@@ -45,3 +45,12 @@ C:\Users\GBENGA FAKUADE\source\repos\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\
 C:\Users\GBENGA FAKUADE\source\repos\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ref\ACEdatabaseAPI.dll
 C:\Users\GBENGA FAKUADE\source\repos\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.pdb
 C:\Users\GBENGA FAKUADE\source\repos\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.genruntimeconfig.cache
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.csproj.AssemblyReference.cache
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.AssemblyInfoInputs.cache
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.AssemblyInfo.cs
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.dll
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ref\ACEdatabaseAPI.dll
+C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Debug\net5.0\ACEdatabaseAPI.pdb
