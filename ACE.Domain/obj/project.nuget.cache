@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "t33DWLvCMtj07TU3KiRfs7F2bQmh8/gRofhzcBD++GELfsoDlfKWiDfIQyZ36aGBbdXqTXwG9ae+R8Ur78Z0fw==",
+  "dgSpecHash": "Qkvb451jIWpcAIQWthOTcjn6z4pNaYAAlChdTJnSzJvplaw96f4cvcAiTNAhjsa7Kw1X4qzWAUb8nkM1i0kX0g==",
   "success": true,
   "projectFilePath": "C:\\Users\\hp\\Desktop\\Projects\\ACE\\ACEProject\\ACE.Domain\\ACE.Domain.csproj",
   "expectedPackageFiles": [
@@ -57,6 +57,7 @@
     "C:\\Users\\hp\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\system.buffers\\4.5.0\\system.buffers.4.5.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",

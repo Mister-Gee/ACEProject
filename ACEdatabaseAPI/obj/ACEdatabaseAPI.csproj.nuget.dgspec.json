@@ -87,6 +87,10 @@
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
               "version": "[6.13.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
             }
           },
           "imports": [
@@ -207,6 +211,10 @@
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
               "version": "[6.13.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
