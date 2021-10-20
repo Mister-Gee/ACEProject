@@ -10,12 +10,13 @@ namespace ACE.Domain.Abstract
     public interface IGenericRepository<T> where T : class
     {
         void Add(T entity);
-        void Remove(T entity);
-
+        void Delete(T entity);
         void Dispose();
+        void Edit(T entity);
 
-        void FindAll(Expression<Func<T, bool>> predicate);
+        IQueryable<T> FindBy(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
+        IQueryable<T> GetAll();
 
-        bool Save();
+        bool Save(string username, string Ip);
     }
 }
