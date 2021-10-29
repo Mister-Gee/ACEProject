@@ -23,8 +23,10 @@ namespace ACEdatabaseAPI.Controllers
         IDepartmentRepo _deptRepo;
         IGenderRepo _genderRepo;
         IProgrammeRepo _progRepo;
+        IStudentCategoryRepo _studentCategoryRepo;
 
-        public ControlledDataController(IReligionRepo religionRepo, IMaritalStatusRepo maritalStatusRepo,
+
+        public ControlledDataController(IReligionRepo religionRepo, IMaritalStatusRepo maritalStatusRepo, IStudentCategoryRepo studentCategoryRepo,
             ILevelRepo levelRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IGenderRepo genderRepo, IProgrammeRepo progRepo)
         {
             _religionRepo = religionRepo;
@@ -34,6 +36,7 @@ namespace ACEdatabaseAPI.Controllers
             _deptRepo = deptRepo;
             _genderRepo = genderRepo;
             _progRepo = progRepo;
+            _studentCategoryRepo = studentCategoryRepo;
         }
 
         [HttpGet]
@@ -151,6 +154,123 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
+
+
+        [HttpGet]
+        [Route("/StudentCategory/All")]
+        public async Task<IActionResult> GetAllStudentCategories()
+        {
+            try
+            {
+                var result = _studentCategoryRepo.GetAll().ToList();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("/StudentCategory/Create/")]
+        public IActionResult CreateStudentCategory(CreateControlledData Model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string username = User.Identity.Name;
+                    var studentCategory = new StudentCategory()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = Model.Name
+                    };
+                    _studentCategoryRepo.Add(studentCategory);
+                    _studentCategoryRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Student Category Created Successfully"
+                        }
+                    );
+                }
+                return BadRequest();
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPut]
+        [Route("/StudentCategory/Edit/{Id}")]
+        public IActionResult EditStudentCategory(Guid Id, CreateControlledData Model)
+        {
+            try
+            {
+                var studentCategory = _studentCategoryRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (studentCategory != null)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        string username = User.Identity.Name;
+                        studentCategory.Name = Model.Name;
+                        _studentCategoryRepo.Edit(studentCategory);
+                        _studentCategoryRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                        return Ok(
+                            new
+                            {
+                                Message = "Student Category Edit Successfully"
+                            }
+                        );
+                    }
+                    return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Student Category Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpDelete]
+        [Route("/StudentCategory/Delete/{Id}")]
+        public IActionResult DeleteStudentCategory(Guid Id)
+        {
+            try
+            {
+                var religion = _religionRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (religion != null)
+                {
+                    string username = User.Identity.Name;
+                    _religionRepo.Delete(religion);
+                    _religionRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Student Category Deleted Successfully"
+                        }
+                    );
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Religion Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
 
 
         [HttpGet]
@@ -747,6 +867,23 @@ namespace ACEdatabaseAPI.Controllers
             try
             {
                 var result = _deptRepo.GetAll().ToList();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [Route("/Department/{SchoolID}")]
+        public IActionResult GetAllDepartmentInSchool(Guid SchoolID)
+        {
+            try
+            {
+                var result = _deptRepo.GetAll().Where(x => x.SchoolID == SchoolID).ToList();
                 return Ok(result);
             }
             catch (Exception x)

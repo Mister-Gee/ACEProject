@@ -19,7 +19,6 @@ namespace ACEdatabaseAPI.Controllers
     public class BiodataController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IMapper _mapper;
         IReligionRepo _religionRepo;
         IMaritalStatusRepo _maritalStatusRepo;
@@ -28,13 +27,14 @@ namespace ACEdatabaseAPI.Controllers
         IDepartmentRepo _deptRepo;
         IGenderRepo _genderRepo;
         IProgrammeRepo _progRepo;
+        IStudentCategoryRepo _studentCategoryRepo;
 
 
-        public BiodataController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IReligionRepo religionRepo, IMaritalStatusRepo maritalStatusRepo,
-            ILevelRepo levelRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IGenderRepo genderRepo, IProgrammeRepo progRepo, IMapper mapper)
+        public BiodataController(UserManager<ApplicationUser> userManager, IReligionRepo religionRepo, IMaritalStatusRepo maritalStatusRepo,
+            ILevelRepo levelRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IGenderRepo genderRepo, IProgrammeRepo progRepo, IMapper mapper,
+            IStudentCategoryRepo studentCategoryRepo)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _religionRepo = religionRepo;
             _maritalStatusRepo = maritalStatusRepo;
             _levelRepo = levelRepo;
@@ -42,6 +42,7 @@ namespace ACEdatabaseAPI.Controllers
             _deptRepo = deptRepo;
             _genderRepo = genderRepo;
             _progRepo = progRepo;
+            _studentCategoryRepo = studentCategoryRepo;
             _mapper = mapper;
         }
 
@@ -65,11 +66,19 @@ namespace ACEdatabaseAPI.Controllers
                         var eLevel = _levelRepo.FindBy(x => x.Id == model.EntryLevel).FirstOrDefault();
                         var school = _schoolRepo.FindBy(x => x.Id == model.School).FirstOrDefault();
                         var dept = _deptRepo.FindBy(x => x.Id == model.Department).FirstOrDefault();
+                        var religion = _religionRepo.FindBy(x => x.Id == model.Department).FirstOrDefault();
+
 
                         if (gender == null)
                         {
                             return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
                                             HttpStatusCode.BadRequest.ToString(), "Gender Does Not Exist"));
+                        }
+
+                        if (religion == null)
+                        {
+                            return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                            HttpStatusCode.BadRequest.ToString(), "Religion Does Not Exist"));
                         }
 
                         if (prog == null)
@@ -116,7 +125,7 @@ namespace ACEdatabaseAPI.Controllers
                                             HttpStatusCode.BadRequest.ToString(), "Department Does Not Exist"));
                         }
 
-                        var updatedStudent = _mapper.Map<StudentBioData, ApplicationUser>(model, student);
+                        var updatedStudent = _mapper.Map(model, student);
                         if (updatedStudent != null)
                         {
                             var result = await _userManager.UpdateAsync(updatedStudent);
@@ -143,6 +152,100 @@ namespace ACEdatabaseAPI.Controllers
                                             HttpStatusCode.BadRequest.ToString(), "Invalid Field"));
             }
             catch(Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                   new ApiError((int)HttpStatusCode.InternalServerError,
+                       HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+
+        [HttpPut]
+        [Route("/Staff/Update/{Id}")]
+        public async Task<IActionResult> UpdateStaffData(Guid Id, StaffBioData model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var staff = _userManager.FindByIdAsync(Id.ToString()).Result;
+
+                    bool isStaff = _userManager.IsInRoleAsync(staff, "Staff").Result;
+                    if (isStaff)
+                    {
+                        var gender = _genderRepo.FindBy(x => x.Id == model.Gender).FirstOrDefault();
+                        var maritalStatus = _maritalStatusRepo.FindBy(x => x.Id == model.MaritalStatus).FirstOrDefault();
+                        var school = _schoolRepo.FindBy(x => x.Id == model.School).FirstOrDefault();
+                        var dept = _deptRepo.FindBy(x => x.Id == model.Department).FirstOrDefault();
+                        var religion = _religionRepo.FindBy(x => x.Id == model.Department).FirstOrDefault();
+
+
+                        if (gender == null)
+                        {
+                            return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                            HttpStatusCode.BadRequest.ToString(), "Gender Does Not Exist"));
+                        }
+
+                        if (religion == null)
+                        {
+                            return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                            HttpStatusCode.BadRequest.ToString(), "Religion Does Not Exist"));
+                        }
+
+
+                        if (maritalStatus == null)
+                        {
+                            return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                            HttpStatusCode.BadRequest.ToString(), "Programme Does Not Exist"));
+                        }
+
+                        if (school == null)
+                        {
+                            return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                            HttpStatusCode.BadRequest.ToString(), "School Does Not Exist"));
+                        }
+
+                        if (dept != null)
+                        {
+                            if (dept.SchoolID != model.School)
+                            {
+                                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                            HttpStatusCode.BadRequest.ToString(), "Department is not in School"));
+                            }
+                        }
+                        else
+                        {
+                            return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                            HttpStatusCode.BadRequest.ToString(), "Department Does Not Exist"));
+                        }
+
+                        var updatedStaff = _mapper.Map(model, staff);
+                        if (updatedStaff != null)
+                        {
+                            var result = await _userManager.UpdateAsync(updatedStaff);
+                            if (result.Succeeded)
+                            {
+                                return Ok(new
+                                {
+                                    Message = "Staff Data Updated Successfuly"
+                                }); ;
+                            }
+                            return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                           HttpStatusCode.BadRequest.ToString(), "Error Saving Data"));
+                        }
+                        return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                           HttpStatusCode.BadRequest.ToString(), "An Error Occured"));
+                    }
+                    else
+                    {
+                        return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                            HttpStatusCode.BadRequest.ToString(), "You are not a Staff"));
+                    }
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                            HttpStatusCode.BadRequest.ToString(), "Invalid Field"));
+            }
+            catch (Exception x)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError,
                    new ApiError((int)HttpStatusCode.InternalServerError,

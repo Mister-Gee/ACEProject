@@ -12,7 +12,7 @@ namespace ACEdatabaseAPI.MapProfile
     {
         public StudentProfile()
         {
-            CreateMap<StudentBioData, ApplicationUser>();
+            CreateMap<StudentBioData, ApplicationUser>().ReverseMap();
         }
     }
 }
