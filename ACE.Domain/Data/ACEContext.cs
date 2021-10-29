@@ -1,4 +1,5 @@
 ﻿using ACE.Domain.Entities;
+using ACE.Domain.Entities.ControlledEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
@@ -21,6 +22,24 @@ namespace ACE.Domain.Data
         }
 
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
+        public virtual DbSet<vUserRole> vUserRoles { get; set; }
+        public virtual DbSet<Device> Devices { get; set; }
+        public virtual DbSet<School> Schools { get; set; }
+        public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<Gender> Genders { get; set; }
+        public virtual DbSet<Level> Levels { get; set; }
+        public virtual DbSet<MaritalStatus> MaritalStatus { get; set; }
+        public virtual DbSet<Programme> Programmes { get; set; }
+        public virtual DbSet<Religion> Religions { get; set; }
+
+
+
+
+
+
+
+
+
 
 
         public int SaveChanges(string userID, string IP)

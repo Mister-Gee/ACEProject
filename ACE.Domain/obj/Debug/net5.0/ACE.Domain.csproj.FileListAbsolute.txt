@@ -3,3 +3,18 @@ C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Doma
 C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.AssemblyInfoInputs.cache
 C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.AssemblyInfo.cs
 C:\Users\hp\Desktop\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\bin\Debug\net5.0\ACE.Domain.deps.json
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\bin\Debug\net5.0\ACE.Domain.runtimeconfig.json
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\bin\Debug\net5.0\ACE.Domain.runtimeconfig.dev.json
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\bin\Debug\net5.0\ACE.Domain.dll
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\bin\Debug\net5.0\ref\ACE.Domain.dll
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\bin\Debug\net5.0\ACE.Domain.pdb
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.csproj.AssemblyReference.cache
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.AssemblyInfoInputs.cache
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.AssemblyInfo.cs
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.dll
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ref\ACE.Domain.dll
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.pdb
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACE.Domain\obj\Debug\net5.0\ACE.Domain.genruntimeconfig.cache

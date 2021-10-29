@@ -10,19 +10,17 @@ namespace ACEdatabaseAPI.Data
     public class ApplicationUser : IdentityUser
     {
         [Required]
-        [MaxLength(30, ErrorMessage = "Name Length Exceeded")]
+        [MaxLength(50, ErrorMessage = "Name Length Exceeded")]
         public string FirstName { get; set; }
-        [Required]
-        [MaxLength(30, ErrorMessage = "Name Length Exceeded")]
-        public string LastName { get; set; }
-        [Required]
-        [MaxLength(30, ErrorMessage = "Name Length Exceeded")]
-        public string OtherName { get; set; }
+
         [Required]
         [MaxLength(50, ErrorMessage = "Name Length Exceeded")]
+        public string LastName { get; set; }
+
+        public string OtherName { get; set; }
+
         public string FormerName { get; set; }
-        [Required]
-        [MaxLength(11, ErrorMessage = "Your NIN should not be more than 11 digits")]
+
         public string NIN { get; set; }
         public string JambRegNumber { get; set; }
         public string MatricNumber { get; set; }
@@ -35,7 +33,6 @@ namespace ACEdatabaseAPI.Data
         public Guid CurrentLevel { get; set; }
         public Guid School { get; set; }
         public Guid Department { get; set; }
-        public Guid StudentStatus { get; set; }
         public Guid MaritalStatus { get; set; }
         public Guid Religion { get; set; }
         public DateTime DateOfBirth { get; set; }
@@ -58,6 +55,7 @@ namespace ACEdatabaseAPI.Data
         public string LinkedInID { get; set; }
         public string RolesCategory { get; set; }
         public bool ForcePasswordChange { get; set; }
+        public DateTime Date { get; set; }
 
     }
 }
