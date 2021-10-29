@@ -112,7 +112,7 @@ namespace ACE.Domain.Data
             // Get primary key value (If you have more than one key column, this will need to be adjusted)
             if(dbEntry != null)
             {
-                string keyName = dbEntry.Entity.GetType().GetProperties().FirstOrDefault(p => p.GetCustomAttributes(typeof(KeyAttribute), false).Count() > 0).Name;
+                string keyName = dbEntry.Entity.GetType().GetProperties().FirstOrDefault(p => p.GetCustomAttributes(typeof(KeyAttribute), false).Length > 0).Name;
                 if(dbEntry.State == EntityState.Added)
                 {
                     // For Inserts, just add the whole record

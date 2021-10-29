@@ -63,6 +63,7 @@ namespace ACEdatabaseAPI.Controllers
                     string username = User.Identity.Name;
                     var religion = new Religion()
                     {
+                        Id = Guid.NewGuid(),
                         Name = Model.Name
                     };
                     _religionRepo.Add(religion);

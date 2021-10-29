@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ACEdatabaseAPI.Model
+namespace ACEdatabaseAPI.DTOModel
 {
     public class StaffBioData : BaseBioData
     {

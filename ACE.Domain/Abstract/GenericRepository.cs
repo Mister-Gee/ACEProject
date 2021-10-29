@@ -48,6 +48,11 @@ namespace ACE.Domain.Abstract
 
         public virtual bool Save(string userName, string IP)
         {
+            return entities.SaveChanges(userName, IP) > 0;
+        }
+
+        public virtual bool SaveAsync(string userName, string IP)
+        {
             return entities.SaveChangesAsync(userName, IP).Result > 0;
         }
 

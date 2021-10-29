@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "JOeU+fwZHyFvx2S+Zn8y5ganMbwn5TtblhYujObMsXvVmzjauAzvr9bYTpVxjk+uWeJ332dxQfLRNG0LTkRlEQ==",
+  "dgSpecHash": "HNKapTXrNrJ+MCW8bdC+4StUrFLm5IEkLXqu9MMH4iQCPK23lCwbOAfHD6nOJOR88VohIyyCRxN4c2u9/4vNOQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Fakuade Gbenga\\Documents\\Projects\\ACE\\ACEProject\\ACEdatabaseAPI\\ACEdatabaseAPI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
+    "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\azure.core\\1.4.1\\azure.core.1.4.1.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\azure.identity\\1.2.3\\azure.identity.1.2.3.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\azure.security.keyvault.certificates\\4.1.0\\azure.security.keyvault.certificates.4.1.0.nupkg.sha512",
@@ -85,6 +87,7 @@
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\system.identitymodel.tokens.jwt\\6.13.1\\system.identitymodel.tokens.jwt.6.13.1.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\system.runtime.caching\\4.7.0\\system.runtime.caching.4.7.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\system.security.cryptography.cng\\4.5.0\\system.security.cryptography.cng.4.5.0.nupkg.sha512",
