@@ -51,10 +51,10 @@ namespace ACEdatabaseAPI.Controllers
                 var gender = _genderRepo.FindBy(x => x.Id == model.Gender).FirstOrDefault();
                 var prog = _progRepo.FindBy(x => x.Id == model.Programme).FirstOrDefault();
                 var maritalStatus = _maritalStatusRepo.FindBy(x => x.Id == model.MaritalStatus).FirstOrDefault();
-                var cLevel = _genderRepo.FindBy(x => x.Id == model.Gender).FirstOrDefault();
-                //var gender = _genderRepo.FindBy(x => x.Id == model.Gender).FirstOrDefault();
-                //var gender = _genderRepo.FindBy(x => x.Id == model.Gender).FirstOrDefault();
-                //var gender = _genderRepo.FindBy(x => x.Id == model.Gender).FirstOrDefault();
+                var cLevel = _levelRepo.FindBy(x => x.Id == model.CurrentLevel).FirstOrDefault();
+                var eLevel = _levelRepo.FindBy(x => x.Id == model.EntryLevel).FirstOrDefault();
+                var school = _schoolRepo.FindBy(x => x.Id == model.School).FirstOrDefault();
+                var dept = _deptRepo.FindBy(x => x.Id == model.Department).FirstOrDefault();
 
             }
             return Ok();
