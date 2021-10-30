@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "HNKapTXrNrJ+MCW8bdC+4StUrFLm5IEkLXqu9MMH4iQCPK23lCwbOAfHD6nOJOR88VohIyyCRxN4c2u9/4vNOQ==",
+  "dgSpecHash": "1knrAULQBV5ilaJ8O0M7KPZFJWuDIXRFfrRktF3lCTAeIPjpZUSQY/EOf+9Mgs03Va+IayHCw3vnnBzc6tn+Nw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Fakuade Gbenga\\Documents\\Projects\\ACE\\ACEProject\\ACEdatabaseAPI\\ACEdatabaseAPI.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,7 @@
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\azure.identity\\1.2.3\\azure.identity.1.2.3.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\azure.security.keyvault.certificates\\4.1.0\\azure.security.keyvault.certificates.4.1.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\azure.security.keyvault.secrets\\4.1.0\\azure.security.keyvault.secrets.4.1.0.nupkg.sha512",
+    "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\cloudinarydotnet\\1.15.2\\cloudinarydotnet.1.15.2.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
@@ -23,6 +24,7 @@
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.aspnetcore.dataprotection.abstractions\\2.2.0\\microsoft.aspnetcore.dataprotection.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.aspnetcore.hosting.abstractions\\2.2.0\\microsoft.aspnetcore.hosting.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.aspnetcore.hosting.server.abstractions\\2.2.0\\microsoft.aspnetcore.hosting.server.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.aspnetcore.http\\2.2.0\\microsoft.aspnetcore.http.2.2.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.aspnetcore.http.extensions\\2.2.0\\microsoft.aspnetcore.http.extensions.2.2.0.nupkg.sha512",
@@ -58,7 +60,7 @@
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.extensions.objectpool\\2.2.0\\microsoft.extensions.objectpool.2.2.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.extensions.options\\5.0.0\\microsoft.extensions.options.5.0.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
-    "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.extensions.webencoders\\2.2.0\\microsoft.extensions.webencoders.2.2.0.nupkg.sha512",
+    "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.extensions.webencoders\\5.0.3\\microsoft.extensions.webencoders.5.0.3.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.identity.client\\4.19.0\\microsoft.identity.client.4.19.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.identity.client.extensions.msal\\2.12.0\\microsoft.identity.client.extensions.msal.2.12.0.nupkg.sha512",
     "C:\\Users\\Fakuade Gbenga\\.nuget\\packages\\microsoft.identity.web\\1.1.0\\microsoft.identity.web.1.1.0.nupkg.sha512",

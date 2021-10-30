@@ -4,137 +4,22 @@ using ACEdatabaseAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ACEdatabaseAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211029112132_ApplicationUserModified4")]
+    partial class ApplicationUserModified4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Department", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("SchoolID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolID");
-
-                    b.ToTable("Department");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Gender", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Gender");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Level", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Level");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.MaritalStatus", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MaritalStatus");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Programme", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Programme");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Religion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Religion");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.School", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("School");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.StudentCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StudentCategory");
-                });
 
             modelBuilder.Entity("ACEdatabaseAPI.Data.ApplicationRole", b =>
                 {
@@ -196,7 +81,7 @@ namespace ACEdatabaseAPI.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CurrentLevelID")
+                    b.Property<Guid>("CurrentLevel")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
@@ -205,7 +90,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("DepartmentID")
+                    b.Property<Guid>("Department")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Disability")
@@ -221,7 +106,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<DateTime>("EmploymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("EntryLevelID")
+                    b.Property<Guid>("EntryLevel")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FacebookID")
@@ -238,7 +123,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<string>("FormerName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("GenderID")
+                    b.Property<Guid>("Gender")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Hometown")
@@ -258,9 +143,6 @@ namespace ACEdatabaseAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("LeftThumbFingerBiometrics")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LinkedInID")
                         .HasColumnType("nvarchar(max)");
 
@@ -270,7 +152,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("MaritalStatusID")
+                    b.Property<Guid>("MaritalStatus")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MatricNumber")
@@ -305,19 +187,16 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("ProgrammeID")
+                    b.Property<Guid>("Programme")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ReligionID")
+                    b.Property<Guid>("Religion")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RightThumbFingerBiometrics")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RolesCategory")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SchoolID")
+                    b.Property<Guid>("School")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SecurityStamp")
@@ -332,7 +211,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("StudentCategoryID")
+                    b.Property<Guid>("StudentCategory")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TwitterID")
@@ -340,12 +219,6 @@ namespace ACEdatabaseAPI.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<long>("UserImageData")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserImageURL")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -362,14 +235,6 @@ namespace ACEdatabaseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentID");
-
-                    b.HasIndex("EntryLevelID");
-
-                    b.HasIndex("GenderID");
-
-                    b.HasIndex("MaritalStatusID");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -377,14 +242,6 @@ namespace ACEdatabaseAPI.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ProgrammeID");
-
-                    b.HasIndex("ReligionID");
-
-                    b.HasIndex("SchoolID");
-
-                    b.HasIndex("StudentCategoryID");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -493,68 +350,6 @@ namespace ACEdatabaseAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Department", b =>
-                {
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.School", "School")
-                        .WithMany("Departments")
-                        .HasForeignKey("SchoolID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("ACEdatabaseAPI.Data.ApplicationUser", b =>
-                {
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Department", "Departments")
-                        .WithMany()
-                        .HasForeignKey("DepartmentID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Level", "Level")
-                        .WithMany()
-                        .HasForeignKey("EntryLevelID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Gender", "Gender")
-                        .WithMany()
-                        .HasForeignKey("GenderID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.MaritalStatus", "MaritalStatus")
-                        .WithMany()
-                        .HasForeignKey("MaritalStatusID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Programme", "Programme")
-                        .WithMany()
-                        .HasForeignKey("ProgrammeID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Religion", "Religion")
-                        .WithMany()
-                        .HasForeignKey("ReligionID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.StudentCategory", "StudentCategory")
-                        .WithMany()
-                        .HasForeignKey("StudentCategoryID");
-
-                    b.Navigation("Departments");
-
-                    b.Navigation("Gender");
-
-                    b.Navigation("Level");
-
-                    b.Navigation("MaritalStatus");
-
-                    b.Navigation("Programme");
-
-                    b.Navigation("Religion");
-
-                    b.Navigation("School");
-
-                    b.Navigation("StudentCategory");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("ACEdatabaseAPI.Data.ApplicationRole", null)
@@ -604,11 +399,6 @@ namespace ACEdatabaseAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.School", b =>
-                {
-                    b.Navigation("Departments");
                 });
 #pragma warning restore 612, 618
         }

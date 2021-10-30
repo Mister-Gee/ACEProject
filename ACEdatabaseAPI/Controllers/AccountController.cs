@@ -192,7 +192,7 @@ namespace ACEdatabaseAPI.Controllers
                                 "You are not Authorized!"));
                     }
                 }
-                return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Invalid Login Attempt"));
+                return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Invalid Registeration Attempt"));
             }
             catch (Exception x)
             {
@@ -242,7 +242,7 @@ namespace ACEdatabaseAPI.Controllers
                                 "You are not Authorized!"));
                     }
                 }
-                return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Invalid Login Attempt"));
+                return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Invalid Registeration Attempt"));
             }
             catch (Exception x)
             {

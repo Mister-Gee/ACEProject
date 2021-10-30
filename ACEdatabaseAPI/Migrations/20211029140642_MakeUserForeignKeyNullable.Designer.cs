@@ -4,14 +4,16 @@ using ACEdatabaseAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ACEdatabaseAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211029140642_MakeUserForeignKeyNullable")]
+    partial class MakeUserForeignKeyNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,9 +260,6 @@ namespace ACEdatabaseAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("LeftThumbFingerBiometrics")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LinkedInID")
                         .HasColumnType("nvarchar(max)");
 
@@ -311,9 +310,6 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<Guid?>("ReligionID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RightThumbFingerBiometrics")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RolesCategory")
                         .HasColumnType("nvarchar(max)");
 
@@ -340,12 +336,6 @@ namespace ACEdatabaseAPI.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<long>("UserImageData")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserImageURL")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

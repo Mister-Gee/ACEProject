@@ -4,14 +4,16 @@ using ACEdatabaseAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ACEdatabaseAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211029131929_ApplicationUserRestructedAgain")]
+    partial class ApplicationUserRestructedAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,7 +198,7 @@ namespace ACEdatabaseAPI.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CurrentLevelID")
+                    b.Property<Guid>("CurrentLevelID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
@@ -205,7 +207,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("DepartmentID")
+                    b.Property<Guid>("DepartmentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Disability")
@@ -221,7 +223,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<DateTime>("EmploymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("EntryLevelID")
+                    b.Property<Guid>("EntryLevelID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FacebookID")
@@ -238,7 +240,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<string>("FormerName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("GenderID")
+                    b.Property<Guid>("GenderID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Hometown")
@@ -258,9 +260,6 @@ namespace ACEdatabaseAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("LeftThumbFingerBiometrics")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LinkedInID")
                         .HasColumnType("nvarchar(max)");
 
@@ -270,7 +269,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("MaritalStatusID")
+                    b.Property<Guid>("MaritalStatusID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MatricNumber")
@@ -305,19 +304,16 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("ProgrammeID")
+                    b.Property<Guid>("ProgrammeID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ReligionID")
+                    b.Property<Guid>("ReligionID")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RightThumbFingerBiometrics")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RolesCategory")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SchoolID")
+                    b.Property<Guid>("SchoolID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SecurityStamp")
@@ -332,7 +328,7 @@ namespace ACEdatabaseAPI.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("StudentCategoryID")
+                    b.Property<Guid>("StudentCategoryID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TwitterID")
@@ -340,12 +336,6 @@ namespace ACEdatabaseAPI.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<long>("UserImageData")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserImageURL")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -508,35 +498,51 @@ namespace ACEdatabaseAPI.Migrations
                 {
                     b.HasOne("ACE.Domain.Entities.ControlledEntities.Department", "Departments")
                         .WithMany()
-                        .HasForeignKey("DepartmentID");
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACE.Domain.Entities.ControlledEntities.Level", "Level")
                         .WithMany()
-                        .HasForeignKey("EntryLevelID");
+                        .HasForeignKey("EntryLevelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACE.Domain.Entities.ControlledEntities.Gender", "Gender")
                         .WithMany()
-                        .HasForeignKey("GenderID");
+                        .HasForeignKey("GenderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACE.Domain.Entities.ControlledEntities.MaritalStatus", "MaritalStatus")
                         .WithMany()
-                        .HasForeignKey("MaritalStatusID");
+                        .HasForeignKey("MaritalStatusID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACE.Domain.Entities.ControlledEntities.Programme", "Programme")
                         .WithMany()
-                        .HasForeignKey("ProgrammeID");
+                        .HasForeignKey("ProgrammeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACE.Domain.Entities.ControlledEntities.Religion", "Religion")
                         .WithMany()
-                        .HasForeignKey("ReligionID");
+                        .HasForeignKey("ReligionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACE.Domain.Entities.ControlledEntities.School", "School")
                         .WithMany()
-                        .HasForeignKey("SchoolID");
+                        .HasForeignKey("SchoolID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ACE.Domain.Entities.ControlledEntities.StudentCategory", "StudentCategory")
                         .WithMany()
-                        .HasForeignKey("StudentCategoryID");
+                        .HasForeignKey("StudentCategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Departments");
 

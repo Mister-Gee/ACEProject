@@ -20,4 +20,13 @@ namespace ACEdatabaseAPI.Model
         public string InterswitchPOSStatus { get; set; }
         public string MinDeveloperFundAmount { get; set; }
     }
+
+    public class CloudinarySettings
+    {
+        public const string SettingsName = "CloudinarySettings";
+
+        public string CloudName { get; set; }
+        public string ApiKey { get; set; }
+        public string ApiSecret { get; set; }
+    }
 }

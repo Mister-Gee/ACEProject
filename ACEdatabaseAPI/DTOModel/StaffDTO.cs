@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace ACEdatabaseAPI.DTOModel
 {
-    public class StaffBioData : BaseBioData
+    public class StaffDTO : UserDTO
     {
         public string StaffID { get; set; }
-
         public DateTime EmploymentDate { get; set; }
+
     }
 }

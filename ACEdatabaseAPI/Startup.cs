@@ -30,6 +30,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using ACE.Domain.Concrete.EFControlledRepo;
 using ACE.Domain.Abstract.IControlledRepo;
+using ACEdatabaseAPI.Helpers.FileUploadService;
 
 namespace ACE
 {
@@ -183,6 +184,10 @@ namespace ACE
             services.AddScoped<IGenderRepo, EFGenderRepo>();
             services.AddScoped<ILevelRepo, EFLevelRepo>();
             services.AddScoped<IMaritalStatusRepo, EFMaritalStatusRepo>();
+            services.AddScoped<IStudentCategoryRepo, EFStudentCategoryRepo>();
+
+            services.AddScoped<IFileUploadService, FileUploadService>();
+
 
 
         }

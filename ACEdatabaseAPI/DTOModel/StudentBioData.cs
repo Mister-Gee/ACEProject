@@ -21,15 +21,15 @@ namespace ACEdatabaseAPI.DTOModel
         public string ModeOfAdmission { get; set; }
 
         [Required]
-        public Guid StudentCategory { get; set; }
+        public Guid StudentCategoryID { get; set; }
 
         [Required]
-        public Guid Programme { get; set; }
+        public Guid ProgrammeID { get; set; }
 
         [Required]
-        public Guid EntryLevel { get; set; }
+        public Guid EntryLevelID { get; set; }
 
         [Required]
-        public Guid CurrentLevel { get; set; }
+        public Guid CurrentLevelID { get; set; }
     }
 }
