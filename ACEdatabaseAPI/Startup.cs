@@ -120,12 +120,16 @@ namespace ACE
                 //c.IncludeXmlComments(xmlPath);
             });
 
-            services.AddDbContext<ACEContext>(options => options.UseSqlServer(
-                Configuration.GetConnectionString("ACEContext")
-                ));
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
-                Configuration.GetConnectionString("ACEContext")
-                ));
+            //services.AddDbContext<ACEContext>(options => options.UseSqlServer(
+            //    Configuration.GetConnectionString("ACEContext")
+            //    ));
+            //services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
+            //    Configuration.GetConnectionString("ACEContext")
+            //    ));
+            services.AddDbContext<ACEContext>(option => option.UseSqlite("Data Source=ACELite.db"));
+            services.AddDbContext<ApplicationDbContext>(option => option.UseSqlite("Data Source=ACELite.db"));
+
+
             services.AddIdentity<ApplicationUser, ApplicationRole>(option => 
                     option.SignIn.RequireConfirmedAccount = false )
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -185,6 +189,12 @@ namespace ACE
             services.AddScoped<ILevelRepo, EFLevelRepo>();
             services.AddScoped<IMaritalStatusRepo, EFMaritalStatusRepo>();
             services.AddScoped<IStudentCategoryRepo, EFStudentCategoryRepo>();
+            services.AddScoped<IFlagLevelRepo, EFFlagLevelRepo>();
+            services.AddScoped<IMedicalRecordRepo, EFMedicalRecordRepo>();
+            services.AddScoped<IMedicalConditionsRepo, EFMedicalConditionsRepo>();
+            services.AddScoped<IFlagRepo, EFFlagRepo>();
+            services.AddScoped<IBloodGroupRepo, EFBloodGroupRepo>();
+            services.AddScoped<IGenotypeRepo, EFGenotypeRepo>();
 
             services.AddScoped<IFileUploadService, FileUploadService>();
 

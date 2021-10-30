@@ -34,7 +34,7 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [Route("/Get/All")]
+        [Route("Get/All")]
         public async Task<IActionResult> GetStaffs()
         {
             try
@@ -70,7 +70,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/Get/{ID}")]
+        [Route("Get/{ID}")]
         public async Task<IActionResult> GetStaffByID(Guid ID)
         {
             try
@@ -104,7 +104,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/Get/{Email}")]
+        [Route("Get/{Email}")]
         public async Task<IActionResult> GetStaffByEmail(string Email)
         {
             try
@@ -138,7 +138,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/Get/{StaffID}")]
+        [Route("Get/{StaffID}")]
         public async Task<IActionResult> GetStudentsByMatricNumber(string StaffID)
         {
             try
@@ -172,7 +172,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/Get/{Biometric}")]
+        [Route("Get/{Biometric}")]
         public async Task<IActionResult> GetStaffByBiometric(string Biometric)
         {
             try
@@ -211,7 +211,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/Department/Get/{DepartmentID}")]
+        [Route("Department/Get/{DepartmentID}")]
         public async Task<IActionResult> GetStaffsInDepartMent(Guid DepartmentID)
         {
             try

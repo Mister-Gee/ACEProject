@@ -51,7 +51,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/Student/Update/{Id}")]
+        [Route("Student/Update/{Id}")]
         public async Task<IActionResult> UpdateStudentData(Guid Id, StudentBioData model)
         {
             try
@@ -172,7 +172,7 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpPut]
-        [Route("/Staff/Update/{Id}")]
+        [Route("Staff/Update/{Id}")]
         public async Task<IActionResult> UpdateStaffData(Guid Id, StaffBioData model)
         {
             try
@@ -265,7 +265,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/Image/Upload/{userID}")]
+        [Route("Image/Upload/{userID}")]
         public async Task<IActionResult> ImageUpload(Guid userID, ImageUpload model)
         {
             try
@@ -305,7 +305,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/Biometrics/RightThumb/{userID}")]
+        [Route("Biometrics/RightThumb/{userID}")]
         public async Task<IActionResult> BiometricRight(Guid userID, BiometricUpload model)
         {
             try
@@ -343,7 +343,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/Biometrics/LeftThumb/{userID}")]
+        [Route("Biometrics/LeftThumb/{userID}")]
         public async Task<IActionResult> BiometricLeft(Guid userID, BiometricUpload model)
         {
             try

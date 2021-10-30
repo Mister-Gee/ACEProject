@@ -29,7 +29,7 @@ namespace ACEdatabaseAPI.Controllers
 
 		//[ApiExplorerSettings(IgnoreApi = true)]
 		[AllowAnonymous]
-		[HttpPost, Route("/RegisterDevice")]
+		[HttpPost, Route("RegisterDevice")]
 		public IActionResult RegisterDeviceAsync([FromBody] DeviceVM model)
 		{
 			var user = User.Identity.Name;
@@ -86,7 +86,7 @@ namespace ACEdatabaseAPI.Controllers
 		}
 
 		//[ApiExplorerSettings(IgnoreApi = true)]
-		[HttpPost, Route("/UnRegisterDevice")]
+		[HttpPost, Route("UnRegisterDevice")]
 		public IActionResult UnRegisterDevice([FromBody] DeviceVM model)
 		{
 			var dv = _deviceRepo

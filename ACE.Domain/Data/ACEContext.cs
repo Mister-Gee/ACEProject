@@ -31,10 +31,14 @@ namespace ACE.Domain.Data
         public virtual DbSet<MaritalStatus> MaritalStatus { get; set; }
         public virtual DbSet<Programme> Programmes { get; set; }
         public virtual DbSet<Religion> Religions { get; set; }
+        public virtual DbSet<StudentCategory> StudentCategories { get; set; }
 
-
-
-
+        public virtual DbSet<BloodGroup> BloodGroup { get; set; }
+        public virtual DbSet<Genotype> Genotype { get; set; }
+        public virtual DbSet<MedicalCondition> MedicalConditions { get; set; }
+        public virtual DbSet<MedicalRecord> MedicalRecords { get; set; }
+        public virtual DbSet<FlagLevel> FlagLevels { get; set; }
+        public virtual DbSet<Flag> Flags { get; set; }
 
 
 

@@ -42,7 +42,7 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpPost]
-        [Route("/Account/login")]
+        [Route("login")]
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] Login model)
         {
@@ -135,7 +135,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Account/Register")]
+        [Route("Register")]
         public async Task<ActionResult> Register([FromBody] Register model)
         {
             try
@@ -203,7 +203,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Account/Cafe/Register")]
+        [Route("Cafe/Register")]
         public async Task<ActionResult> RegisterCafe([FromBody] BaseRegister model)
         {
             try
@@ -253,7 +253,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Account/ChangePassword")]
+        [Route("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePassword model)
         {
             try
@@ -305,7 +305,7 @@ namespace ACEdatabaseAPI.Controllers
                 if (user.ForcePasswordChange)
                 {
                     user.ForcePasswordChange = false;
-                    _userManager.UpdateAsync(user);
+                    await _userManager.UpdateAsync(user);
                 }
                 await _signInManager.RefreshSignInAsync(user);
 
@@ -346,7 +346,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Account/ForgetPassword/{userName}"), AllowAnonymous]
+        [Route("ForgetPassword/{userName}"), AllowAnonymous]
         public async Task<IActionResult> ForgetPassword(string userName)
         {
             try
@@ -385,7 +385,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Account/ResetPassword"), AllowAnonymous]
+        [Route("ResetPassword"), AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPassword model)
         {
             try

@@ -31,7 +31,7 @@ namespace ACEdatabaseAPI.Controllers
 
 
 		[HttpGet]
-		[Route("/Get")]
+		[Route("Get")]
 		public async Task<IActionResult> CreateRole()
 		{
 			var roles = _roleManager.Roles.ToList();
@@ -78,7 +78,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/roles/{userName}")]
+        [Route("roles/{userName}")]
         public async Task<IActionResult> Roles(string userName)
         {
             //var usr = await _userManager.FindByNameAsync(userName);
@@ -96,7 +96,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
 		[HttpPost, Authorize(Roles = "Admin")]
-		[Route("/addRoles/{userName}/{roles}")]
+		[Route("addRoles/{userName}/{roles}")]
 		public async Task<IActionResult> UserRoles(string userName, string roles)
 		{
 			if (!string.IsNullOrEmpty(roles) && !string.IsNullOrEmpty(userName))

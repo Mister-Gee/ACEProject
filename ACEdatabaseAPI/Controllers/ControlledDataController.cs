@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ACEdatabaseAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ControlledDataController : ControllerBase
     {
@@ -24,10 +24,16 @@ namespace ACEdatabaseAPI.Controllers
         IGenderRepo _genderRepo;
         IProgrammeRepo _progRepo;
         IStudentCategoryRepo _studentCategoryRepo;
+        IBloodGroupRepo _bloodGroupRepo;
+        IGenotypeRepo _genotypeRepo;
+        IFlagLevelRepo _flagLevelRepo;
+        IMedicalConditionsRepo _medConRepo;
+
 
 
         public ControlledDataController(IReligionRepo religionRepo, IMaritalStatusRepo maritalStatusRepo, IStudentCategoryRepo studentCategoryRepo,
-            ILevelRepo levelRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IGenderRepo genderRepo, IProgrammeRepo progRepo)
+            ILevelRepo levelRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IGenderRepo genderRepo, IProgrammeRepo progRepo,
+            IBloodGroupRepo bloodGroupRepo, IGenotypeRepo genotypeRepo, IFlagLevelRepo flagLevelRepo, IMedicalConditionsRepo medConRepo)
         {
             _religionRepo = religionRepo;
             _maritalStatusRepo = maritalStatusRepo;
@@ -37,11 +43,15 @@ namespace ACEdatabaseAPI.Controllers
             _genderRepo = genderRepo;
             _progRepo = progRepo;
             _studentCategoryRepo = studentCategoryRepo;
+            _bloodGroupRepo = bloodGroupRepo;
+            _genotypeRepo = genotypeRepo;
+            _flagLevelRepo = flagLevelRepo;
+            _medConRepo = medConRepo;
         }
 
         [HttpGet]
-        [Route("/Religion/All")]
-        public async Task<IActionResult> GetAllReligion(){
+        [Route("Religion/All")]
+        public IActionResult GetAllReligion(){
             try
             {
                 var result = _religionRepo.GetAll().ToList();
@@ -56,7 +66,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Religion/Create/")]
+        [Route("Religion/Create/")]
         public IActionResult CreateReligion(CreateControlledData Model)
         {
             try
@@ -89,7 +99,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/Religion/Edit/{Id}")]
+        [Route("Religion/Edit/{Id}")]
         public IActionResult EditReligion(Guid Id, CreateControlledData Model)
         {
             try
@@ -125,7 +135,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("/Religion/Delete/{Id}")]
+        [Route("Religion/Delete/{Id}")]
         public IActionResult DeleteReligion(Guid Id)
         {
             try
@@ -157,8 +167,8 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [Route("/StudentCategory/All")]
-        public async Task<IActionResult> GetAllStudentCategories()
+        [Route("StudentCategory/All")]
+        public IActionResult GetAllStudentCategories()
         {
             try
             {
@@ -174,7 +184,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/StudentCategory/Create/")]
+        [Route("StudentCategory/Create/")]
         public IActionResult CreateStudentCategory(CreateControlledData Model)
         {
             try
@@ -207,7 +217,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/StudentCategory/Edit/{Id}")]
+        [Route("StudentCategory/Edit/{Id}")]
         public IActionResult EditStudentCategory(Guid Id, CreateControlledData Model)
         {
             try
@@ -243,7 +253,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("/StudentCategory/Delete/{Id}")]
+        [Route("StudentCategory/Delete/{Id}")]
         public IActionResult DeleteStudentCategory(Guid Id)
         {
             try
@@ -274,8 +284,8 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [Route("/Gender/All")]
-        public async Task<IActionResult> GetAllGender()
+        [Route("Gender/All")]
+        public IActionResult GetAllGender()
         {
             try
             {
@@ -291,7 +301,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Gender/Create/")]
+        [Route("Gender/Create/")]
         public IActionResult CreateGender(CreateControlledData Model)
         {
             try
@@ -323,7 +333,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/Gender/Edit/{Id}")]
+        [Route("Gender/Edit/{Id}")]
         public IActionResult EditGender(Guid Id, CreateControlledData Model)
         {
             try
@@ -359,7 +369,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("/Gender/Delete/{Id}")]
+        [Route("Gender/Delete/{Id}")]
         public IActionResult DeleteGender(Guid Id)
         {
             try
@@ -392,8 +402,8 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [Route("/MaritalStatus/All")]
-        public async Task<IActionResult> GetAllMaritalStatus()
+        [Route("MaritalStatus/All")]
+        public IActionResult GetAllMaritalStatus()
         {
             try
             {
@@ -409,7 +419,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/MaritalStatus/Create/")]
+        [Route("MaritalStatus/Create/")]
         public IActionResult CreateMaritalStatus(CreateControlledData Model)
         {
             try
@@ -441,7 +451,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/MaritalStatus/Edit/{Id}")]
+        [Route("MaritalStatus/Edit/{Id}")]
         public IActionResult EditMaritalStatus(Guid Id, CreateControlledData Model)
         {
             try
@@ -477,7 +487,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("/MaritalStatus/Delete/{Id}")]
+        [Route("MaritalStatus/Delete/{Id}")]
         public IActionResult DeleteMaritalStatus(Guid Id)
         {
             try
@@ -510,8 +520,8 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [Route("/Level/All")]
-        public async Task<IActionResult> GetAllLevel()
+        [Route("Level/All")]
+        public IActionResult GetAllLevel()
         {
             try
             {
@@ -527,7 +537,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Level/Create/")]
+        [Route("Level/Create/")]
         public IActionResult CreateLevel(CreateControlledData Model)
         {
             try
@@ -559,7 +569,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/Level/Edit/{Id}")]
+        [Route("Level/Edit/{Id}")]
         public IActionResult EditLevel(Guid Id, CreateControlledData Model)
         {
             try
@@ -595,7 +605,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("/Level/Delete/{Id}")]
+        [Route("Level/Delete/{Id}")]
         public IActionResult DeleteLevel(Guid Id)
         {
             try
@@ -627,8 +637,8 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [Route("/Programme/All")]
-        public async Task<IActionResult> GetAllProgramme()
+        [Route("Programme/All")]
+        public IActionResult GetAllProgramme()
         {
             try
             {
@@ -644,7 +654,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Programme/Create/")]
+        [Route("Programme/Create/")]
         public IActionResult CreateProgramme(CreateControlledData Model)
         {
             try
@@ -676,7 +686,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/Programme/Edit/{Id}")]
+        [Route("Programme/Edit/{Id}")]
         public IActionResult EditProgramme(Guid Id, CreateControlledData Model)
         {
             try
@@ -712,7 +722,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("/Programme/Delete/{Id}")]
+        [Route("Programme/Delete/{Id}")]
         public IActionResult DeleteProgramme(Guid Id)
         {
             try
@@ -744,8 +754,8 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [Route("/School/All")]
-        public async Task<IActionResult> GetAllSchool()
+        [Route("School/All")]
+        public IActionResult GetAllSchool()
         {
             try
             {
@@ -761,7 +771,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/School/Create/")]
+        [Route("School/Create/")]
         public IActionResult CreateSchool(CreateControlledData Model)
         {
             try
@@ -793,7 +803,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/School/Edit/{Id}")]
+        [Route("School/Edit/{Id}")]
         public IActionResult EditSchool(Guid Id, CreateControlledData Model)
         {
             try
@@ -829,7 +839,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("/School/Delete/{Id}")]
+        [Route("School/Delete/{Id}")]
         public IActionResult DeleteSchool(Guid Id)
         {
             try
@@ -861,8 +871,8 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [Route("/Department/All")]
-        public async Task<IActionResult> GetAllDepartment()
+        [Route("Department/All")]
+        public IActionResult GetAllDepartment()
         {
             try
             {
@@ -878,7 +888,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/Department/{SchoolID}")]
+        [Route("Department/{SchoolID}")]
         public IActionResult GetAllDepartmentInSchool(Guid SchoolID)
         {
             try
@@ -895,7 +905,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Department/Create/")]
+        [Route("Department/Create/")]
         public IActionResult CreateDepartment(CreateDept Model)
         {
             try
@@ -936,7 +946,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPut]
-        [Route("/Department/Edit/{Id}")]
+        [Route("Department/Edit/{Id}")]
         public IActionResult EditDepartment(Guid Id, CreateDept Model)
         {
             try
@@ -973,7 +983,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("/Department/Delete/{Id}")]
+        [Route("Department/Delete/{Id}")]
         public IActionResult DeleteDepartment(Guid Id)
         {
             try
@@ -993,6 +1003,476 @@ namespace ACEdatabaseAPI.Controllers
                 }
                 return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
                                      HttpStatusCode.BadRequest.ToString(), "Religion Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+
+        [HttpGet]
+        [Route("BloodGroup/All")]
+        public IActionResult GetAllBloodGroup()
+        {
+            try
+            {
+                var result = _bloodGroupRepo.GetAll().ToList();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("BloodGroup/Create/")]
+        public IActionResult CreateBloodGroup(CreateControlledData Model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string username = User.Identity.Name;
+                    var bloodGroup = new BloodGroup()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = Model.Name
+                    };
+                    _bloodGroupRepo.Add(bloodGroup);
+                    _bloodGroupRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Blood Group Created Successfully"
+                        }
+                    );
+                }
+                return BadRequest();
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPut]
+        [Route("BloodGroup/Edit/{Id}")]
+        public IActionResult EditBloodGroup(Guid Id, CreateControlledData Model)
+        {
+            try
+            {
+                var bloodGroup = _bloodGroupRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (bloodGroup != null)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        string username = User.Identity.Name;
+                        bloodGroup.Name = Model.Name;
+                        _bloodGroupRepo.Edit(bloodGroup);
+                        _bloodGroupRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                        return Ok(
+                            new
+                            {
+                                Message = "Blood Group Edit Successfully"
+                            }
+                        );
+                    }
+                    return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Blood Group Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpDelete]
+        [Route("BloodGroup/Delete/{Id}")]
+        public IActionResult DeleteBloodGroup(Guid Id)
+        {
+            try
+            {
+                var bloodGroup = _bloodGroupRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (bloodGroup != null)
+                {
+                    string username = User.Identity.Name;
+                    _bloodGroupRepo.Delete(bloodGroup);
+                    _bloodGroupRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Blood Group Deleted Successfully"
+                        }
+                    );
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Blood Group Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+
+        [HttpGet]
+        [Route("Genotype/All")]
+        public IActionResult GetAllGenotype()
+        {
+            try
+            {
+                var result = _genotypeRepo.GetAll().ToList();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("Genotype/Create/")]
+        public IActionResult CreateGenotype(CreateControlledData Model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string username = User.Identity.Name;
+                    var genotype = new Genotype()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = Model.Name
+                    };
+                    _genotypeRepo.Add(genotype);
+                    _genotypeRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Genotype Created Successfully"
+                        }
+                    );
+                }
+                return BadRequest();
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPut]
+        [Route("Genotype/Edit/{Id}")]
+        public IActionResult EditGenotype(Guid Id, CreateControlledData Model)
+        {
+            try
+            {
+                var genotype = _genotypeRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (genotype != null)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        string username = User.Identity.Name;
+                        genotype.Name = Model.Name;
+                        _genotypeRepo.Edit(genotype);
+                        _genotypeRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                        return Ok(
+                            new
+                            {
+                                Message = "Genotype Edit Successfully"
+                            }
+                        );
+                    }
+                    return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Genotype Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpDelete]
+        [Route("Genotype/Delete/{Id}")]
+        public IActionResult DeleteGenotype(Guid Id)
+        {
+            try
+            {
+                var genotype = _genotypeRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (genotype != null)
+                {
+                    string username = User.Identity.Name;
+                    _genotypeRepo.Delete(genotype);
+                    _genotypeRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Genotype Deleted Successfully"
+                        }
+                    );
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Genotype Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+
+
+        [HttpGet]
+        [Route("FlagLevel/All")]
+        public IActionResult GetAllFlagLevel()
+        {
+            try
+            {
+                var result = _flagLevelRepo.GetAll().ToList();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("FlagLevel/Create/")]
+        public IActionResult CreateFlagLevel(CreateControlledData Model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string username = User.Identity.Name;
+                    var flagLevel = new FlagLevel()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = Model.Name
+                    };
+                    _flagLevelRepo.Add(flagLevel);
+                    _flagLevelRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Flag Level Created Successfully"
+                        }
+                    );
+                }
+                return BadRequest();
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPut]
+        [Route("FlagLevel/Edit/{Id}")]
+        public IActionResult EditFlagLevel(Guid Id, CreateControlledData Model)
+        {
+            try
+            {
+                var flagLevel = _flagLevelRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (flagLevel != null)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        string username = User.Identity.Name;
+                        flagLevel.Name = Model.Name;
+                        _flagLevelRepo.Edit(flagLevel);
+                        _flagLevelRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                        return Ok(
+                            new
+                            {
+                                Message = "Flag Level Edit Successfully"
+                            }
+                        );
+                    }
+                    return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Flag Level Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpDelete]
+        [Route("FlagLevel/Delete/{Id}")]
+        public IActionResult DeleteFlagLevel(Guid Id)
+        {
+            try
+            {
+                var flagLevel = _flagLevelRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (flagLevel != null)
+                {
+                    string username = User.Identity.Name;
+                    _flagLevelRepo.Delete(flagLevel);
+                    _flagLevelRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Flag Level Deleted Successfully"
+                        }
+                    );
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Flag Level Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+
+
+        [HttpGet]
+        [Route("MeedicalCondition/All")]
+        public IActionResult GetAllMeedicalCondition()
+        {
+            try
+            {
+                var result = _medConRepo.GetAll().ToList();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("MedicalCondition/Create/")]
+        public IActionResult CreateMedicalCondition(CreateControlledData Model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string username = User.Identity.Name;
+                    var medCon = new MedicalCondition()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = Model.Name
+                    };
+                    _medConRepo.Add(medCon);
+                    _medConRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Medical Condition Created Successfully"
+                        }
+                    );
+                }
+                return BadRequest();
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPut]
+        [Route("MedicalCondition/Edit/{Id}")]
+        public IActionResult EditMedicalCondition(Guid Id, CreateControlledData Model)
+        {
+            try
+            {
+                var medCon = _medConRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (medCon != null)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        string username = User.Identity.Name;
+                        medCon.Name = Model.Name;
+                        _medConRepo.Edit(medCon);
+                        _medConRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                        return Ok(
+                            new
+                            {
+                                Message = "Medical Condition Edit Successfully"
+                            }
+                        );
+                    }
+                    return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpDelete]
+        [Route("MedicalConditin/Delete/{Id}")]
+        public IActionResult DeleteMedicalConditin(Guid Id)
+        {
+            try
+            {
+                var medCon = _medConRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (medCon != null)
+                {
+                    string username = User.Identity.Name;
+                    _medConRepo.Delete(medCon);
+                    _medConRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Medical Condition Deleted Successfully"
+                        }
+                    );
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
             }
             catch (Exception x)
             {
