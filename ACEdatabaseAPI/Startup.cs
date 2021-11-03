@@ -235,11 +235,16 @@ namespace ACE
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext appContext, ACEContext aceContext)
         {
             //app.UseSession();
             var path = Directory.GetCurrentDirectory();
             var date = DateTime.Today.ToString("ddMMyyyy");
+
+            appContext.Database.Migrate();
+            aceContext.Database.Migrate();
+
+
             //loggerFactory.AddFile($"{path}\\Logs\\{date}-Log.txt");
 
             //if (env.IsDevelopment())

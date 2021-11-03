@@ -121,7 +121,7 @@ namespace ACEdatabaseAPI.Controllers
 
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "Invalid login attempt. e2"));
+                                "Invalid login attempt"));
                 }
 
             }

@@ -1,5 +1,7 @@
 ﻿using ACE.Domain.Abstract.IControlledRepo;
+using ACE.Domain.Entities;
 using ACE.Domain.Entities.ControlledEntities;
+using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.DTOModel;
 using AutoMapper;
@@ -50,4 +52,24 @@ namespace ACEdatabaseAPI.MapProfile
               .ReverseMap();
         }
     }
+
+    public class FlagProfile : Profile
+    {
+        public FlagProfile()
+        {
+            CreateMap<Flag, FlagStudent>()
+            .ReverseMap();
+        }
+    }
+
+    public class FlagDTOProfile : Profile
+    {
+        public FlagDTOProfile()
+        {
+            CreateMap<Flag, FlagDTO>()
+              .ForMember(destinationMember => destinationMember.FlagLevel, memberOptions => memberOptions.MapFrom(x => x.FlagLevel.Name))
+              .ReverseMap();
+        }
+    }
+
 }

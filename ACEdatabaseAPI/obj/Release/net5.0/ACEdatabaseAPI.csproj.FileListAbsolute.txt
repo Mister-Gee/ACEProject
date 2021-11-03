@@ -102,3 +102,4 @@ C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Rel
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\ref\ACEdatabaseAPI.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\ACEdatabaseAPI.pdb
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\ACEdatabaseAPI.genruntimeconfig.cache
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\ACEdatabaseAPI.csproj.CopyComplete

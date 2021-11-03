@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ACEdatabaseAPI.DTOModel;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +10,8 @@ namespace ACEdatabaseAPI.CreateModel
 {
     public class ImageUpload
     {
-        [Required]
+        [FileSignatureValidation]
+        [MaxFileSize(2000)]
         public IFormFile Image { get; set; }
     }
 }
