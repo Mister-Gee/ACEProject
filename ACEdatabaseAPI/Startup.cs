@@ -195,6 +195,10 @@ namespace ACE
             services.AddScoped<IFlagRepo, EFFlagRepo>();
             services.AddScoped<IBloodGroupRepo, EFBloodGroupRepo>();
             services.AddScoped<IGenotypeRepo, EFGenotypeRepo>();
+            services.AddScoped<IAcademicYearRepo, EFAcademicYearRepo>();
+            services.AddScoped<ISemesterRepo, EFSemesterRepo>();
+            services.AddScoped<ICourseRepo, EFCourseRepo>();
+            services.AddScoped<IStudentRegCourseRepo, EFStudentRegCourseRepo>();
 
             services.AddScoped<IFileUploadService, FileUploadService>();
 

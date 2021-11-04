@@ -28,12 +28,14 @@ namespace ACEdatabaseAPI.Controllers
         IGenotypeRepo _genotypeRepo;
         IFlagLevelRepo _flagLevelRepo;
         IMedicalConditionsRepo _medConRepo;
-
+        IAcademicYearRepo _acadYearRepo;
+        ISemesterRepo _semesterRepo;
 
 
         public ControlledDataController(IReligionRepo religionRepo, IMaritalStatusRepo maritalStatusRepo, IStudentCategoryRepo studentCategoryRepo,
             ILevelRepo levelRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IGenderRepo genderRepo, IProgrammeRepo progRepo,
-            IBloodGroupRepo bloodGroupRepo, IGenotypeRepo genotypeRepo, IFlagLevelRepo flagLevelRepo, IMedicalConditionsRepo medConRepo)
+            IBloodGroupRepo bloodGroupRepo, IGenotypeRepo genotypeRepo, IFlagLevelRepo flagLevelRepo, IMedicalConditionsRepo medConRepo, 
+            IAcademicYearRepo acadYearRepo, ISemesterRepo semesterRepo)
         {
             _religionRepo = religionRepo;
             _maritalStatusRepo = maritalStatusRepo;
@@ -47,6 +49,8 @@ namespace ACEdatabaseAPI.Controllers
             _genotypeRepo = genotypeRepo;
             _flagLevelRepo = flagLevelRepo;
             _medConRepo = medConRepo;
+            _acadYearRepo = acadYearRepo;
+            _semesterRepo = semesterRepo;
         }
 
         [HttpGet]
@@ -1367,8 +1371,8 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [Route("MeedicalCondition/All")]
-        public IActionResult GetAllMeedicalCondition()
+        [Route("MedicalCondition/All")]
+        public IActionResult GetAllMedicalCondition()
         {
             try
             {
@@ -1453,8 +1457,8 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("MedicalConditin/Delete/{Id}")]
-        public IActionResult DeleteMedicalConditin(Guid Id)
+        [Route("MedicalCondition/Delete/{Id}")]
+        public IActionResult DeleteMedicalCondition(Guid Id)
         {
             try
             {
@@ -1468,6 +1472,240 @@ namespace ACEdatabaseAPI.Controllers
                         new
                         {
                             Message = "Medical Condition Deleted Successfully"
+                        }
+                    );
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [Route("AcademicYear/All")]
+        public IActionResult GetAllAcademicYear()
+        {
+            try
+            {
+                var result = _acadYearRepo.GetAll().ToList();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("AcademicYear/Create/")]
+        public IActionResult CreateAcademicYear(CreateControlledData Model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string username = User.Identity.Name;
+                    var acadYear = new AcademicYear()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = Model.Name
+                    };
+                    _acadYearRepo.Add(acadYear);
+                    _acadYearRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Academic Year Created Successfully"
+                        }
+                    );
+                }
+                return BadRequest();
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPut]
+        [Route("AcademicYear/Edit/{Id}")]
+        public IActionResult EditAcademicYear(Guid Id, CreateControlledData Model)
+        {
+            try
+            {
+                var acadYear = _acadYearRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (acadYear != null)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        string username = User.Identity.Name;
+                        acadYear.Name = Model.Name;
+                        _acadYearRepo.Edit(acadYear);
+                        _acadYearRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                        return Ok(
+                            new
+                            {
+                                Message = "Academic Year Edit Successfully"
+                            }
+                        );
+                    }
+                    return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpDelete]
+        [Route("AcademicYear/Delete/{Id}")]
+        public IActionResult DeleteAcademicYear(Guid Id)
+        {
+            try
+            {
+                var acadYear = _acadYearRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (acadYear != null)
+                {
+                    string username = User.Identity.Name;
+                    _acadYearRepo.Delete(acadYear);
+                    _acadYearRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Academic Year Deleted Successfully"
+                        }
+                    );
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+
+
+        [HttpGet]
+        [Route("Semester/All")]
+        public IActionResult GetAllSemester()
+        {
+            try
+            {
+                var result = _semesterRepo.GetAll().ToList();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("Semester/Create/")]
+        public IActionResult CreateSemester(CreateControlledData Model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string username = User.Identity.Name;
+                    var semester = new Semester()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = Model.Name
+                    };
+                    _semesterRepo.Add(semester);
+                    _semesterRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Semester Created Successfully"
+                        }
+                    );
+                }
+                return BadRequest();
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPut]
+        [Route("Semester/Edit/{Id}")]
+        public IActionResult EditSemester(Guid Id, CreateControlledData Model)
+        {
+            try
+            {
+                var semester = _semesterRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (semester != null)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        string username = User.Identity.Name;
+                        semester.Name = Model.Name;
+                        _semesterRepo.Edit(semester);
+                        _semesterRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                        return Ok(
+                            new
+                            {
+                                Message = "Semester Edit Successfully"
+                            }
+                        );
+                    }
+                    return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpDelete]
+        [Route("Semester/Delete/{Id}")]
+        public IActionResult DeleteSemester(Guid Id)
+        {
+            try
+            {
+                var semester = _semesterRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (semester != null)
+                {
+                    string username = User.Identity.Name;
+                    _semesterRepo.Delete(semester);
+                    _semesterRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Semester Deleted Successfully"
                         }
                     );
                 }

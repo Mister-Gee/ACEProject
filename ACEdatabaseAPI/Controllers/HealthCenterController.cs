@@ -54,7 +54,7 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Health"))
                 {
-                    var result = _medRepo.GetAll().Where(x => String.IsNullOrEmpty(x.MatricNumber)).ToList();
+                    var result = _medRepo.GetAll().Where(x => !String.IsNullOrEmpty(x.MatricNumber)).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -78,7 +78,7 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Health"))
                 {
-                    var result = _medRepo.GetAll().Where(x => String.IsNullOrEmpty(x.StaffID)).ToList();
+                    var result = _medRepo.GetAll().Where(x => !String.IsNullOrEmpty(x.StaffID)).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
