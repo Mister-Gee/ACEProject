@@ -14,6 +14,8 @@ namespace ACEdatabaseAPI.CreateModel
         [Required]
         public string CourseCode { get; set; }
 
+        public string CourseDescription { get; set; }
+
         [Required]
         public double CourseUnit { get; set; }
 

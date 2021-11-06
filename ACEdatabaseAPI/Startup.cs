@@ -31,6 +31,7 @@ using System.Runtime.InteropServices;
 using ACE.Domain.Concrete.EFControlledRepo;
 using ACE.Domain.Abstract.IControlledRepo;
 using ACEdatabaseAPI.Helpers.FileUploadService;
+using ACEdatabaseAPI.Helpers.ExamGradeService;
 
 namespace ACE
 {
@@ -199,9 +200,17 @@ namespace ACE
             services.AddScoped<ISemesterRepo, EFSemesterRepo>();
             services.AddScoped<ICourseRepo, EFCourseRepo>();
             services.AddScoped<IStudentRegCourseRepo, EFStudentRegCourseRepo>();
+            services.AddScoped<IClassAttendanceRepo, EFClassAttendanceRepo>();
+            services.AddScoped<IExamTimetableRepo, EFExamTimetableRepo>();
+            services.AddScoped<IExamAttendanceRepo, EFExamAttendanceRepo>();
+            services.AddScoped<IGradingUnitRepo, EFGradingUnitRepo>();
+            services.AddScoped<IExamRecordsRepo, EFExamRecordsRepo>();
+
+
+
 
             services.AddScoped<IFileUploadService, FileUploadService>();
-
+            services.AddScoped<IExamGradingService, ExamGradingService>();
 
 
         }

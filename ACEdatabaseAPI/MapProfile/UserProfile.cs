@@ -80,4 +80,13 @@ namespace ACEdatabaseAPI.MapProfile
               .ReverseMap();
         }
     }
+
+    public class CourseRegProfile : Profile
+    {
+        public CourseRegProfile()
+        {
+            CreateMap<StudentRegisteredCourse, RegisterCourse>()
+              .ReverseMap();
+        }
+    }
 }
