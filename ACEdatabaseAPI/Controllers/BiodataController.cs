@@ -266,7 +266,7 @@ namespace ACEdatabaseAPI.Controllers
 
         [HttpPut]
         [Route("Image/Upload/{userID}")]
-        public async Task<IActionResult> ImageUpload(Guid userID, ImageUpload model)
+        public async Task<IActionResult> ImageUpload(Guid userID, [FromForm]ImageUpload model)
         {
             try
             {
