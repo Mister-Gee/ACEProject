@@ -5,6 +5,7 @@ using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.DTOModel;
 using AutoMapper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,14 @@ using System.Threading.Tasks;
 
 namespace ACEdatabaseAPI.MapProfile
 {
+
+    public class UserProfile : Profile
+    {
+        public UserProfile()
+        {
+            CreateMap<UserDTO, ApplicationUser>().ReverseMap();
+        }
+    }
     public class StudentProfile : Profile
     {
         public StudentProfile()
@@ -26,15 +35,15 @@ namespace ACEdatabaseAPI.MapProfile
         public StudentDTOProfile()
         {
             CreateMap<ApplicationUser, StudentDTO>()
-               .ForMember(destinationMember => destinationMember.Gender, memberOptions => memberOptions.MapFrom(x => x.Gender.Name))
-               .ForMember(destinationMember => destinationMember.Religion, memberOptions => memberOptions.MapFrom(x => x.Religion.Name))
-               .ForMember(destinationMember => destinationMember.MaritalStatus, memberOptions => memberOptions.MapFrom(x => x.MaritalStatus.Name))
-               .ForMember(destinationMember => destinationMember.Department, memberOptions => memberOptions.MapFrom(x => x.Departments.Name))
-               .ForMember(destinationMember => destinationMember.School, memberOptions => memberOptions.MapFrom(x => x.School.Name))
-               .ForMember(destinationMember => destinationMember.StudentCategory, memberOptions => memberOptions.MapFrom(x => x.StudentCategory.Name))
-               .ForMember(destinationMember => destinationMember.Programme, memberOptions => memberOptions.MapFrom(x => x.Programme.Name))
-               .ForMember(destinationMember => destinationMember.EntryLevel, memberOptions => memberOptions.MapFrom(x => x.Level.Name))
-               .ForMember(destinationMember => destinationMember.CurrentLevel, memberOptions => memberOptions.MapFrom(x => x.Level.Name))
+               //.ForMember(destinationMember => destinationMember.Gender, memberOptions => memberOptions.MapFrom(x => x.Gender.Name))
+               //.ForMember(destinationMember => destinationMember.Religion, memberOptions => memberOptions.MapFrom(x => x.Religion.Name))
+               //.ForMember(destinationMember => destinationMember.MaritalStatus, memberOptions => memberOptions.MapFrom(x => x.MaritalStatus.Name))
+               //.ForMember(destinationMember => destinationMember.Department, memberOptions => memberOptions.MapFrom(x => x.Departments.Name))
+               //.ForMember(destinationMember => destinationMember.School, memberOptions => memberOptions.MapFrom(x => x.School.Name))
+               //.ForMember(destinationMember => destinationMember.StudentCategory, memberOptions => memberOptions.MapFrom(x => x.StudentCategory.Name))
+               //.ForMember(destinationMember => destinationMember.Programme, memberOptions => memberOptions.MapFrom(x => x.Programme.Name))
+               //.ForMember(destinationMember => destinationMember.EntryLevel, memberOptions => memberOptions.MapFrom(x => x.Level.Name))
+               //.ForMember(destinationMember => destinationMember.CurrentLevel, memberOptions => memberOptions.MapFrom(x => x.Level.Name))
                .ReverseMap();
         }
     }
@@ -44,11 +53,11 @@ namespace ACEdatabaseAPI.MapProfile
         public StaffDTOProfile()
         {
             CreateMap<ApplicationUser, StaffDTO>()
-              .ForMember(destinationMember => destinationMember.Gender, memberOptions => memberOptions.MapFrom(x => x.Gender.Name))
-              .ForMember(destinationMember => destinationMember.Religion, memberOptions => memberOptions.MapFrom(x => x.Religion.Name))
-              .ForMember(destinationMember => destinationMember.MaritalStatus, memberOptions => memberOptions.MapFrom(x => x.MaritalStatus.Name))
-              .ForMember(destinationMember => destinationMember.Department, memberOptions => memberOptions.MapFrom(x => x.Departments.Name))
-              .ForMember(destinationMember => destinationMember.School, memberOptions => memberOptions.MapFrom(x => x.School.Name))
+              //.ForMember(destinationMember => destinationMember.Gender, memberOptions => memberOptions.MapFrom(x => x.Gender.Name))
+              //.ForMember(destinationMember => destinationMember.Religion, memberOptions => memberOptions.MapFrom(x => x.Religion.Name))
+              //.ForMember(destinationMember => destinationMember.MaritalStatus, memberOptions => memberOptions.MapFrom(x => x.MaritalStatus.Name))
+              //.ForMember(destinationMember => destinationMember.Department, memberOptions => memberOptions.MapFrom(x => x.Departments.Name))
+              //.ForMember(destinationMember => destinationMember.School, memberOptions => memberOptions.MapFrom(x => x.School.Name))
               .ReverseMap();
         }
     }
@@ -67,16 +76,7 @@ namespace ACEdatabaseAPI.MapProfile
         public FlagDTOProfile()
         {
             CreateMap<Flag, FlagDTO>()
-              .ForMember(destinationMember => destinationMember.FlagLevel, memberOptions => memberOptions.MapFrom(x => x.FlagLevel.Name))
-              .ReverseMap();
-        }
-    }
-
-    public class CourseProfile : Profile
-    {
-        public CourseProfile()
-        {
-            CreateMap<Course, CreateCourse>()
+              //.ForMember(destinationMember => destinationMember.FlagLevel, memberOptions => memberOptions.MapFrom(x => x.FlagLevel.Name))
               .ReverseMap();
         }
     }

@@ -8,7 +8,6 @@ namespace ACEdatabaseAPI.CreateModel
 {
     public class Register : BaseRegister
     {
-        public bool isStudent { get; set; }
 
         public bool isStaff { get; set; }
 

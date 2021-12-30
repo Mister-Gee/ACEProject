@@ -322,6 +322,7 @@ C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Rel
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Azure.Security.KeyVault.Certificates.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Azure.Security.KeyVault.Secrets.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\CloudinaryDotNet.dll
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\EPPlus.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
@@ -345,6 +346,7 @@ C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Rel
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Microsoft.IdentityModel.Protocols.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Microsoft.IO.RecyclableMemoryStream.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Microsoft.OpenApi.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Newtonsoft.Json.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\Newtonsoft.Json.Bson.dll
@@ -359,6 +361,7 @@ C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Rel
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\System.Runtime.Caching.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\System.Xml.XPath.XmlDocument.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\libe_sqlite3.so
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\ACE.Domain.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\ACE.Domain.pdb

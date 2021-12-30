@@ -1,8 +1,10 @@
 ﻿using ACE.Domain.Abstract;
 using ACE.Domain.Entities;
 using ACEdatabaseAPI.CreateModel;
+using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -18,9 +20,14 @@ namespace ACEdatabaseAPI.Controllers
     public class HealthCenterController : ControllerBase
     {
         IMedicalRecordRepo _medRepo;
-        public HealthCenterController(IMedicalRecordRepo medRepo)
+        IMedicalHistoryRepo _medHistoryRepo;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public HealthCenterController(IMedicalRecordRepo medRepo, IMedicalHistoryRepo medHistoryRepo, UserManager<ApplicationUser> userManager)
         {
             _medRepo = medRepo;
+            _medHistoryRepo = medHistoryRepo;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -119,7 +126,40 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Records/{UserID}")]
+        [Route("Records/Status/{UserID}")]
+        public IActionResult HealthRecordStatus(Guid UserID)
+        {
+            try
+            {
+                if (User.IsInRole("Health") || User.IsInRole("MIS") || User.IsInRole("Exam&Records") || User.IsInRole("Security"))
+                {
+                    var result = _medRepo.FindBy(x => x.UserId == UserID).FirstOrDefault();
+                    if(result == null)
+                    {
+                        return Ok(new { 
+                            IsCompleted = false
+                        });
+                    }
+                    return Ok(new
+                    {
+                        IsCompleted = true
+                    });
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [Route("Records/User/{UserID}")]
         public IActionResult RecordByUserID(Guid UserID)
         {
             try
@@ -143,14 +183,43 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Records/{MatricNumber}")]
-        public IActionResult RecordByMatricNumber(string MatricNumber)
+        [Route("MedicalHistory/{UserID}")]
+        public IActionResult MedicalHistoryByUserID(Guid UserID)
         {
             try
             {
                 if (User.IsInRole("Health"))
                 {
-                    var result = _medRepo.FindBy(x => x.MatricNumber == MatricNumber).FirstOrDefault();
+                    var result = _medHistoryRepo.FindBy(x => x.UserID == UserID).OrderByDescending(x => x.Date).ToList();
+                    return Ok(result);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("Records/MatricNumber")]
+        public IActionResult RecordByMatricNumber(SearchByMatricNumber model)
+        {
+            try
+            {
+                if (User.IsInRole("Health"))
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
+                    }
+
+                    var result = _medRepo.FindBy(x => x.MatricNumber == model.MatricNumber).FirstOrDefault();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -166,15 +235,73 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("Records/{StaffID}")]
-        public IActionResult RecordByStaffID(string StaffID)
+        [HttpPost]
+        [Route("Diagnosis/Add")]
+        public IActionResult AddDiagnosis(AddMedicalHistory model)
         {
             try
             {
                 if (User.IsInRole("Health"))
                 {
-                    var result = _medRepo.FindBy(x => x.StaffID == StaffID).FirstOrDefault();
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
+                    }
+                    var user = User.Identity.Name;
+                    var medicalHistory = new MedicalHistory();
+
+                    var patient = _userManager.FindByIdAsync(model.UserID.ToString()).Result;
+                    if (patient == null)
+                    {
+                        return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "User does not exist"));
+                    }
+
+                    medicalHistory.AdditionDoctorsNote = model.AdditionDoctorsNote;
+                    medicalHistory.Date = DateTime.UtcNow.AddHours(1);
+                    medicalHistory.Description = model.Description;
+                    medicalHistory.Doctor = User.Identity.Name;
+                    medicalHistory.FinalDiagnosis = model.FinalDiagnosis;
+                    medicalHistory.InitialDiagnosis = model.InitialDiagnosis;
+                    medicalHistory.TreatmentPlan = model.TreatmentPlan;
+                    medicalHistory.UserID = model.UserID;
+                    medicalHistory.VitalSign = model.VitalSign;
+
+                    _medHistoryRepo.Add(medicalHistory);
+                    _medHistoryRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
+
+                    return Ok(new
+                    {
+                        Message = "Medical History Added Successfully"
+                    });
+
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("Records/StaffID")]
+        public IActionResult RecordByStaffID(SearchByStaffID model)
+        {
+            try
+            {
+                if (User.IsInRole("Health"))
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
+                    }
+
+                    var result = _medRepo.FindBy(x => x.StaffID == model.StaffID).FirstOrDefault();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -209,9 +336,9 @@ namespace ACEdatabaseAPI.Controllers
                         medicalRecord.FamilyDoctorPhoneNumber = model.FamilyDoctorPhoneNumber;
                         medicalRecord.GenotypeID = model.GenotypeID;
                         medicalRecord.Height = model.Height;
-                        medicalRecord.MedicalHistory = model.MedicalHistory;
+                        medicalRecord.AdditionalNote = model.AdditionalNote;
                         medicalRecord.Weight = model.Weight;
-                        medicalRecord.OtherMedicalHistorys = JsonConvert.SerializeObject(model.OtherMedicalHistorys);
+
                         _medRepo.Add(medicalRecord);
                         _medRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new
@@ -254,9 +381,8 @@ namespace ACEdatabaseAPI.Controllers
                         medicalRecord.FamilyDoctorPhoneNumber = model.FamilyDoctorPhoneNumber;
                         medicalRecord.GenotypeID = model.GenotypeID;
                         medicalRecord.Height = model.Height;
-                        medicalRecord.MedicalHistory = model.MedicalHistory;
+                        medicalRecord.AdditionalNote = model.AdditionalNote;
                         medicalRecord.Weight = model.Weight;
-                        medicalRecord.OtherMedicalHistorys = JsonConvert.SerializeObject(model.OtherMedicalHistorys);
                         _medRepo.Add(medicalRecord);
                         _medRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new
@@ -312,9 +438,8 @@ namespace ACEdatabaseAPI.Controllers
                         studentRecord.FamilyDoctorPhoneNumber = model.FamilyDoctorPhoneNumber;
                         studentRecord.GenotypeID = model.GenotypeID;
                         studentRecord.Height = model.Height;
-                        studentRecord.MedicalHistory = model.MedicalHistory;
+                        studentRecord.AdditionalNote = model.AdditionalNote;
                         studentRecord.Weight = model.Weight;
-                        studentRecord.OtherMedicalHistorys = JsonConvert.SerializeObject(model.OtherMedicalHistorys);
                         _medRepo.Edit(studentRecord);
                         _medRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new
@@ -338,6 +463,7 @@ namespace ACEdatabaseAPI.Controllers
                         HttpStatusCode.InternalServerError.ToString(), x.ToString()));
             }
         }
+
 
         [HttpPut]
         [Route("Records/Staff/Edit/{ID}")]
@@ -371,9 +497,8 @@ namespace ACEdatabaseAPI.Controllers
                         staffRecord.FamilyDoctorPhoneNumber = model.FamilyDoctorPhoneNumber;
                         staffRecord.GenotypeID = model.GenotypeID;
                         staffRecord.Height = model.Height;
-                        staffRecord.MedicalHistory = model.MedicalHistory;
+                        staffRecord.AdditionalNote = model.AdditionalNote;
                         staffRecord.Weight = model.Weight;
-                        staffRecord.OtherMedicalHistorys = JsonConvert.SerializeObject(model.OtherMedicalHistorys);
                         _medRepo.Edit(staffRecord);
                         _medRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new
@@ -389,6 +514,62 @@ namespace ACEdatabaseAPI.Controllers
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
                                 "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPut]
+        [Route("Diagnosis/Edit/{ID}")]
+        public IActionResult EditDiagnosis(Guid ID, EditMedicalHistory model)
+        {
+            try
+            {
+                if (User.IsInRole("Health"))
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
+                    }
+                    var user = User.Identity.Name;
+                    var medicalHistory = _medHistoryRepo.FindBy(x => x.Id == ID).FirstOrDefault();
+                    if (medicalHistory == null)
+                    {
+                        return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Medical History does not exist"));
+                    }
+
+                    var patient = _userManager.FindByIdAsync(model.UserID.ToString()).Result;
+                    if (patient == null)
+                    {
+                        return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "User does not exist"));
+                    }
+
+                    medicalHistory.AdditionDoctorsNote = model.AdditionDoctorsNote;
+                    medicalHistory.Date = DateTime.UtcNow.AddHours(1);
+                    medicalHistory.Description = model.Description;
+                    medicalHistory.Doctor = User.Identity.Name;
+                    medicalHistory.FinalDiagnosis = model.FinalDiagnosis;
+                    medicalHistory.InitialDiagnosis = model.InitialDiagnosis;
+                    medicalHistory.TreatmentPlan = model.TreatmentPlan;
+                    medicalHistory.UserID = model.UserID;
+                    medicalHistory.VitalSign = model.VitalSign;
+
+                    _medHistoryRepo.Edit(medicalHistory);
+                    _medHistoryRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
+
+                    return Ok(new { 
+                        Message = "Medical History Updated Successfully"
+                    });
+
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+
             }
             catch (Exception x)
             {
@@ -419,6 +600,40 @@ namespace ACEdatabaseAPI.Controllers
                     return Ok(new
                     {
                         Message = "Record Deleted Successfully"
+                    });
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpDelete]
+        [Route("Record/Delete/{ID}")]
+        public IActionResult DeleteMedicalHistory(Guid ID)
+        {
+            try
+            {
+                var user = User.Identity.Name;
+                if (User.IsInRole("Health"))
+                {
+                    var medicalHistory = _medHistoryRepo.FindBy(x => x.Id == ID).FirstOrDefault();
+                    if (medicalHistory == null)
+                    {
+                        return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Medical History does not exist"));
+                    }
+                    _medHistoryRepo.Delete(medicalHistory);
+                    _medHistoryRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(new
+                    {
+                        Message = "Medical History Deleted Successfully"
                     });
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,

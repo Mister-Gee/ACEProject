@@ -8,21 +8,42 @@ namespace ACEdatabaseAPI.CreateModel
 {
     public class RegisterCourse
     {
-        public Guid Id { get; set; }
-
         [Required]
         public Guid StudentId { get; set; }
 
         [Required]
-        public string StudentMatricNumber { get; set; }
-
-        [Required]
-        public Guid CourseID { get; set; }
+        public List<Course> Courses { get; set; }
 
         [Required]
         public Guid AcademicYearID { get; set; }
 
         [Required]
         public Guid SemesterID { get; set; }
+    }
+
+    public class Course 
+    {
+        public Guid CourseID { get; set; }
+    }
+
+    public class EditRegisteredCourse
+    {
+        [Required]
+        public Guid StudentId { get; set; }
+
+        [Required]
+        public List<EditCourse> Courses { get; set; }
+
+        [Required]
+        public Guid AcademicYearID { get; set; }
+
+        [Required]
+        public Guid SemesterID { get; set; }
+    }
+
+    public class EditCourse
+    {
+        public Guid? Id { get; set; }
+        public Guid CourseID { get; set; }
     }
 }

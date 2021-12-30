@@ -29,9 +29,7 @@ namespace ACEdatabaseAPI.CreateModel
 
         public string FamilyDoctorName { get; set; }
         public string FamilyDoctorPhoneNumber { get; set; }
+        public string AdditionalNote { get; set; }
 
-        public string MedicalHistory { get; set; }
-
-        public List<Guid> OtherMedicalHistorys { get; set; }
     }
 }

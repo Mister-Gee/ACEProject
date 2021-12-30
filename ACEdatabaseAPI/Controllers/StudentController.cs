@@ -1,5 +1,6 @@
 ﻿using ACE.Domain.Abstract.IControlledRepo;
 using ACE.Domain.Entities;
+using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.DTOModel;
 using ACEdatabaseAPI.Model;
@@ -45,14 +46,14 @@ namespace ACEdatabaseAPI.Controllers
                     var isStudent = await _userManager.IsInRoleAsync(user, "Student");
                     if (isStudent)
                     {
-                        await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Level).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Level).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
 
 
                         var student = new StudentDTO();
@@ -72,7 +73,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Get/{ID}")]
+        [Route("Get/ID/{ID}")]
         public async Task<IActionResult> GetStudentByID(Guid ID)
         {
             try
@@ -83,14 +84,14 @@ namespace ACEdatabaseAPI.Controllers
                     var isStudent = await _userManager.IsInRoleAsync(user, "Student");
                     if (isStudent)
                     {
-                        await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Level).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Level).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
 
                         var student = new StudentDTO();
                         var newDTO = _mapper.Map(user, student);
@@ -108,26 +109,31 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("Get/{Email}")]
-        public async Task<IActionResult> GetStudentByEmail(string Email)
+        [HttpPost]
+        [Route("Get/Email")]
+        public async Task<IActionResult> GetStudentByEmail(SearchByEmail model)
         {
             try
             {
-                var user = await _userManager.FindByNameAsync(Email);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
+                }
+
+                var user = await _userManager.FindByNameAsync(model.Email);
                 if (user != null)
                 {
                     var isStudent = await _userManager.IsInRoleAsync(user, "Student");
                     if (isStudent)
                     {
-                        await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Level).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Level).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
 
                         var student = new StudentDTO();
                         var newDTO = _mapper.Map(user, student);
@@ -145,26 +151,31 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("Get/{MatricNumber}")]
-        public async Task<IActionResult> GetStudentByMatricNumber(string MatricNumber)
+        [HttpPost]
+        [Route("Get/MatricNumber")]
+        public async Task<IActionResult> GetStudentByMatricNumber(SearchByMatricNumber model)
         {
             try
             {
-                var user = _userManager.Users.Where(x => x.MatricNumber.ToUpper() == MatricNumber.ToUpper()).FirstOrDefault();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
+                }
+
+                var user = _userManager.Users.Where(x => x.MatricNumber.ToUpper() == model.MatricNumber.ToUpper()).FirstOrDefault();
                 if(user != null)
                 {
                     var isStudent = await _userManager.IsInRoleAsync(user, "Student");
                     if (isStudent)
                     {
-                        await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Level).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Level).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
 
                         var student = new StudentDTO();
                         var newDTO = _mapper.Map(user, student);
@@ -182,30 +193,35 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("Get/{Biometric}")]
-        public async Task<IActionResult> GetStudentByBiometric(string Biometric)
+        [HttpPost]
+        [Route("Get/Biometric")]
+        public async Task<IActionResult> GetStudentByBiometric(SearchByBiometrics model)
         {
             try
             {
-                var user = _userManager.Users.Where(x => x.RightThumbFingerBiometrics == Biometric).FirstOrDefault();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
+                }
+
+                var user = _userManager.Users.Where(x => x.RightThumbFingerBiometrics == model.Biometric).FirstOrDefault();
                 if (user == null)
                 {
-                    user = _userManager.Users.Where(x => x.LeftThumbFingerBiometrics == Biometric).FirstOrDefault();
+                    user = _userManager.Users.Where(x => x.LeftThumbFingerBiometrics == model.Biometric).FirstOrDefault();
 
                     if (user != null)
                     {
                         var isStudent = await _userManager.IsInRoleAsync(user, "Student");
                         if (isStudent)
                         {
-                            await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                            await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
-                            await _context.Entry(user).Reference(x => x.Level).LoadAsync();
-                            await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                            await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                            await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                            await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-                            await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
+                            //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
+                            //await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
+                            //await _context.Entry(user).Reference(x => x.Level).LoadAsync();
+                            //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
+                            //await _context.Entry(user).Reference(x => x.School).LoadAsync();
+                            //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
+                            //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
+                            //await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
 
                             var student = new StudentDTO();
                             var newDTO = _mapper.Map(user, student);
@@ -244,14 +260,14 @@ namespace ACEdatabaseAPI.Controllers
                     var isStudent = await _userManager.IsInRoleAsync(user, "Student");
                     if (isStudent)
                     {
-                        await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Level).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-                        await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.StudentCategory).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Level).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
+                        //await _context.Entry(user).Reference(x => x.Programme).LoadAsync();
 
 
                         var student = new StudentDTO();

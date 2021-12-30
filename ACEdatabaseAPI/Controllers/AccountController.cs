@@ -1,7 +1,10 @@
-﻿using ACEdatabaseAPI.CreateModel;
+﻿using ACE.Domain.Abstract;
+using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
+using ACEdatabaseAPI.DTOModel;
 using ACEdatabaseAPI.Helpers;
 using ACEdatabaseAPI.Model;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +24,7 @@ using System.Threading.Tasks;
 namespace ACEdatabaseAPI.Controllers
 {
     [Route("[controller]")]
+    [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,16 +32,23 @@ namespace ACEdatabaseAPI.Controllers
         private readonly IOptions<JwtAuth> _jwtAuthentication;
         private readonly IOptions<AppSettings> _appSetting;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        IvStaffRepo _vStaffRepo;
+        IvStudentRepo _vStudentRepo;
+        IMapper _mapper;
 
-        public AccountController(UserManager<ApplicationUser> userManager,
+        public AccountController(UserManager<ApplicationUser> userManager, IMapper mapper,
                 IOptions<JwtAuth> jwtAuthentication, SignInManager<ApplicationUser> signInManger,
-                IOptions<AppSettings> appSetting, IWebHostEnvironment hostingEnvironment)
+                IOptions<AppSettings> appSetting, IWebHostEnvironment hostingEnvironment,
+                IvStaffRepo vStaffRepo, IvStudentRepo vStudentRepo)
         {
             _userManager = userManager;
             _signInManager = signInManger;
             _jwtAuthentication = jwtAuthentication;
             _appSetting = appSetting;
             _hostingEnvironment = hostingEnvironment;
+            _mapper = mapper;
+            _vStaffRepo = vStaffRepo;
+            _vStudentRepo = vStudentRepo;
         }
 
 
@@ -50,7 +61,7 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Invalid Login Attempt E1"));
+                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Invalid Login Attempt"));
                 }
 
                 ApplicationUser user;
@@ -72,7 +83,7 @@ namespace ACEdatabaseAPI.Controllers
 
                 if (user.Status == "InActive")
                 {
-                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "User Account Deactivated"));
+                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "User Account Deactivated/Suspended"));
 
                 }
 
@@ -92,7 +103,7 @@ namespace ACEdatabaseAPI.Controllers
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
-
+                       
                     foreach (var item in roles)
                     {
                         myClaims.Add(new Claim(ClaimTypes.Role, item));
@@ -113,6 +124,7 @@ namespace ACEdatabaseAPI.Controllers
                         lastName = user.LastName,
                         email = user.Email,
                         phone = user.PhoneNumber,
+                        userID = user.Id,
                         role
                     });
                 }
@@ -136,13 +148,14 @@ namespace ACEdatabaseAPI.Controllers
 
         [HttpPost]
         [Route("Register")]
+        //[Authorize("MIS")]
         public async Task<ActionResult> Register([FromBody] Register model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (User.IsInRole("Cafe"))
+                    if (User.IsInRole("MIS"))
                     {
                         var strippedPhone = $"0{model.PhoneNumber.Substring(model.PhoneNumber.Length - 10, 10)}";
                         var user = new ApplicationUser()
@@ -152,10 +165,27 @@ namespace ACEdatabaseAPI.Controllers
                             FirstName = model.SurName,
                             PhoneNumber = strippedPhone,
                             LastName = model.Name,
-                            Date = Utility.CurrentTime
+                            Date = Utility.CurrentTime,
+                            ForcePasswordChange = true
                         };
 
-                       var result = _userManager.CreateAsync(user, model.Password).Result;
+                        var emailCheck = _userManager.Users.Where(x => x.Email == model.Email).FirstOrDefault();
+                        if (emailCheck != null)
+                        {
+                            return StatusCode((int)HttpStatusCode.Unauthorized,
+                                new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                    "Email Already Exist!"));
+                        }
+
+                        var phoneNumCheck = _userManager.Users.Where(x => x.Email == strippedPhone).FirstOrDefault();
+                        if (phoneNumCheck != null)
+                        {
+                            return StatusCode((int)HttpStatusCode.Unauthorized,
+                                new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                    "Phone Number Already Exist!"));
+                        }
+
+                        var result = _userManager.CreateAsync(user, model.Password).Result;
                         if (result.Succeeded)
                         {
                             if (model.isStaff)
@@ -170,8 +200,7 @@ namespace ACEdatabaseAPI.Controllers
                                     });
                                 }
                             }
-
-                            if (model.isStudent)
+                            else
                             {
                                 var role = await _userManager.AddToRoleAsync(user, "Student");
                                 if (role.Succeeded)
@@ -185,12 +214,6 @@ namespace ACEdatabaseAPI.Controllers
                             }
                         }
                     }
-                    else
-                    {
-                        return StatusCode((int)HttpStatusCode.Unauthorized,
-                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "You are not Authorized!"));
-                    }
                 }
                 return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Invalid Registeration Attempt"));
             }
@@ -202,8 +225,10 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("Cafe/Register")]
+        //[Authorize("MIS")]
         public async Task<ActionResult> RegisterCafe([FromBody] BaseRegister model)
         {
             try
@@ -211,16 +236,34 @@ namespace ACEdatabaseAPI.Controllers
                 if (ModelState.IsValid)
                 {
                     var strippedPhone = $"0{model.PhoneNumber.Substring(model.PhoneNumber.Length - 10, 10)}";
-                        var user = new ApplicationUser()
-                        {
-                            UserName = model.Email,
-                            Email = model.Email,
-                            FirstName = model.SurName,
-                            PhoneNumber = strippedPhone,
-                            LastName = model.Name,
-                            Date = Utility.CurrentTime,
-                            LockoutEnabled = false
-                        };
+                    var user = new ApplicationUser()
+                    {
+                        UserName = model.Email,
+                        Email = model.Email,
+                        FirstName = model.SurName,
+                        PhoneNumber = strippedPhone,
+                        LastName = model.Name,
+                        Date = Utility.CurrentTime,
+                        LockoutEnabled = false,
+                        ForcePasswordChange = true
+
+                    };
+
+                    var emailCheck = _userManager.Users.Where(x => x.Email == model.Email).FirstOrDefault();
+                    if(emailCheck != null)
+                    {
+                        return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Email Already Exist!"));
+                    }
+
+                    var phoneNumCheck = _userManager.Users.Where(x => x.Email == strippedPhone).FirstOrDefault();
+                    if (phoneNumCheck != null)
+                    {
+                        return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Phone Number Already Exist!"));
+                    }
 
                     var result = _userManager.CreateAsync(user, model.Password).Result;
                     if (result.Succeeded)
@@ -234,12 +277,6 @@ namespace ACEdatabaseAPI.Controllers
                                 message = "Cafe Registered Successfully"
                             });
                         }
-                    }
-                    else
-                    {
-                        return StatusCode((int)HttpStatusCode.Unauthorized,
-                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "You are not Authorized!"));
                     }
                 }
                 return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Invalid Registeration Attempt"));
@@ -445,7 +482,303 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("LoggedIn/User")]
+        public IActionResult GetUser()
+        {
+            try
+            {
+                var name = User.Identity.Name;
+                var user = _userManager.FindByNameAsync(name).Result;
 
+                if(_userManager.IsInRoleAsync(user, "Staff").Result)
+                {
+                    var staffResult = _vStaffRepo.FindBy(x => x.Id == user.Id).FirstOrDefault();
+                    if(staffResult != null)
+                    {
+                        return Ok(staffResult);
+                    }
+                }
 
+                if(_userManager.IsInRoleAsync(user, "Student").Result)
+                {
+                    var studentResult = _vStudentRepo.FindBy(x => x.Id == user.Id).FirstOrDefault();
+                    if(studentResult != null)
+                    {
+                        return Ok(studentResult);
+                    }
+                }
+                var userDTO = new UserDTO();
+                var result = _mapper.Map(user, userDTO);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,
+                    new ApiError(500, HttpStatusCode.InternalServerError.ToString(),
+                        ex.Message.ToString()));
+
+            }
+        }
+
+        [HttpGet]
+        [Route("Get/Email")]
+        public IActionResult GetUser(string Email)
+        {
+            try
+            {
+                var user = _userManager.FindByNameAsync(Email).Result;
+
+                if(user == null)
+                {
+                    return Ok(new { 
+                        Message = "User Not Found"
+                    });
+                }
+
+                if (_userManager.IsInRoleAsync(user, "Staff").Result)
+                {
+                    var staffResult = _vStaffRepo.FindBy(x => x.Id == user.Id).FirstOrDefault();
+                    if (staffResult != null)
+                    {
+                        return Ok(staffResult);
+                    }
+                }
+
+                if (_userManager.IsInRoleAsync(user, "Student").Result)
+                {
+                    var studentResult = _vStudentRepo.FindBy(x => x.Id == user.Id).FirstOrDefault();
+                    if (studentResult != null)
+                    {
+                        return Ok(studentResult);
+                    }
+                }
+
+                var userDTO = new UserDTO();
+                var result = _mapper.Map(user, userDTO);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,
+                    new ApiError(500, HttpStatusCode.InternalServerError.ToString(),
+                        ex.Message.ToString()));
+
+            }
+        }
+
+        [HttpPost]
+        [Route("Get/ByMatricNumber")]
+        public IActionResult GetUserByMatricNumber(SearchByMatricNumber model)
+        {
+            try
+            {
+                var user = _vStudentRepo.FindBy(x => x.MatricNumber == model.MatricNumber).FirstOrDefault();
+                if (user == null)
+                {
+                    return Ok(new
+                    {
+                        Message = "User Not Found"
+                    });
+                }
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,
+                    new ApiError(500, HttpStatusCode.InternalServerError.ToString(),
+                        ex.Message.ToString()));
+
+            }
+        }
+
+        [HttpPost]
+        [Route("Get/ByStaffID")]
+        public IActionResult GetUserByStaffID(SearchByStaffID model)
+        {
+            try
+            {
+                var user = _vStaffRepo.FindBy(x => x.StaffID == model.StaffID).FirstOrDefault();
+                if (user == null)
+                {
+                    return Ok(new
+                    {
+                        Message = "User Not Found"
+                    });
+                }
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,
+                    new ApiError(500, HttpStatusCode.InternalServerError.ToString(),
+                        ex.Message.ToString()));
+
+            }
+        }
+
+        [HttpPut]
+        [Route("User/UpdateStatus/ByID")]
+        public IActionResult ChangeUserStatus(userActiveStatusID model)
+        {
+            try
+            {
+                if (User.IsInRole("MIS"))
+                {
+                    var user = _userManager.FindByIdAsync(model.UserID).Result;
+                    if (user == null)
+                    {
+                        return Ok(new
+                        {
+                            Message = "User Not Found"
+                        });
+                    }
+                    user.isDisabled = model.ActiveStatus;
+
+                    var result = _userManager.UpdateAsync(user).Result;
+                    if (result.Succeeded)
+                    {
+                        return Ok( new { 
+                            Message = "Status Changed Succesffully"
+                        });
+                    }
+                    return BadRequest();
+                }
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,
+                    new ApiError(500, HttpStatusCode.InternalServerError.ToString(),
+                        ex.Message.ToString()));
+
+            }
+        }
+
+        [HttpPut]
+        [Route("User/UpdateStatus/ByEmail")]
+        public IActionResult ChangeUserStatus(userActiveStatusEmail model)
+        {
+            try
+            {
+                if (User.IsInRole("MIS"))
+                {
+                    var user = _userManager.FindByEmailAsync(model.UserEmail).Result;
+                    if (user == null)
+                    {
+                        return Ok(new
+                        {
+                            Message = "User Not Found"
+                        });
+                    }
+                    user.isDisabled = model.ActiveStatus;
+
+                    var result = _userManager.UpdateAsync(user).Result;
+                    if (result.Succeeded)
+                    {
+                        return Ok(new
+                        {
+                            Message = "Status Changed Succesffully"
+                        });
+                    }
+                    return BadRequest();
+                }
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,
+                    new ApiError(500, HttpStatusCode.InternalServerError.ToString(),
+                        ex.Message.ToString()));
+
+            }
+        }
+
+        [HttpPut]
+        [Route("User/UpdateStatus/ByStaffID")]
+        public IActionResult ChangeUserStatus(userActiveStatusStaffID model)
+        {
+            try
+            {
+                if (User.IsInRole("MIS"))
+                {
+                    var user = _userManager.Users.Where(x => x.StaffID == model.StaffID).FirstOrDefault();
+                    if (user == null)
+                    {
+                        return Ok(new
+                        {
+                            Message = "User Not Found"
+                        });
+                    }
+                    user.isDisabled = model.ActiveStatus;
+
+                    var result = _userManager.UpdateAsync(user).Result;
+                    if (result.Succeeded)
+                    {
+                        return Ok(new
+                        {
+                            Message = "Status Changed Succesffully"
+                        });
+                    }
+                    return BadRequest();
+                }
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,
+                    new ApiError(500, HttpStatusCode.InternalServerError.ToString(),
+                        ex.Message.ToString()));
+
+            }
+        }
+
+        [HttpPut]
+        [Route("User/UpdateStatus/ByMatricNumber")]
+        public IActionResult ChangeUserStatus(userActiveStatusMatricNumber model)
+        {
+            try
+            {
+                if (User.IsInRole("MIS"))
+                {
+                    var user = _userManager.Users.Where(x => x.MatricNumber == model.MatricNumber).FirstOrDefault();
+                    if (user == null)
+                    {
+                        return Ok(new
+                        {
+                            Message = "User Not Found"
+                        });
+                    }
+                    user.isDisabled = model.ActiveStatus;
+
+                    var result = _userManager.UpdateAsync(user).Result;
+                    if (result.Succeeded)
+                    {
+                        return Ok(new
+                        {
+                            Message = "Status Changed Succesffully"
+                        });
+                    }
+                    return BadRequest();
+                }
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,
+                    new ApiError(500, HttpStatusCode.InternalServerError.ToString(),
+                        ex.Message.ToString()));
+
+            }
+        }
     }
 }

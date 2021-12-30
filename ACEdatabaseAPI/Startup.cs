@@ -32,6 +32,8 @@ using ACE.Domain.Concrete.EFControlledRepo;
 using ACE.Domain.Abstract.IControlledRepo;
 using ACEdatabaseAPI.Helpers.FileUploadService;
 using ACEdatabaseAPI.Helpers.ExamGradeService;
+using ACEdatabaseAPI.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ACE
 {
@@ -51,25 +53,41 @@ namespace ACE
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //    .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
 
-            //services.AddSession();
+            services.AddSession();
             services.AddControllers();
+            services.AddMvc();
 
-            //services.AddCors(
-            //    c =>
-            //    {
-            //        c.AddPolicy("AllowOrigin", options => options.SetIsOriginAllowedToAllowWildcardSubdomains()
-            //            .WithOrigins("http://localhost:57578", "http://localhost:8080", "https://localhost:8080",
-            //               "http://localhost:3000")
-            //            .AllowAnyOrigin()
-            //            .AllowAnyHeader()
-            //            .AllowAnyMethod()
-            //        );
-            //    }
-            //);
+            services.AddOptions();
+            services.AddMemoryCache();
+            services.AddHttpContextAccessor();
+
+            services.AddCors(
+                c =>
+                {
+                    c.AddPolicy("AllowOrigin", options => options.SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .WithOrigins("http://localhost:57578", "http://localhost:8080", "https://localhost:8080",
+                           "http://localhost:3000", "https://localhost:3000")
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                    );
+                }
+            );
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ACE", Version = "v1" });
             //});
+            services.Configure<CloudinarySettings>(Configuration.GetSection(CloudinarySettings.SettingsName));
+
+            services.AddControllersWithViews(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    //.RequireAssertion(_ => true)
+                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -124,11 +142,16 @@ namespace ACE
             //services.AddDbContext<ACEContext>(options => options.UseSqlServer(
             //    Configuration.GetConnectionString("ACEContext")
             //    ));
+            //services.AddDbContext<ACEViewContext>(options => options.UseSqlServer(
+            //    Configuration.GetConnectionString("ACEContext")
+            //    ));
             //services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
             //    Configuration.GetConnectionString("ACEContext")
             //    ));
-            services.AddDbContext<ACEContext>(option => option.UseSqlite("Data Source=ACELite.db"));
-            services.AddDbContext<ApplicationDbContext>(option => option.UseSqlite("Data Source=ACELite.db"));
+
+            services.AddDbContext<ACEContext>(option => option.UseSqlite("Data Source=ACEDbLite.db"));
+            services.AddDbContext<ACEViewContext>(option => option.UseSqlite("Data Source=ACEDbLite.db"));
+            services.AddDbContext<ApplicationDbContext>(option => option.UseSqlite("Data Source=ACEDbLite.db"));
 
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(option => 
@@ -181,6 +204,17 @@ namespace ACE
 
             //Scopes
             services.AddScoped<IvUserRoleRepo, EFvUserRoleRepo>();
+            services.AddScoped<IvStaffRepo, EFvStaffRepo>();
+            services.AddScoped<IvStudentRepo, EFvStudentRepo>();
+            services.AddScoped<IvCourseRepo, EFvCourseRepo>();
+            services.AddScoped<IvCourseRegisterationRepo, EFvCourseRegisterationRepo>();
+            services.AddScoped<IvStudentRegisteredCourseRepo, EFvStudentRegisteredCourseRepo>();
+
+
+
+
+
+
             services.AddScoped<IDeviceRepo, EFDeviceRepo>();
             services.AddScoped<IProgrammeRepo, EFProgrammeRepo>();
             services.AddScoped<IReligionRepo, EFReligionRepo>();
@@ -192,7 +226,7 @@ namespace ACE
             services.AddScoped<IStudentCategoryRepo, EFStudentCategoryRepo>();
             services.AddScoped<IFlagLevelRepo, EFFlagLevelRepo>();
             services.AddScoped<IMedicalRecordRepo, EFMedicalRecordRepo>();
-            services.AddScoped<IMedicalConditionsRepo, EFMedicalConditionsRepo>();
+            services.AddScoped<IMedicalHistoryRepo, EFMedicalHistoryRepo>();
             services.AddScoped<IFlagRepo, EFFlagRepo>();
             services.AddScoped<IBloodGroupRepo, EFBloodGroupRepo>();
             services.AddScoped<IGenotypeRepo, EFGenotypeRepo>();
@@ -205,12 +239,15 @@ namespace ACE
             services.AddScoped<IExamAttendanceRepo, EFExamAttendanceRepo>();
             services.AddScoped<IGradingUnitRepo, EFGradingUnitRepo>();
             services.AddScoped<IExamRecordsRepo, EFExamRecordsRepo>();
+            services.AddScoped<ICurrentAcademicSessionRepo, EFCurrentAcademicSessionRepo>();
+            services.AddScoped<ICourseRegisterationRepo, EFCourseRegisterationRepo>(); 
 
 
 
 
-            services.AddScoped<IFileUploadService, FileUploadService>();
+            services.AddScoped<IFileUploadService, FileUploadService>(); 
             services.AddScoped<IExamGradingService, ExamGradingService>();
+            services.AddScoped<IExcelHelper, ExcelHelper>();
 
 
         }
@@ -250,12 +287,19 @@ namespace ACE
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext appContext, ACEContext aceContext)
         {
-            //app.UseSession();
+            app.UseSession();
             var path = Directory.GetCurrentDirectory();
             var date = DateTime.Today.ToString("ddMMyyyy");
 
-            appContext.Database.Migrate();
-            aceContext.Database.Migrate();
+            try
+            {
+                appContext.Database.Migrate();
+                aceContext.Database.Migrate();
+            }
+            catch(Exception x)
+            {
+                Console.WriteLine(x.ToString());
+            }
 
 
             //loggerFactory.AddFile($"{path}\\Logs\\{date}-Log.txt");
@@ -279,9 +323,15 @@ namespace ACE
             // app.UseDeveloperExceptionPage();
             app.UseSwaggerUI(c =>
             {
-                //c.SwaggerEndpoint("/myApi/swagger/v1/swagger.json", "V1 Docs");
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "ACE Service");
             });
+
+            app.UseCors(
+                options => options.SetIsOriginAllowedToAllowWildcardSubdomains().WithOrigins("http://localhost:57578", "http://localhost:8080", "https://localhost:8080", "https://localhost:3000", "http://localhost:3000")
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
 
             app.UseHttpsRedirection();
 

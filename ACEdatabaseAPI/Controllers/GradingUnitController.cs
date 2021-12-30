@@ -59,7 +59,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("MIS"))
                 {
                     if (ModelState.IsValid)
                     {
@@ -101,7 +101,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("MIS"))
                 {
                     if (ModelState.IsValid)
                     {
@@ -152,7 +152,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("MIS"))
                 {
                     if (ModelState.IsValid)
                     {

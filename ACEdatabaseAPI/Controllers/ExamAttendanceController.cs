@@ -43,7 +43,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                     var acadYear = _acadYearRepo.GetAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
                     var semester = _semesterRepo.GetAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
@@ -69,7 +69,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                    
                     var result = _examAttRepo.GetAll().Where(x => x.CourseID == CourseID && x.AcademicYearID == AcademicYearID && x.SemesterID == SemesterID);
@@ -93,7 +93,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                     var user = User.Identity.Name;
                     if (ModelState.IsValid)
@@ -173,7 +173,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                     var attendance = _examAttRepo.FindBy(x => x.Id == AttendanceID).FirstOrDefault();
                     if (attendance == null)
@@ -222,7 +222,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                     var user = User.Identity.Name;
                     var result = _examAttRepo.FindBy(x => x.Id == ID).FirstOrDefault();

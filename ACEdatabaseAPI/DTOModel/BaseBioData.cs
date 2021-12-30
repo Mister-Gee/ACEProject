@@ -11,52 +11,52 @@ namespace ACEdatabaseAPI.DTOModel
         public string OtherName { get; set; }
         public string FormerName { get; set; }
 
-        [Required]
+        //[Required]
         public string NIN { get; set; }
 
-        [Required]
-        public Guid SchoolID { get; set; }
+        //[Required]
+        public Guid? SchoolID { get; set; }
 
-        [Required]
-        public Guid DepartmentID { get; set; }
+        //[Required]
+        public Guid? DepartmentID { get; set; }
 
-        [Required]
-        public Guid MaritalStatusID { get; set; }
+        //[Required]
+        public Guid? MaritalStatusID { get; set; }
 
-        [Required]
-        public Guid ReligionID { get; set; }
+        //[Required]
+        public Guid? ReligionID { get; set; }
 
-        [Required]
+        //[Required]
         public DateTime DateOfBirth { get; set; }
 
-        [Required]
-        public Guid GenderID { get; set; }
+        //[Required]
+        public Guid? GenderID { get; set; }
 
-        [Required]
+        //[Required]
         public bool isDisabled { get; set; }
 
         public string Disability { get; set; }
 
         public string AlternatePhoneNumber { get; set; }
 
-        [Required]
+        //[Required]
         public bool isIndigenous { get; set; }
 
-        [Required]
+        //[Required]
         public string Nationality { get; set; }
 
-        [Required]
+        //[Required]
         public string StateOfOrigin { get; set; }
 
-        [Required]
+        //[Required]
         public string LG { get; set; }
 
-        [Required]
+        //[Required]
         public string Hometown { get; set; }
 
         public string ZipPostalCode { get; set; }
 
-        [Required]
+        //[Required]
         public string Address { get; set; }
 
         public string TwitterID { get; set; }

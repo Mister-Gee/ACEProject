@@ -27,14 +27,13 @@ namespace ACEdatabaseAPI.Controllers
         IBloodGroupRepo _bloodGroupRepo;
         IGenotypeRepo _genotypeRepo;
         IFlagLevelRepo _flagLevelRepo;
-        IMedicalConditionsRepo _medConRepo;
         IAcademicYearRepo _acadYearRepo;
         ISemesterRepo _semesterRepo;
 
 
         public ControlledDataController(IReligionRepo religionRepo, IMaritalStatusRepo maritalStatusRepo, IStudentCategoryRepo studentCategoryRepo,
             ILevelRepo levelRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IGenderRepo genderRepo, IProgrammeRepo progRepo,
-            IBloodGroupRepo bloodGroupRepo, IGenotypeRepo genotypeRepo, IFlagLevelRepo flagLevelRepo, IMedicalConditionsRepo medConRepo, 
+            IBloodGroupRepo bloodGroupRepo, IGenotypeRepo genotypeRepo, IFlagLevelRepo flagLevelRepo, 
             IAcademicYearRepo acadYearRepo, ISemesterRepo semesterRepo)
         {
             _religionRepo = religionRepo;
@@ -48,7 +47,6 @@ namespace ACEdatabaseAPI.Controllers
             _bloodGroupRepo = bloodGroupRepo;
             _genotypeRepo = genotypeRepo;
             _flagLevelRepo = flagLevelRepo;
-            _medConRepo = medConRepo;
             _acadYearRepo = acadYearRepo;
             _semesterRepo = semesterRepo;
         }
@@ -1368,123 +1366,6 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-
-
-        [HttpGet]
-        [Route("MedicalCondition/All")]
-        public IActionResult GetAllMedicalCondition()
-        {
-            try
-            {
-                var result = _medConRepo.GetAll().ToList();
-                return Ok(result);
-            }
-            catch (Exception x)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    new ApiError((int)HttpStatusCode.InternalServerError,
-                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
-            }
-        }
-
-        [HttpPost]
-        [Route("MedicalCondition/Create/")]
-        public IActionResult CreateMedicalCondition(CreateControlledData Model)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    string username = User.Identity.Name;
-                    var medCon = new MedicalCondition()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = Model.Name
-                    };
-                    _medConRepo.Add(medCon);
-                    _medConRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
-                    return Ok(
-                        new
-                        {
-                            Message = "Medical Condition Created Successfully"
-                        }
-                    );
-                }
-                return BadRequest();
-            }
-            catch (Exception x)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    new ApiError((int)HttpStatusCode.InternalServerError,
-                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
-            }
-        }
-
-        [HttpPut]
-        [Route("MedicalCondition/Edit/{Id}")]
-        public IActionResult EditMedicalCondition(Guid Id, CreateControlledData Model)
-        {
-            try
-            {
-                var medCon = _medConRepo.FindBy(x => x.Id == Id).FirstOrDefault();
-                if (medCon != null)
-                {
-                    if (ModelState.IsValid)
-                    {
-                        string username = User.Identity.Name;
-                        medCon.Name = Model.Name;
-                        _medConRepo.Edit(medCon);
-                        _medConRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
-                        return Ok(
-                            new
-                            {
-                                Message = "Medical Condition Edit Successfully"
-                            }
-                        );
-                    }
-                    return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
-                                     HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
-                }
-                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
-                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
-            }
-            catch (Exception x)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    new ApiError((int)HttpStatusCode.InternalServerError,
-                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
-            }
-        }
-
-        [HttpDelete]
-        [Route("MedicalCondition/Delete/{Id}")]
-        public IActionResult DeleteMedicalCondition(Guid Id)
-        {
-            try
-            {
-                var medCon = _medConRepo.FindBy(x => x.Id == Id).FirstOrDefault();
-                if (medCon != null)
-                {
-                    string username = User.Identity.Name;
-                    _medConRepo.Delete(medCon);
-                    _medConRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
-                    return Ok(
-                        new
-                        {
-                            Message = "Medical Condition Deleted Successfully"
-                        }
-                    );
-                }
-                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
-                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
-            }
-            catch (Exception x)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    new ApiError((int)HttpStatusCode.InternalServerError,
-                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
-            }
-        }
 
         [HttpGet]
         [Route("AcademicYear/All")]

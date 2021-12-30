@@ -16,123 +16,6 @@ namespace ACEdatabaseAPI.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.11");
 
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Department", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("SchoolID")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolID");
-
-                    b.ToTable("Department");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Gender", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Gender");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Level", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Level");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.MaritalStatus", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MaritalStatus");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Programme", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Programme");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Religion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Religion");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.School", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("School");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.StudentCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StudentCategory");
-                });
-
             modelBuilder.Entity("ACEdatabaseAPI.Data.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
@@ -238,6 +121,9 @@ namespace ACEdatabaseAPI.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Hometown")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IPPISNo")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("InstagramID")
@@ -358,28 +244,12 @@ namespace ACEdatabaseAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentID");
-
-                    b.HasIndex("EntryLevelID");
-
-                    b.HasIndex("GenderID");
-
-                    b.HasIndex("MaritalStatusID");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
-
-                    b.HasIndex("ProgrammeID");
-
-                    b.HasIndex("ReligionID");
-
-                    b.HasIndex("SchoolID");
-
-                    b.HasIndex("StudentCategoryID");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -486,68 +356,6 @@ namespace ACEdatabaseAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Department", b =>
-                {
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.School", "School")
-                        .WithMany("Departments")
-                        .HasForeignKey("SchoolID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("ACEdatabaseAPI.Data.ApplicationUser", b =>
-                {
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Department", "Departments")
-                        .WithMany()
-                        .HasForeignKey("DepartmentID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Level", "Level")
-                        .WithMany()
-                        .HasForeignKey("EntryLevelID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Gender", "Gender")
-                        .WithMany()
-                        .HasForeignKey("GenderID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.MaritalStatus", "MaritalStatus")
-                        .WithMany()
-                        .HasForeignKey("MaritalStatusID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Programme", "Programme")
-                        .WithMany()
-                        .HasForeignKey("ProgrammeID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Religion", "Religion")
-                        .WithMany()
-                        .HasForeignKey("ReligionID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolID");
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.StudentCategory", "StudentCategory")
-                        .WithMany()
-                        .HasForeignKey("StudentCategoryID");
-
-                    b.Navigation("Departments");
-
-                    b.Navigation("Gender");
-
-                    b.Navigation("Level");
-
-                    b.Navigation("MaritalStatus");
-
-                    b.Navigation("Programme");
-
-                    b.Navigation("Religion");
-
-                    b.Navigation("School");
-
-                    b.Navigation("StudentCategory");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("ACEdatabaseAPI.Data.ApplicationRole", null)
@@ -597,11 +405,6 @@ namespace ACEdatabaseAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.School", b =>
-                {
-                    b.Navigation("Departments");
                 });
 #pragma warning restore 612, 618
         }

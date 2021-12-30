@@ -17,9 +17,9 @@ namespace ACEdatabaseAPI.Helpers.FileUploadService
         {
             var acc = new Account
             (
-                config.Value.CloudName,
-                config.Value.ApiKey,
-                config.Value.ApiSecret
+                "ghost-axis-technology",
+                "137937544362995",
+                "eIjp_RIsjwEB3GaXaeIsBqpb7Z0"
             );
 
             _cloudinary = new Cloudinary(acc);

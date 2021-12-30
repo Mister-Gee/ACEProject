@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 namespace ACEdatabaseAPI.Controllers
 {
 	[Route("[controller]")]
+	//[Authorize("MIS")]
 	public class RoleController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -34,15 +35,25 @@ namespace ACEdatabaseAPI.Controllers
 		[Route("Get")]
 		public async Task<IActionResult> CreateRole()
 		{
-			var roles = _roleManager.Roles.ToList();
-			if(roles.Count > 0)
+            try
             {
-				return Ok(roles);
-            }
-			
-			return Ok(new {
-				Message = "No Roles Created Yet"
-			});
+				var roles = _roleManager.Roles.ToList();
+				if (roles.Count > 0)
+				{
+					return Ok(roles);
+				}
+
+				return Ok(new
+				{
+					Message = "No Roles Created Yet"
+				});
+			}
+			catch(Exception x)
+            {
+				return StatusCode((int)HttpStatusCode.InternalServerError,
+					new ApiError((int)HttpStatusCode.InternalServerError,
+						HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+			}
 
 		}
 
@@ -84,8 +95,9 @@ namespace ACEdatabaseAPI.Controllers
             //var usr = await _userManager.FindByNameAsync(userName);
             if (!string.IsNullOrEmpty(userName))
             {
-                // var rols = await _userManager.GetRolesAsync(usr).ConfigureAwait(true);
-                var _rols = _vUserRoleRepo.FindBy(a => a.UserName.ToLower() == userName.ToLower()).Select(a => new { a.RoleName, a.RoleFriendlyName }).ToList();// _vAspnetRoleRep.FindBy(a =>a.Name==).ToList();
+				var user = _userManager.FindByNameAsync(userName).Result;
+				var _rols = _userManager.GetRolesAsync(user);
+                //var _rols = _vUserRoleRepo.FindBy(a => a.UserName.ToLower() == userName.ToLower()).Select(a => new { a.RoleName, a.RoleFriendlyName }).ToList();// _vAspnetRoleRep.FindBy(a =>a.Name==).ToList();
                 return Ok(_rols);
             }
             else
@@ -95,7 +107,7 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-		[HttpPost, Authorize(Roles = "Admin")]
+		[HttpPost]
 		[Route("addRoles/{userName}/{roles}")]
 		public async Task<IActionResult> UserRoles(string userName, string roles)
 		{
@@ -114,8 +126,10 @@ namespace ACEdatabaseAPI.Controllers
 							//check if the role exists
 							if (await _roleManager.RoleExistsAsync(item))
 							{
-								rls.Add(item);
-
+								if(!await _userManager.IsInRoleAsync(usr, item))
+                                {
+									rls.Add(item);
+								}
 							}
 							else
 							{
@@ -132,7 +146,6 @@ namespace ACEdatabaseAPI.Controllers
 							if (rls.Count > 0)
 							{
 								await _userManager.AddToRolesAsync(usr, rls);
-
 							}
 							else
 							{

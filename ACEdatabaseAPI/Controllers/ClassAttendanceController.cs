@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace ACEdatabaseAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ClassAttendanceController : ControllerBase
     {
@@ -26,14 +26,20 @@ namespace ACEdatabaseAPI.Controllers
         IAcademicYearRepo _acadYearRepo;
         ISemesterRepo _semesterRepo;
         ICourseRepo _courseRepo;
+        ICurrentAcademicSessionRepo _currentAcadYearRepo;
+        IStudentRegCourseRepo _courseRegItemRepo;
+
         public ClassAttendanceController(IClassAttendanceRepo classAttendanceRepo, UserManager<ApplicationUser> userManager, 
-            IAcademicYearRepo acadYearRepo, ISemesterRepo semesterRepo, ICourseRepo courseRepo)
+            IAcademicYearRepo acadYearRepo, ISemesterRepo semesterRepo, ICourseRepo courseRepo, ICurrentAcademicSessionRepo currentAcadYearRepo,
+            IStudentRegCourseRepo courseRegItemRepo)
         {
             _classAttendanceRepo = classAttendanceRepo;
             _userManager = userManager;
             _acadYearRepo = acadYearRepo;
             _semesterRepo = semesterRepo;
             _courseRepo = courseRepo;
+            _currentAcadYearRepo = currentAcadYearRepo;
+            _courseRegItemRepo = courseRegItemRepo;
         }
 
         [HttpGet]
@@ -106,17 +112,15 @@ namespace ACEdatabaseAPI.Controllers
                     foreach(var itm in result)
                     {
                         var dto = new AttendanceDTO();
-                        
-                        
                         dto.Id = itm.Id;
                         dto.ClassWeek = itm.ClassWeek;
 
-                        var studentsID = JsonConvert.DeserializeObject<List<string>>(itm.PresentStudent);
+                        var studentsID = JsonConvert.DeserializeObject<List<Guid>>(itm.PresentStudent);
                         List<StudentAttendanceDetailDTO> presentStudentsDetails = new List<StudentAttendanceDetailDTO>();
                         foreach (var studentId in studentsID)
                         {
                             var studentDetail = new StudentAttendanceDetailDTO();
-                            var student = _userManager.FindByIdAsync(studentId).Result;
+                            var student = _userManager.FindByIdAsync(studentId.ToString()).Result;
                             studentDetail.Name = student.FirstName + " " + student.LastName;
                             studentDetail.MatricNumber = student.MatricNumber;
                             presentStudentsDetails.Add(studentDetail);
@@ -124,6 +128,59 @@ namespace ACEdatabaseAPI.Controllers
                         dto.PresentStudents = presentStudentsDetails;
                     }
                     return Ok(listDto);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [Route("Record/Student/Courses")]
+        public IActionResult StudentCourseAttendance()
+        {
+            try
+            {
+                if (User.IsInRole("Student"))
+                {
+                    List<CourseAttendanceDTO> attendance = new List<CourseAttendanceDTO>();
+                    var student = _userManager.FindByNameAsync(User.Identity.Name).Result;
+                    var currentAcadYear = _currentAcadYearRepo.GetAll().FirstOrDefault();
+                    var studentRegisteredCourses = _courseRegItemRepo.FindBy(x => x.StudentId == Guid.Parse(student.Id) 
+                        && x.SemesterID == currentAcadYear.SemesterID && x.AcademicYearID == currentAcadYear.AcademicYearID).ToList();
+                    if(studentRegisteredCourses.Count < 1)
+                    {
+                        return Ok(attendance);
+                    }
+
+                    foreach(var item in studentRegisteredCourses)
+                    {
+                        var studentAtt = new CourseAttendanceDTO();
+                        var course = _courseRepo.FindBy(x => x.Id == item.CourseID).FirstOrDefault();
+                        var courseAttendance = _classAttendanceRepo.FindBy(x => x.CourseID == item.CourseID
+                            && x.SemesterID == currentAcadYear.SemesterID && x.AcademicYearID == currentAcadYear.AcademicYearID).ToList();
+                        var studentCourseAtt = courseAttendance.Where(x => JsonConvert.DeserializeObject<List<Guid>>(x.PresentStudent).Contains(Guid.Parse(student.Id))).ToList();
+                        int totalClassesHeld = courseAttendance.Count;
+                        int totalClassesAttended = studentCourseAtt.Count;
+                        double attPercent = (totalClassesAttended / totalClassesHeld) * 100;
+                        studentAtt.AttendancePercent = attPercent;
+                        studentAtt.Course = course.CourseTitle;
+                        studentAtt.CourseUnit = item.CourseUnit;
+                        studentAtt.Id = course.Id;
+                        studentAtt.TotalClassesAttended = totalClassesAttended;
+                        studentAtt.TotalClassesHeld = totalClassesHeld;
+
+                        attendance.Add(studentAtt);
+                        
+                    }
+                    return Ok(attendance);
+                    
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -153,12 +210,12 @@ namespace ACEdatabaseAPI.Controllers
                     attendance.Id = result.Id;
                     attendance.ClassWeek = result.ClassWeek;
 
-                    var studentsID = JsonConvert.DeserializeObject<List<string>>(result.PresentStudent);
+                    var studentsID = JsonConvert.DeserializeObject<List<Guid>>(result.PresentStudent);
                     List<StudentAttendanceDetailDTO> presentStudentsDetails = new List<StudentAttendanceDetailDTO>();
                     foreach (var studentId in studentsID)
                     {
                         var studentDetail = new StudentAttendanceDetailDTO();
-                        var student = _userManager.FindByIdAsync(studentId).Result;
+                        var student = _userManager.FindByIdAsync(studentId.ToString()).Result;
                         studentDetail.Name = student.FirstName + " " + student.LastName;
                         studentDetail.MatricNumber = student.MatricNumber;
                         presentStudentsDetails.Add(studentDetail);

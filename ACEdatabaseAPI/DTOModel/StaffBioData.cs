@@ -9,6 +9,7 @@ namespace ACEdatabaseAPI.DTOModel
     {
         public string StaffID { get; set; }
 
-        public DateTime EmploymentDate { get; set; }
+        public DateTime? EmploymentDate { get; set; }
+        public string IPPISNo { get; set; }
     }
 }

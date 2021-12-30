@@ -84,7 +84,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                     var result = _examRecordsRepo.GetAll().Where(x => x.SchoolID == SchoolID);
 
@@ -108,7 +108,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                     var result = _examRecordsRepo.GetAll().Where(x => x.SchoolID == SchoolID && x.DepartmentID == DepartmentID);
                     return Ok(result);
@@ -131,7 +131,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                     var course = _courseRepo.FindBy(x => x.Id == CourseID).FirstOrDefault();
                     if(course == null)
@@ -180,12 +180,11 @@ namespace ACEdatabaseAPI.Controllers
                         var gradeVM = _examGradingService.GetLetterGradeAndGradePoint(studentTotalScore);
 
                         var examRecord = new ExamRecords();
-                        examRecord.AcademicYearID = course.AcademicYearID;
-                        examRecord.SemesterID = course.SemesterID;
+                        //examRecord.AcademicYearID = course.AcademicYearID;
+                        //examRecord.SemesterID = course.SemesterID;
                         examRecord.StudentID = model.StudentID;
                         examRecord.CourseID = CourseID;
                         examRecord.CourseUnit = course.CourseUnit;
-                        examRecord.SemesterID = course.SemesterID;
                         examRecord.SchoolID = (Guid)student.SchoolID;
                         examRecord.DepartmentID = (Guid)student.DepartmentID;
                         examRecord.OtherAssessmentScore = model.OtherAssessmentScore;
@@ -224,7 +223,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                     var examRecord = _examRecordsRepo.FindBy(x => x.Id == ID).FirstOrDefault();
                     if (examRecord == null)
@@ -287,7 +286,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("Exam&Records"))
                 {
                     if (ModelState.IsValid)
                     {

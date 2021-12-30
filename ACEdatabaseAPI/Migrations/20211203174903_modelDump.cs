@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ACEdatabaseAPI.Migrations
 {
-    public partial class sqlLiteMigration : Migration
+    public partial class modelDump : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,130 +23,6 @@ namespace ACEdatabaseAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Gender",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Gender", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Level",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Level", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MaritalStatus",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MaritalStatus", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Programme",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Programme", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Religion",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Religion", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "School",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_School", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StudentCategory",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StudentCategory", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
-                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
-                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Department",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    SchoolID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Department", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Department_School_SchoolID",
-                        column: x => x.SchoolID,
-                        principalTable: "School",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,6 +55,7 @@ namespace ACEdatabaseAPI.Migrations
                     Disability = table.Column<string>(type: "TEXT", nullable: true),
                     AlternatePhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
                     Status = table.Column<string>(type: "TEXT", nullable: true),
+                    IPPISNo = table.Column<string>(type: "TEXT", nullable: true),
                     isIndigenous = table.Column<bool>(type: "INTEGER", nullable: false),
                     Nationality = table.Column<string>(type: "TEXT", nullable: true),
                     StateOfOrigin = table.Column<string>(type: "TEXT", nullable: true),
@@ -216,21 +93,21 @@ namespace ACEdatabaseAPI.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Department_DepartmentID",
+                        name: "FK_AspNetUsers_Departments_DepartmentID",
                         column: x => x.DepartmentID,
-                        principalTable: "Department",
+                        principalTable: "Departments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Gender_GenderID",
+                        name: "FK_AspNetUsers_Genders_GenderID",
                         column: x => x.GenderID,
-                        principalTable: "Gender",
+                        principalTable: "Genders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Level_EntryLevelID",
+                        name: "FK_AspNetUsers_Levels_EntryLevelID",
                         column: x => x.EntryLevelID,
-                        principalTable: "Level",
+                        principalTable: "Levels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -240,29 +117,50 @@ namespace ACEdatabaseAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Programme_ProgrammeID",
+                        name: "FK_AspNetUsers_Programmes_ProgrammeID",
                         column: x => x.ProgrammeID,
-                        principalTable: "Programme",
+                        principalTable: "Programmes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Religion_ReligionID",
+                        name: "FK_AspNetUsers_Religions_ReligionID",
                         column: x => x.ReligionID,
-                        principalTable: "Religion",
+                        principalTable: "Religions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_School_SchoolID",
+                        name: "FK_AspNetUsers_Schools_SchoolID",
                         column: x => x.SchoolID,
-                        principalTable: "School",
+                        principalTable: "Schools",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_StudentCategory_StudentCategoryID",
+                        name: "FK_AspNetUsers_StudentCategories_StudentCategoryID",
                         column: x => x.StudentCategoryID,
-                        principalTable: "StudentCategory",
+                        principalTable: "StudentCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -426,11 +324,6 @@ namespace ACEdatabaseAPI.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Department_SchoolID",
-                table: "Department",
-                column: "SchoolID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -455,30 +348,6 @@ namespace ACEdatabaseAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Department");
-
-            migrationBuilder.DropTable(
-                name: "Gender");
-
-            migrationBuilder.DropTable(
-                name: "Level");
-
-            migrationBuilder.DropTable(
-                name: "MaritalStatus");
-
-            migrationBuilder.DropTable(
-                name: "Programme");
-
-            migrationBuilder.DropTable(
-                name: "Religion");
-
-            migrationBuilder.DropTable(
-                name: "StudentCategory");
-
-            migrationBuilder.DropTable(
-                name: "School");
         }
     }
 }

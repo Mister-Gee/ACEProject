@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,21 +23,17 @@ namespace ACEdatabaseAPI.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         ICourseRepo _courseRepo;
-        IAcademicYearRepo _acadYearRepo;
-        ISemesterRepo _semesterRepo;
         ISchoolRepo _schoolRepo;
         IDepartmentRepo _deptRepo;
-        IMapper _mapper;
-        public CourseController(UserManager<ApplicationUser> userManager, ICourseRepo courseRepo, IAcademicYearRepo acadYearRepo,
-            ISemesterRepo semesterRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IMapper mapper)
+        IvCourseRepo _vCourseRepo;
+        public CourseController(UserManager<ApplicationUser> userManager, ICourseRepo courseRepo, IvCourseRepo vCourseRepo,
+             ISchoolRepo schoolRepo, IDepartmentRepo deptRepo)
         {
             _userManager = userManager;
             _courseRepo = courseRepo;
-            _acadYearRepo = acadYearRepo;
-            _semesterRepo = semesterRepo;
+            _vCourseRepo = vCourseRepo;
             _schoolRepo = schoolRepo;
             _deptRepo = deptRepo;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -45,9 +42,9 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff") || User.IsInRole("Student"))
+                if (User.IsInRole("Staff"))
                 {
-                    var result = _courseRepo.GetAll().ToList();
+                    var result = _vCourseRepo.GetAll().ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -62,85 +59,16 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("CurrentYear/All")]
-        public IActionResult GetAllCurrentAcademicYearCourses()
-        {
-            try
-            {
-                if (User.IsInRole("Staff") || User.IsInRole("Student"))
-                {
-                    var currentAcademicYearYear = _acadYearRepo.GetAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
-                    var result = _courseRepo.GetAll().Where(x => x.AcademicYearID == currentAcademicYearYear).ToList();
-                    return Ok(result);
-                }
-                return StatusCode((int)HttpStatusCode.Unauthorized,
-                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "Unauthorized Access"));
-            }
-            catch (Exception x)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    new ApiError((int)HttpStatusCode.InternalServerError,
-                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
-            }
-        }
 
         [HttpGet]
-        [Route("Get/{AcademicYearID}")]
-        public IActionResult GetAllAcademicYearCourses(Guid AcademicYearID)
-        {
-            try
-            {
-                if (User.IsInRole("Staff") || User.IsInRole("Student"))
-                {
-                    var result = _courseRepo.GetAll().Where(x => x.AcademicYearID == AcademicYearID).ToList();
-                    return Ok(result);
-                }
-                return StatusCode((int)HttpStatusCode.Unauthorized,
-                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "Unauthorized Access"));
-            }
-            catch (Exception x)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    new ApiError((int)HttpStatusCode.InternalServerError,
-                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
-            }
-        }
-
-        [HttpGet]
-        [Route("Get/{AcademicYearID}/{SemesterID}")]
-        public IActionResult GetAllAcademicYearSemesterCourses(Guid AcademicYearID, Guid SemesterID)
-        {
-            try
-            {
-                if (User.IsInRole("Staff") || User.IsInRole("Student"))
-                {
-                    var result = _courseRepo.GetAll().Where(x => x.AcademicYearID == AcademicYearID && x.SemesterID == SemesterID).ToList();
-                    return Ok(result);
-                }
-                return StatusCode((int)HttpStatusCode.Unauthorized,
-                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "Unauthorized Access"));
-            }
-            catch (Exception x)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    new ApiError((int)HttpStatusCode.InternalServerError,
-                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
-            }
-        }
-
-        [HttpGet]
-        [Route("Get/{SchoolID}")]
+        [Route("Get/School/{SchoolID}")]
         public IActionResult GetAllSchoolCourses(Guid SchoolID)
         {
             try
             {
                 if (User.IsInRole("Staff") || User.IsInRole("Student"))
                 {
-                    var result = _courseRepo.GetAll().Where(x => x.SchoolID == SchoolID).ToList();
+                    var result = _vCourseRepo.GetAll().Where(x => x.SchoolID == SchoolID).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -156,14 +84,14 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Get/{SchoolID}/{DepartmentID}")]
-        public IActionResult GetAllSchoolDepartmentCourses(Guid SchoolID, Guid DepartmentID)
+        [Route("Get/Department/{DepartmentID}")]
+        public IActionResult GetAllSchoolDepartmentCourses(Guid DepartmentID)
         {
             try
             {
                 if (User.IsInRole("Staff") || User.IsInRole("Student"))
                 {
-                    var result = _courseRepo.GetAll().Where(x => x.SchoolID == SchoolID && x.DepartmentID == DepartmentID).ToList();
+                    var result = _vCourseRepo.GetAll().Where(x => x.DepartmentID == DepartmentID).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -179,14 +107,47 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Get/{LecturerID}")]
+        [Route("Get/Student/EligibleCourses/{DepartmentID}")]
+        public IActionResult GetAllStudentEligibleCourses(Guid DepartmentID)
+        {
+            try
+            {
+                if (User.IsInRole("Student"))
+                {
+                    List<vCourse> studentCourseList = new List<vCourse>();
+                    var result = _vCourseRepo.GetAll().ToList();
+                    foreach(var course in result)
+                    {
+                        var eligibleDepartment = JsonConvert.DeserializeObject<List<Guid>>(course.EligibleDepartments);
+
+                        if((course.isDepartmental && course.DepartmentID == DepartmentID) || course.isGeneral || eligibleDepartment.Contains(DepartmentID))
+                        {
+                            studentCourseList.Add(course);
+                        }
+                    }
+                    return Ok(studentCourseList);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [Route("Get/ByLecturer/{LecturerID}")]
         public IActionResult GetAllLecturerCourses(Guid LecturerID)
         {
             try
             {
                 if (User.IsInRole("Staff") || User.IsInRole("Student"))
                 {
-                    var result = _courseRepo.GetAll().Where(x => x.LeadLecturerID == LecturerID).ToList();
+                    var result = _vCourseRepo.GetAll().Where(x => x.LeadLecturerID == LecturerID).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -224,33 +185,40 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Search/Lecturer/{LecturerID}")]
+        public IActionResult GetCoursesByLecturer(Guid LecturerID)
+        {
+            try
+            {
+                if (User.IsInRole("Staff"))
+                {
+                    var result = _vCourseRepo.FindBy(x => x.AssistantLecturerID == LecturerID || x.LeadLecturerID == LecturerID || x.OtherCourseLecturerID == LecturerID).FirstOrDefault();
+                    return Ok(result);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
         [HttpPost]
         [Route("Create")]
         public IActionResult CreateCourse(CreateCourse model)
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("MIS"))
                 {
                     var user = User.Identity.Name;
                     if (ModelState.IsValid)
                     {
-                        var acadYear = _acadYearRepo.FindBy(x => x.Id == model.AcademicYearID).FirstOrDefault();
-                        if(acadYear == null)
-                        {
-                            return StatusCode((int)HttpStatusCode.Unauthorized,
-                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "Invalid Academic Year"));
-                        }
-
-                        var semester = _semesterRepo.FindBy(x => x.Id == model.SemesterID).FirstOrDefault();
-                        if (semester == null)
-                        {
-                            return StatusCode((int)HttpStatusCode.Unauthorized,
-                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "Invalid Semester"));
-                        }
-
                         var school = _schoolRepo.FindBy(x => x.Id == model.SchoolID).FirstOrDefault();
                         if (school == null)
                         {
@@ -276,12 +244,12 @@ namespace ACEdatabaseAPI.Controllers
                         }
                         else
                         {
-                            if (!_userManager.IsInRoleAsync(lecturer, "Staff").Result) { }
-                            {
-                                return StatusCode((int)HttpStatusCode.Unauthorized,
-                                    new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                    "Lecturer is not a Staff"));
-                            }
+                            //if (!_userManager.IsInRoleAsync(lecturer, "Staff").Result) { }
+                            //{
+                            //    return StatusCode((int)HttpStatusCode.Unauthorized,
+                            //        new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                            //        "Lecturer is not a Staff"));
+                            //}
                         }
 
                         if (!String.IsNullOrEmpty(model.AssistantLecturerID.ToString()))
@@ -295,17 +263,30 @@ namespace ACEdatabaseAPI.Controllers
                             }
                             else
                             {
-                                if (!_userManager.IsInRoleAsync(asstLecturer, "Staff").Result) { }
-                                {
-                                    return StatusCode((int)HttpStatusCode.Unauthorized,
-                                        new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                        "Assistant Lecturer is not a Staff"));
-                                }
+                                //if (!_userManager.IsInRoleAsync(asstLecturer, "Staff").Result) { }
+                                //{
+                                //    return StatusCode((int)HttpStatusCode.Unauthorized,
+                                //        new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                //        "Assistant Lecturer is not a Staff"));
+                                //}
                             }
                         }
 
-                        var newCourse = new Course();
-                        var course = _mapper.Map(model, newCourse);
+                        var course = new ACE.Domain.Entities.Course();
+                        course.AssistantLecturerID = model.AssistantLecturerID.Value;
+                        course.CourseCode = model.CourseCode;
+                        course.CourseDescription = model.CourseDescription;
+                        course.CourseTitle = model.CourseTitle;
+                        course.CourseUnit = model.CourseUnit;
+                        course.DepartmentID = model.DepartmentID;
+                        course.EligibleDepartments = JsonConvert.SerializeObject(model.EligibleDepartments);
+                        course.isDepartmental = model.isDepartmental;
+                        course.isGeneral = model.isGeneral;
+                        course.isOptional = model.isOptional;
+                        course.LeadLecturerID = model.LeadLecturerID;
+                        course.OtherCourseLecturer = model.OtherCourseLecturer.Value;
+                        course.SchoolID = model.SchoolID;
+
                         _courseRepo.Add(course);
                         _courseRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new
@@ -332,14 +313,14 @@ namespace ACEdatabaseAPI.Controllers
 
         [HttpPut]
         [Route("Edit/{ID}")]
-        public IActionResult EditCourse(Guid ID, CreateCourse model)
+        public IActionResult EditCourse(Guid ID, EditCreatedCourse model)
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("MIS"))
                 {
-                    var existingCourse = _courseRepo.FindBy(x => x.Id == ID).FirstOrDefault();
-                    if (existingCourse == null)
+                    var course = _courseRepo.FindBy(x => x.Id == ID).FirstOrDefault();
+                    if (course == null)
                     {
                         return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -348,22 +329,7 @@ namespace ACEdatabaseAPI.Controllers
                     var user = User.Identity.Name;
                     if (ModelState.IsValid)
                     {
-                        var acadYear = _acadYearRepo.FindBy(x => x.Id == model.AcademicYearID).FirstOrDefault();
-                        if (acadYear == null)
-                        {
-                            return StatusCode((int)HttpStatusCode.Unauthorized,
-                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "Invalid Academic Year"));
-                        }
-
-                        var semester = _semesterRepo.FindBy(x => x.Id == model.SemesterID).FirstOrDefault();
-                        if (semester == null)
-                        {
-                            return StatusCode((int)HttpStatusCode.Unauthorized,
-                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                "Invalid Semester"));
-                        }
-
+                       
                         var school = _schoolRepo.FindBy(x => x.Id == model.SchoolID).FirstOrDefault();
                         if (school == null)
                         {
@@ -389,12 +355,12 @@ namespace ACEdatabaseAPI.Controllers
                         }
                         else
                         {
-                            if (!_userManager.IsInRoleAsync(lecturer, "Staff").Result) { }
-                            {
-                                return StatusCode((int)HttpStatusCode.Unauthorized,
-                                    new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                    "Lecturer is not a Staff"));
-                            }
+                            //if (!_userManager.IsInRoleAsync(lecturer, "Staff").Result) { }
+                            //{
+                            //    return StatusCode((int)HttpStatusCode.Unauthorized,
+                            //        new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                            //        "Lecturer is not a Staff"));
+                            //}
                         }
 
                         if (!String.IsNullOrEmpty(model.AssistantLecturerID.ToString()))
@@ -408,16 +374,29 @@ namespace ACEdatabaseAPI.Controllers
                             }
                             else
                             {
-                                if (!_userManager.IsInRoleAsync(asstLecturer, "Staff").Result) { }
-                                {
-                                    return StatusCode((int)HttpStatusCode.Unauthorized,
-                                        new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                        "Assistant Lecturer is not a Staff"));
-                                }
+                                //if (!_userManager.IsInRoleAsync(asstLecturer, "Staff").Result) { }
+                                //{
+                                //    return StatusCode((int)HttpStatusCode.Unauthorized,
+                                //        new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                //        "Assistant Lecturer is not a Staff"));
+                                //}
                             }
                         }
 
-                        var course = _mapper.Map(model, existingCourse);
+                        course.AssistantLecturerID = model.AssistantLecturerID.Value;
+                        course.CourseCode = model.CourseCode;
+                        course.CourseDescription = model.CourseDescription;
+                        course.CourseTitle = model.CourseTitle;
+                        course.CourseUnit = model.CourseUnit;
+                        course.DepartmentID = model.DepartmentID;
+                        course.EligibleDepartments = JsonConvert.SerializeObject(model.EligibleDepartments);
+                        course.isDepartmental = model.isDepartmental;
+                        course.isGeneral = model.isGeneral;
+                        course.isOptional = model.isOptional;
+                        course.LeadLecturerID = model.LeadLecturerID;
+                        course.OtherCourseLecturer = model.OtherCourseLecturer.Value;
+                        course.SchoolID = model.SchoolID;
+
                         _courseRepo.Edit(course);
                         _courseRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new
@@ -448,7 +427,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("Staff"))
+                if (User.IsInRole("MIS"))
                 {
                     var user = User.Identity.Name;
                     var result = _courseRepo.FindBy(x => x.Id == ID).FirstOrDefault();
