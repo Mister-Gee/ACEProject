@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace ACE.Domain.Concrete.EFControlledRepo
 {
-    public class EFMedicalConditionsRepo : GenericRepository<MedicalCondition>, IMedicalConditionsRepo
+    public class EFSemesterRepo : GenericRepository<Semester>, ISemesterRepo
     {
-        public EFMedicalConditionsRepo(ACEContext context) : base(context)
+        public EFSemesterRepo(ACEContext context) : base(context)
         {
-                
+
         }
     }
 }

@@ -22,7 +22,7 @@ namespace ACE.Domain.Data
         }
 
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
-        public virtual DbSet<vUserRole> vUserRoles { get; set; }
+        public virtual DbSet<CurrentAcademicSession> CurrentAcademicSessions { get; set; }
         public virtual DbSet<Device> Devices { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
@@ -35,11 +35,30 @@ namespace ACE.Domain.Data
 
         public virtual DbSet<BloodGroup> BloodGroup { get; set; }
         public virtual DbSet<Genotype> Genotype { get; set; }
-        public virtual DbSet<MedicalCondition> MedicalConditions { get; set; }
         public virtual DbSet<MedicalRecord> MedicalRecords { get; set; }
+        public virtual DbSet<MedicalHistory> MedicalHistory { get; set; }
         public virtual DbSet<FlagLevel> FlagLevels { get; set; }
         public virtual DbSet<Flag> Flags { get; set; }
+        public virtual DbSet<AcademicYear> AcademicYears { get; set; }
+        public virtual DbSet<Semester> Semesters { get; set; }
+        public virtual DbSet<Course> Courses { get; set; }
+        public virtual DbSet<StudentRegisteredCourse> StudentRegisteredCourses { get; set; }
+        public virtual DbSet<CourseRegisteration> CourseRegisterations { get; set; }
+        public virtual DbSet<ClassAttendance> ClassAttendances { get; set; }
+        public virtual DbSet<ExamTimetable> ExamTimetables { get; set; }
+        public virtual DbSet<ExamAttendance> ExamAttendances { get; set; }
+        public virtual DbSet<GradingUnit> GradingUnits { get; set; }
+        public virtual DbSet<ExamRecords> ExamRecords { get; set; }
 
+
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<vUserRole>(c => {
+        //        c.HasNoKey();
+        //        c.ToView("vUserRole");
+        //    });
+        //}
 
 
 
@@ -174,5 +193,34 @@ namespace ACE.Domain.Data
 
         }
 
+    }
+
+    public class ACEViewContext : DbContext, IDbContext
+    {
+        public ACEViewContext(DbContextOptions<ACEViewContext> option) : base(option)
+        {
+
+        }
+
+        public virtual DbSet<vStaff> vStaffs { get; set; }
+        public virtual DbSet<vStudent> vStudents { get; set; }
+        public virtual DbSet<vCourse> vCourses { get; set; }
+        public virtual DbSet<vCourseRegisteration> vCourseRegisterations { get; set; }
+        public virtual DbSet<vStudentRegisteredCourse> vStudentRegisteredCourses { get; set; }
+        public virtual DbSet<vExamAttendance> vExamAttendances { get; set; }
+
+
+
+
+
+        public int SaveChanges(string userID, string IP)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> SaveChangesAsync(string userID, string IP, CancellationToken token = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

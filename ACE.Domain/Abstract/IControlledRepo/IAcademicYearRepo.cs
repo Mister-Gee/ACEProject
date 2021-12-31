@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ACE.Domain.Abstract.IControlledRepo
 {
-    public interface IMedicalConditionsRepo : IGenericRepository<MedicalCondition>
+    public interface IAcademicYearRepo : IGenericRepository<AcademicYear>
     {
     }
 }

@@ -19,4 +19,11 @@ namespace ACE.Domain.Abstract
 
         bool Save(string username, string Ip);
     }
+
+    public interface IGenericViewRepository<T>
+   where T : class
+    {
+        IQueryable<T> FindBy(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
+        IQueryable<T> GetAll();
+    }
 }

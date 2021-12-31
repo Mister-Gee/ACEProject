@@ -54,6 +54,55 @@ namespace ACE.Domain.Migrations
                     b.ToTable("AuditLogs");
                 });
 
+            modelBuilder.Entity("ACE.Domain.Entities.ClassAttendance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AcademicYearID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ClassAttendanceID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ClassDateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ClassWeek")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("CourseID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PresentStudent")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SemesterID")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClassAttendances");
+                });
+
+            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.AcademicYear", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Year")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AcademicYears");
+                });
+
             modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.BloodGroup", b =>
                 {
                     b.Property<Guid>("Id")
@@ -81,8 +130,6 @@ namespace ACE.Domain.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SchoolID");
 
                     b.ToTable("Departments");
                 });
@@ -129,6 +176,26 @@ namespace ACE.Domain.Migrations
                     b.ToTable("Genotype");
                 });
 
+            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.GradingUnit", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("GradePoint")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<char>("LetterGrade")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ScoreRange")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("GradingUnits");
+                });
+
             modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Level", b =>
                 {
                     b.Property<Guid>("Id")
@@ -155,20 +222,6 @@ namespace ACE.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MaritalStatus");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.MedicalCondition", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MedicalConditions");
                 });
 
             modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Programme", b =>
@@ -213,6 +266,20 @@ namespace ACE.Domain.Migrations
                     b.ToTable("Schools");
                 });
 
+            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Semester", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Semesters");
+                });
+
             modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.StudentCategory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -225,6 +292,105 @@ namespace ACE.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StudentCategories");
+                });
+
+            modelBuilder.Entity("ACE.Domain.Entities.Course", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AssistantLecturerID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CourseCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CourseDescription")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CourseTitle")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CourseUnit")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("DepartmentID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EligibleDepartments")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("LeadLecturerID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("OtherCourseLecturer")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SchoolID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("isDepartmental")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("isGeneral")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("isOptional")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("ACE.Domain.Entities.CourseRegisteration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AcademicYearID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Courses")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("RegDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SemesterID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("StudentID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TotalUnit")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CourseRegisterations");
+                });
+
+            modelBuilder.Entity("ACE.Domain.Entities.CurrentAcademicSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AcademicYearID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SemesterID")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CurrentAcademicSessions");
                 });
 
             modelBuilder.Entity("ACE.Domain.Entities.Device", b =>
@@ -250,6 +416,123 @@ namespace ACE.Domain.Migrations
                     b.ToTable("Devices");
                 });
 
+            modelBuilder.Entity("ACE.Domain.Entities.ExamAttendance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AcademicYearID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CourseID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExamEndDateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExamEndingStudents")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExamStartDateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExamStartingStudents")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SemesterID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SupervisorID")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExamAttendances");
+                });
+
+            modelBuilder.Entity("ACE.Domain.Entities.ExamRecords", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AcademicYearID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CourseID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CourseUnit")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("DepartmentID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("ExamScore")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("GradePoint")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<char>("LetterGrade")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("OtherAssessmentScore")
+                        .HasColumnType("REAL");
+
+                    b.Property<Guid>("SchoolID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SemesterID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("StudentID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("TotalScore")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExamRecords");
+                });
+
+            modelBuilder.Entity("ACE.Domain.Entities.ExamTimetable", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AcademicYearID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CourseID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExamDateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExamDuration")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExamStartTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SemesterID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SupervisorID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Venue")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExamTimetables");
+                });
+
             modelBuilder.Entity("ACE.Domain.Entities.Flag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -259,20 +542,65 @@ namespace ACE.Domain.Migrations
                     b.Property<Guid>("FlagLevelID")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("SecurityID")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("StudentID")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<int>("TotalFlags")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("FlagLevelID");
+                    b.HasKey("Id");
 
                     b.ToTable("Flags");
                 });
 
+            modelBuilder.Entity("ACE.Domain.Entities.MedicalHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AdditionDoctorsNote")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Doctor")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FinalDiagnosis")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("InitialDiagnosis")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TreatmentPlan")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VitalSign")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MedicalHistory");
+                });
+
             modelBuilder.Entity("ACE.Domain.Entities.MedicalRecord", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AdditionalNote")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("BloodGroupID")
@@ -290,99 +618,53 @@ namespace ACE.Domain.Migrations
                     b.Property<double>("Height")
                         .HasColumnType("REAL");
 
-                    b.Property<string>("MedicalHistory")
+                    b.Property<string>("MatricNumber")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("OtherMedicalHistorys")
+                    b.Property<string>("StaffID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Weight")
                         .HasColumnType("REAL");
 
-                    b.HasKey("UserId");
-
-                    b.HasIndex("BloodGroupID");
-
-                    b.HasIndex("GenotypeID");
+                    b.HasKey("Id");
 
                     b.ToTable("MedicalRecords");
                 });
 
-            modelBuilder.Entity("ACE.Domain.Entities.vUserRole", b =>
+            modelBuilder.Entity("ACE.Domain.Entities.StudentRegisteredCourse", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<Guid>("AcademicYearID")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirstName")
+                    b.Property<Guid>("CourseID")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("LastName")
+                    b.Property<DateTime>("CourseRegisterationDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<Guid>("CourseRegisterationID")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("RoleFriendlyName")
+                    b.Property<int>("CourseUnit")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("SemesterID")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("RoleName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserName")
+                    b.Property<Guid>("StudentId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("vUserRoles");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Department", b =>
-                {
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.School", "School")
-                        .WithMany("Departments")
-                        .HasForeignKey("SchoolID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.Flag", b =>
-                {
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.FlagLevel", "FlagLevel")
-                        .WithMany()
-                        .HasForeignKey("FlagLevelID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FlagLevel");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.MedicalRecord", b =>
-                {
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.BloodGroup", "BloodGroup")
-                        .WithMany()
-                        .HasForeignKey("BloodGroupID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ACE.Domain.Entities.ControlledEntities.Genotype", "Genotype")
-                        .WithMany()
-                        .HasForeignKey("GenotypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BloodGroup");
-
-                    b.Navigation("Genotype");
-                });
-
-            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.School", b =>
-                {
-                    b.Navigation("Departments");
+                    b.ToTable("StudentRegisteredCourses");
                 });
 #pragma warning restore 612, 618
         }

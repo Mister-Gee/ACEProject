@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ACE.Domain.Entities.ControlledEntities
 {
-    public class MedicalCondition : baseClass
+    public class AcademicYear : baseClass
     {
+        public string Year { get; set; }
     }
 }

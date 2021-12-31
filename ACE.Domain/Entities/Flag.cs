@@ -16,8 +16,8 @@ namespace ACE.Domain.Entities
 
         public Guid StudentID { get; set; }
 
-        [ForeignKey("FlagLevel")]
         public Guid FlagLevelID { get; set; }
-        public FlagLevel FlagLevel { get; set; }
+        public int TotalFlags { get; set; }
+        public Guid SecurityID { get; set; }
     }
 }

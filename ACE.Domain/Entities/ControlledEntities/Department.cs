@@ -9,9 +9,6 @@ namespace ACE.Domain.Entities.ControlledEntities
 {
     public class Department : baseClass
     {
-        [ForeignKey("School")]
         public Guid SchoolID { get; set; }
-        public School School { get; set; }
-
     }
 }

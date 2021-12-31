@@ -12,26 +12,17 @@ namespace ACE.Domain.Entities
     public class MedicalRecord
     {
         [Key]
+        public Guid Id { get; set; }
         public Guid UserId { get; set; }
-
-        [ForeignKey("BloodGroup")]
+        public string MatricNumber { get; set; }
+        public string StaffID { get; set; }
         public Guid BloodGroupID { get; set; }
-        public BloodGroup BloodGroup { get; set; }
-
-        [ForeignKey("Genotype")]
         public Guid GenotypeID { get; set; }
-        public Genotype Genotype { get; set; }
-
         public double Weight { get; set; }
-
         public double Height { get; set; }
-
         public string FamilyDoctorName { get; set; }
         public string FamilyDoctorPhoneNumber { get; set; }
-
-        public string MedicalHistory { get; set; }
-
-        public string OtherMedicalHistorys { get; set; }
+        public string AdditionalNote { get; set; }
 
     }
 }

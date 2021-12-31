@@ -62,4 +62,32 @@ namespace ACE.Domain.Abstract
             GC.SuppressFinalize(this);
         }
     }
+
+    public abstract class GenericViewRepository<T> : IGenericViewRepository<T>
+      where T : class
+    {
+        private readonly IDbContext entities;
+        public GenericViewRepository(IDbContext ntities)
+        {
+            entities = ntities;
+        }
+
+        public virtual IQueryable<T> GetAll()
+        {
+            IQueryable<T> query = entities.Set<T>().AsNoTracking();
+            return query;
+        }
+        public virtual IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
+        {
+            IQueryable<T> query = entities.Set<T>().Where(predicate).AsNoTracking();
+            return query;
+        }
+
+        public void Dispose()
+        {
+            // Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
 }

@@ -8,6 +8,5 @@ namespace ACE.Domain.Entities.ControlledEntities
 {
     public class School : baseClass 
     {
-        public List<Department> Departments { get; set; }
     }
 }
