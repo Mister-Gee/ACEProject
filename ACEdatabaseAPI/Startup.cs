@@ -209,9 +209,7 @@ namespace ACE
             services.AddScoped<IvCourseRepo, EFvCourseRepo>();
             services.AddScoped<IvCourseRegisterationRepo, EFvCourseRegisterationRepo>();
             services.AddScoped<IvStudentRegisteredCourseRepo, EFvStudentRegisteredCourseRepo>();
-
-
-
+            services.AddScoped<IvExamAttendanceRepo, EFvExamAttendanceRepo>();
 
 
 

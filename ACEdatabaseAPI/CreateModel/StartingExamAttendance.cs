@@ -12,19 +12,9 @@ namespace ACEdatabaseAPI.CreateModel
         public Guid CourseID { get; set; }
 
         [Required]
-
         public List<Guid> ExamStartingStudents { get; set; }
 
         [Required]
-
         public Guid SupervisorID { get; set; }
-
-        [Required]
-
-        public Guid AcademicYearID { get; set; }
-
-        [Required]
-          
-        public Guid SemesterID { get; set; }
     }
 }
