@@ -219,6 +219,7 @@ namespace ACE
 
 
             services.AddScoped<IDeviceRepo, EFDeviceRepo>();
+            services.AddScoped<IAnnoucementRepo, EFAnnoucementRepo>();
             services.AddScoped<IProgrammeRepo, EFProgrammeRepo>();
             services.AddScoped<IReligionRepo, EFReligionRepo>();
             services.AddScoped<ISchoolRepo, EFSchoolRepo>();

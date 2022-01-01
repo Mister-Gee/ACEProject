@@ -22,6 +22,7 @@ namespace ACE.Domain.Data
         }
 
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
+        public virtual DbSet<Annoucement> Annoucements { get; set; }
         public virtual DbSet<CurrentAcademicSession> CurrentAcademicSessions { get; set; }
         public virtual DbSet<Device> Devices { get; set; }
         public virtual DbSet<School> Schools { get; set; }
