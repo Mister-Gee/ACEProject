@@ -234,6 +234,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(RegProgressDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Registeration/Progress/")]
         public async Task<IActionResult> RegProgress()
         {
@@ -429,31 +432,37 @@ namespace ACEdatabaseAPI.Controllers
 
         [HttpPut]
         [Route("Image/Upload/{userID}")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> ImageUpload(Guid userID, [FromForm]ImageUpload model)
         {
             try
             {
-                if(userID.ToString() != null)
+                if(userID != null)
                 {
                     if (ModelState.IsValid)
                     {
                         if (User.IsInRole("Cafe") || User.IsInRole("MIS"))
                         {
                             var user = await _userManager.FindByIdAsync(userID.ToString());
-                            if (user == null)
+                            if (user != null)
                             {
-                                user = await _userManager.FindByNameAsync(userID.ToString());
-                                if (user != null)
+                                var resp = _fileUploadService.AddPhoto(model.Image, user.Id);
+                                user.UserImageURL = "assets/images/displayImages/"+resp;
+                                var res = await _userManager.UpdateAsync(user);
+                                if (res.Succeeded)
                                 {
-                                    var resp = await _fileUploadService.AddPhotoAsync(model.Image, user.Id);
-                                    user.UserImageURL = resp.SecureUrl.AbsoluteUri;
-                                    user.UserImageData = resp.Bytes;
-
-                                    await _userManager.UpdateAsync(user);
+                                    return Ok(new
+                                    {
+                                        Message = "Image Uploaded Successfully"
+                                    });
                                 }
-                                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
-                                                HttpStatusCode.BadRequest.ToString(), "User Not Found"));
+                                return BadRequest(new { 
+                                    Message = "Image Uploaded Failed"
+                                });
+                               
                             }
+                            return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                               HttpStatusCode.BadRequest.ToString(), "User Not Found"));
                         }
                         return Unauthorized();
                     }

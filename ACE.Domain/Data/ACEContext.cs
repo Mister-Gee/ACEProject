@@ -37,6 +37,8 @@ namespace ACE.Domain.Data
         public virtual DbSet<Genotype> Genotype { get; set; }
         public virtual DbSet<MedicalRecord> MedicalRecords { get; set; }
         public virtual DbSet<MedicalHistory> MedicalHistory { get; set; }
+        public virtual DbSet<MedicalCondition> MedicalConditions { get; set; }
+
         public virtual DbSet<FlagLevel> FlagLevels { get; set; }
         public virtual DbSet<Flag> Flags { get; set; }
         public virtual DbSet<AcademicYear> AcademicYears { get; set; }
@@ -208,8 +210,10 @@ namespace ACE.Domain.Data
         public virtual DbSet<vCourseRegisteration> vCourseRegisterations { get; set; }
         public virtual DbSet<vStudentRegisteredCourse> vStudentRegisteredCourses { get; set; }
         public virtual DbSet<vExamAttendance> vExamAttendances { get; set; }
-
-
+        public virtual DbSet<vMedicalRecord> vMedicalRecords { get; set; }
+        public virtual DbSet<vExamRecords> vExamRecords { get; set; }
+        public virtual DbSet<vExamTimetable> vExamTimetables { get; set; }
+        public virtual DbSet<vFlag> vFlags { get; set; }
 
 
 

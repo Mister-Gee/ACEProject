@@ -37,6 +37,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("All")]
         public IActionResult GetAllCourses()
         {
@@ -61,6 +64,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/School/{SchoolID}")]
         public IActionResult GetAllSchoolCourses(Guid SchoolID)
         {
@@ -84,6 +90,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/Department/{DepartmentID}")]
         public IActionResult GetAllSchoolDepartmentCourses(Guid DepartmentID)
         {
@@ -107,6 +116,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/Student/EligibleCourses/{DepartmentID}")]
         public IActionResult GetAllStudentEligibleCourses(Guid DepartmentID)
         {
@@ -140,6 +152,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/ByLecturer/{LecturerID}")]
         public IActionResult GetAllLecturerCourses(Guid LecturerID)
         {
@@ -163,6 +178,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(vCourse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/{ID}")]
         public IActionResult GetCoursesByID(Guid ID)
         {
@@ -170,7 +188,7 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Staff") || User.IsInRole("Student"))
                 {
-                    var result = _courseRepo.FindBy(x => x.Id == ID).FirstOrDefault();
+                    var result = _vCourseRepo.FindBy(x => x.Id == ID).FirstOrDefault();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -186,6 +204,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Search/Lecturer/{LecturerID}")]
         public IActionResult GetCoursesByLecturer(Guid LecturerID)
         {
@@ -193,7 +214,7 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Staff"))
                 {
-                    var result = _vCourseRepo.FindBy(x => x.AssistantLecturerID == LecturerID || x.LeadLecturerID == LecturerID || x.OtherCourseLecturerID == LecturerID).FirstOrDefault();
+                    var result = _vCourseRepo.FindBy(x => x.AssistantLecturerID == LecturerID || x.LeadLecturerID == LecturerID || x.OtherCourseLecturerID == LecturerID).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,

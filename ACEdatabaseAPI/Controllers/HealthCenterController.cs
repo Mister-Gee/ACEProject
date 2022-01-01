@@ -1,7 +1,9 @@
 ﻿using ACE.Domain.Abstract;
+using ACE.Domain.Abstract.IControlledRepo;
 using ACE.Domain.Entities;
 using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
+using ACEdatabaseAPI.DTOModel;
 using ACEdatabaseAPI.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,17 +22,25 @@ namespace ACEdatabaseAPI.Controllers
     public class HealthCenterController : ControllerBase
     {
         IMedicalRecordRepo _medRepo;
+        IvMedicalRecordRepo _vMedRepo;
         IMedicalHistoryRepo _medHistoryRepo;
+        IMedicalConditionRepo _medConRepo;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public HealthCenterController(IMedicalRecordRepo medRepo, IMedicalHistoryRepo medHistoryRepo, UserManager<ApplicationUser> userManager)
+        public HealthCenterController(IMedicalRecordRepo medRepo, IMedicalHistoryRepo medHistoryRepo, UserManager<ApplicationUser> userManager,
+            IvMedicalRecordRepo vMedRepo, IMedicalConditionRepo medConRepo)
         {
             _medRepo = medRepo;
             _medHistoryRepo = medHistoryRepo;
             _userManager = userManager;
+            _vMedRepo = vMedRepo;
+            _medConRepo = medConRepo;
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vMedicalRecord>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Records/All")]
         public IActionResult AllMedicalData()
         {
@@ -38,7 +48,7 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Health"))
                 {
-                    var result = _medRepo.GetAll().ToList();
+                    var result = _vMedRepo.GetAll().ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -54,6 +64,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vMedicalRecord>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Records/Student/All")]
         public IActionResult AllStudentMedicalData()
         {
@@ -61,8 +74,17 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Health"))
                 {
-                    var result = _medRepo.GetAll().Where(x => !String.IsNullOrEmpty(x.MatricNumber)).ToList();
-                    return Ok(result);
+                    List<vMedicalRecord> medRecord = new List<vMedicalRecord>();
+                    var result = _vMedRepo.GetAll().ToList();
+                    foreach(var item in result)
+                    {
+                        var user = _userManager.FindByIdAsync(item.UserId.ToString()).Result;
+                        if(_userManager.IsInRoleAsync(user, "Student").Result)
+                        {
+                            medRecord.Add(item);
+                        }
+                    }
+                    return Ok(medRecord);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -78,6 +100,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vMedicalRecord>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Records/Staff/All")]
         public IActionResult AllStaffMedicalData()
         {
@@ -85,8 +110,17 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Health"))
                 {
-                    var result = _medRepo.GetAll().Where(x => !String.IsNullOrEmpty(x.StaffID)).ToList();
-                    return Ok(result);
+                    List<vMedicalRecord> medRecord = new List<vMedicalRecord>();
+                    var result = _vMedRepo.GetAll().ToList();
+                    foreach (var item in result)
+                    {
+                        var user = _userManager.FindByIdAsync(item.UserId.ToString()).Result;
+                        if (_userManager.IsInRoleAsync(user, "Staff").Result)
+                        {
+                            medRecord.Add(item);
+                        }
+                    }
+                    return Ok(medRecord);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -102,6 +136,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(MedicalRecordDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Records/{ID}")]
         public IActionResult RecordByID(Guid ID)
         {
@@ -109,8 +146,20 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Health"))
                 {
-                    var result = _medRepo.FindBy(x => x.Id == ID).FirstOrDefault();
-                    return Ok(result);
+                    var medicalRecord = new MedicalRecordDTO();
+                    var result = _vMedRepo.FindBy(x => x.Id == ID).FirstOrDefault();
+                    medicalRecord.Record = result;
+
+                    var userMedCondID = JsonConvert.DeserializeObject<List<Guid>>(result.MedicalConditions);
+                    if(userMedCondID.Count > 0)
+                    {
+                        foreach (var id in userMedCondID)
+                        {
+                            var cond = _medConRepo.FindBy(x => x.Id == id).FirstOrDefault();
+                            medicalRecord.MedicalConditionsList.Add(cond);
+                        }
+                    }
+                    return Ok(medicalRecord);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -159,6 +208,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(MedicalRecordDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Records/User/{UserID}")]
         public IActionResult RecordByUserID(Guid UserID)
         {
@@ -166,8 +218,21 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Health"))
                 {
-                    var result = _medRepo.FindBy(x => x.UserId == UserID).FirstOrDefault();
-                    return Ok(result);
+                    var medicalRecord = new MedicalRecordDTO();
+                    var result = _vMedRepo.FindBy(x => x.UserId == UserID).FirstOrDefault();
+                    medicalRecord.Record = result;
+
+                    var userMedCondID = JsonConvert.DeserializeObject<List<Guid>>(result.MedicalConditions);
+                    if (userMedCondID.Count > 0)
+                    {
+                        foreach (var id in userMedCondID)
+                        {
+                            var cond = _medConRepo.FindBy(x => x.Id == id).FirstOrDefault();
+                            medicalRecord.MedicalConditionsList.Add(cond);
+                        }
+                    }
+                    return Ok(medicalRecord);
+
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -183,6 +248,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(MedicalHistory), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("MedicalHistory/{UserID}")]
         public IActionResult MedicalHistoryByUserID(Guid UserID)
         {
@@ -207,6 +275,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(MedicalRecordDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Records/MatricNumber")]
         public IActionResult RecordByMatricNumber(SearchByMatricNumber model)
         {
@@ -219,8 +290,21 @@ namespace ACEdatabaseAPI.Controllers
                         return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
                     }
 
-                    var result = _medRepo.FindBy(x => x.MatricNumber == model.MatricNumber).FirstOrDefault();
-                    return Ok(result);
+                    var user = _userManager.Users.Where(x => x.MatricNumber == model.MatricNumber).FirstOrDefault();
+                    var medicalRecord = new MedicalRecordDTO();
+                    var result = _vMedRepo.FindBy(x => x.UserId == Guid.Parse(user.Id)).FirstOrDefault();
+                    medicalRecord.Record = result;
+
+                    var userMedCondID = JsonConvert.DeserializeObject<List<Guid>>(result.MedicalConditions);
+                    if (userMedCondID.Count > 0)
+                    {
+                        foreach (var id in userMedCondID)
+                        {
+                            var cond = _medConRepo.FindBy(x => x.Id == id).FirstOrDefault();
+                            medicalRecord.MedicalConditionsList.Add(cond);
+                        }
+                    }
+                    return Ok(medicalRecord);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -289,6 +373,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(MedicalRecordDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Records/StaffID")]
         public IActionResult RecordByStaffID(SearchByStaffID model)
         {
@@ -301,8 +388,21 @@ namespace ACEdatabaseAPI.Controllers
                         return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
                     }
 
-                    var result = _medRepo.FindBy(x => x.StaffID == model.StaffID).FirstOrDefault();
-                    return Ok(result);
+                    var user = _userManager.Users.Where(x => x.StaffID == model.StaffID).FirstOrDefault();
+                    var medicalRecord = new MedicalRecordDTO();
+                    var result = _vMedRepo.FindBy(x => x.UserId == Guid.Parse(user.Id)).FirstOrDefault();
+                    medicalRecord.Record = result;
+
+                    var userMedCondID = JsonConvert.DeserializeObject<List<Guid>>(result.MedicalConditions);
+                    if (userMedCondID.Count > 0)
+                    {
+                        foreach (var id in userMedCondID)
+                        {
+                            var cond = _medConRepo.FindBy(x => x.Id == id).FirstOrDefault();
+                            medicalRecord.MedicalConditionsList.Add(cond);
+                        }
+                    }
+                    return Ok(medicalRecord);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -330,7 +430,6 @@ namespace ACEdatabaseAPI.Controllers
                         var user = User.Identity.Name;
                         var medicalRecord = new MedicalRecord();
                         medicalRecord.UserId = model.UserId;
-                        medicalRecord.MatricNumber = model.MatricNumber;
                         medicalRecord.BloodGroupID = model.BloodGroupID;
                         medicalRecord.FamilyDoctorName = model.FamilyDoctorName;
                         medicalRecord.FamilyDoctorPhoneNumber = model.FamilyDoctorPhoneNumber;
@@ -338,6 +437,8 @@ namespace ACEdatabaseAPI.Controllers
                         medicalRecord.Height = model.Height;
                         medicalRecord.AdditionalNote = model.AdditionalNote;
                         medicalRecord.Weight = model.Weight;
+                        medicalRecord.MedicalConditions = JsonConvert.SerializeObject(model.MedicalConditions);
+                        medicalRecord.OtherMedicalConditions = model.OtherMedicalConditions;
 
                         _medRepo.Add(medicalRecord);
                         _medRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
@@ -375,7 +476,6 @@ namespace ACEdatabaseAPI.Controllers
                         var user = User.Identity.Name;
                         var medicalRecord = new MedicalRecord();
                         medicalRecord.UserId = model.UserId;
-                        medicalRecord.StaffID = model.StaffID;
                         medicalRecord.BloodGroupID = model.BloodGroupID;
                         medicalRecord.FamilyDoctorName = model.FamilyDoctorName;
                         medicalRecord.FamilyDoctorPhoneNumber = model.FamilyDoctorPhoneNumber;
@@ -383,6 +483,9 @@ namespace ACEdatabaseAPI.Controllers
                         medicalRecord.Height = model.Height;
                         medicalRecord.AdditionalNote = model.AdditionalNote;
                         medicalRecord.Weight = model.Weight;
+                        medicalRecord.MedicalConditions = JsonConvert.SerializeObject(model.MedicalConditions);
+                        medicalRecord.OtherMedicalConditions = model.OtherMedicalConditions;
+
                         _medRepo.Add(medicalRecord);
                         _medRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new
@@ -408,7 +511,7 @@ namespace ACEdatabaseAPI.Controllers
 
         [HttpPost]
         [Route("Records/Student/Edit/{ID}")]
-        public IActionResult EditStudentMedicalRecord(Guid ID, CreateStudentMedicalRecord model)
+        public IActionResult EditStudentMedicalRecord(Guid ID, EditStudentMedicalRecord model)
         {
             try
             {
@@ -432,7 +535,6 @@ namespace ACEdatabaseAPI.Controllers
 
                         var user = User.Identity.Name;
                         studentRecord.UserId = model.UserId;
-                        studentRecord.MatricNumber = model.MatricNumber;
                         studentRecord.BloodGroupID = model.BloodGroupID;
                         studentRecord.FamilyDoctorName = model.FamilyDoctorName;
                         studentRecord.FamilyDoctorPhoneNumber = model.FamilyDoctorPhoneNumber;
@@ -440,6 +542,9 @@ namespace ACEdatabaseAPI.Controllers
                         studentRecord.Height = model.Height;
                         studentRecord.AdditionalNote = model.AdditionalNote;
                         studentRecord.Weight = model.Weight;
+                        studentRecord.MedicalConditions = JsonConvert.SerializeObject(model.MedicalConditions);
+                        studentRecord.OtherMedicalConditions = model.OtherMedicalConditions;
+
                         _medRepo.Edit(studentRecord);
                         _medRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new
@@ -491,7 +596,6 @@ namespace ACEdatabaseAPI.Controllers
 
                         var user = User.Identity.Name;
                         staffRecord.UserId = model.UserId;
-                        staffRecord.StaffID = model.StaffID;
                         staffRecord.BloodGroupID = model.BloodGroupID;
                         staffRecord.FamilyDoctorName = model.FamilyDoctorName;
                         staffRecord.FamilyDoctorPhoneNumber = model.FamilyDoctorPhoneNumber;
@@ -499,6 +603,9 @@ namespace ACEdatabaseAPI.Controllers
                         staffRecord.Height = model.Height;
                         staffRecord.AdditionalNote = model.AdditionalNote;
                         staffRecord.Weight = model.Weight;
+                        staffRecord.MedicalConditions = JsonConvert.SerializeObject(model.MedicalConditions);
+                        staffRecord.OtherMedicalConditions = model.OtherMedicalConditions;
+
                         _medRepo.Edit(staffRecord);
                         _medRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new

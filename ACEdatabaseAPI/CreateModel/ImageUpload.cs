@@ -10,8 +10,9 @@ namespace ACEdatabaseAPI.CreateModel
 {
     public class ImageUpload
     {
-        [FileSignatureValidation]
-        [MaxFileSize(2000)]
+        //[FileSignatureValidation]
+        //[MaxFileSize(2000)]
+        [Required]
         public IFormFile Image { get; set; }
     }
 }

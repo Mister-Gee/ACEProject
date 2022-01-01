@@ -1,4 +1,6 @@
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\ACEdatabaseAPI
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\assets\images\displayImages\9f1faedb-fbb5-49cf-ac0c-291e2dd330de_Adobe_Post_20211121_2202330.08382440356121856.png
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\assets\images\displayImages\fdc556a5-cfda-4cdb-abbb-bd001db29729_Adobe_Post_20211121_2202330.08382440356121856.png
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\appsettings.Development.json
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\appsettings.json
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\PubTmp\Out\ACEdatabaseAPI.dll

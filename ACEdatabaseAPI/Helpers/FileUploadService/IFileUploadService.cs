@@ -9,7 +9,7 @@ namespace ACEdatabaseAPI.Helpers.FileUploadService
 {
     public interface IFileUploadService
     {
-        Task<ImageUploadResult> AddPhotoAsync(IFormFile file, string folderId = null);
-        Task<DeletionResult> DeletePhotoAsync(string publicId);
+        string AddPhoto(IFormFile file, string folderId = null);
+        //Task<DeletionResult> DeletePhotoAsync(string publicId);
     }
 }

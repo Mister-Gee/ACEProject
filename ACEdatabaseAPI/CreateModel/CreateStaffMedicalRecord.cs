@@ -11,4 +11,13 @@ namespace ACEdatabaseAPI.CreateModel
         [Required]
         public string StaffID { get; set; }
     }
+
+    public class EditStaffMedicalRecord : BaseCreateMedicalRecord
+    {
+        [Required]
+        public string StaffID { get; set; }
+
+        [Required]
+        public Guid Id { get; set; }
+    }
 }

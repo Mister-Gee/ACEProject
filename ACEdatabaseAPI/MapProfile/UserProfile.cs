@@ -62,24 +62,24 @@ namespace ACEdatabaseAPI.MapProfile
         }
     }
 
-    public class FlagProfile : Profile
-    {
-        public FlagProfile()
-        {
-            CreateMap<Flag, FlagStudent>()
-            .ReverseMap();
-        }
-    }
+    //public class FlagProfile : Profile
+    //{
+    //    public FlagProfile()
+    //    {
+    //        CreateMap<Flag, FlagStudent>()
+    //        .ReverseMap();
+    //    }
+    //}
 
-    public class FlagDTOProfile : Profile
-    {
-        public FlagDTOProfile()
-        {
-            CreateMap<Flag, FlagDTO>()
-              //.ForMember(destinationMember => destinationMember.FlagLevel, memberOptions => memberOptions.MapFrom(x => x.FlagLevel.Name))
-              .ReverseMap();
-        }
-    }
+    //public class FlagDTOProfile : Profile
+    //{
+    //    public FlagDTOProfile()
+    //    {
+    //        CreateMap<Flag, FlagDTO>()
+    //          //.ForMember(destinationMember => destinationMember.FlagLevel, memberOptions => memberOptions.MapFrom(x => x.FlagLevel.Name))
+    //          .ReverseMap();
+    //    }
+    //}
 
     public class CourseRegProfile : Profile
     {

@@ -224,6 +224,20 @@ namespace ACE.Domain.Migrations
                     b.ToTable("MaritalStatus");
                 });
 
+            modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.MedicalCondition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MedicalConditions");
+                });
+
             modelBuilder.Entity("ACE.Domain.Entities.ControlledEntities.Programme", b =>
                 {
                     b.Property<Guid>("Id")
@@ -618,10 +632,10 @@ namespace ACE.Domain.Migrations
                     b.Property<double>("Height")
                         .HasColumnType("REAL");
 
-                    b.Property<string>("MatricNumber")
+                    b.Property<string>("MedicalConditions")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("StaffID")
+                    b.Property<string>("OtherMedicalConditions")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")

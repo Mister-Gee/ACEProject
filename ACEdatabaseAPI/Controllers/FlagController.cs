@@ -24,11 +24,14 @@ namespace ACEdatabaseAPI.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         IFlagLevelRepo _flagLevelRepo;
         IFlagRepo _flagRepo;
+        IvFlagRepo _vFlagRepo;
         private readonly IMapper _mapper;
 
-        public FlagController(UserManager<ApplicationUser> userManager, IFlagLevelRepo flagLevelRepo, IFlagRepo flagRepo, IMapper mapper)
+        public FlagController(UserManager<ApplicationUser> userManager, IFlagLevelRepo flagLevelRepo, IFlagRepo flagRepo, 
+            IMapper mapper, IvFlagRepo vFlagRepo)
         {
             _userManager = userManager;
+            _vFlagRepo = vFlagRepo;
             _flagLevelRepo = flagLevelRepo;
             _flagRepo = flagRepo;
             _mapper = mapper;
@@ -36,31 +39,18 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [Route("Students/All")]
+        [ProducesResponseType(typeof(List<vFlag>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        public async Task<IActionResult> GetFlaggedStudents()
+        public IActionResult GetFlaggedStudents()
         {
             try
             {
-               if(User.IsInRole("Security") || User.IsInRole("Staff"))
+               if(User.IsInRole("Security") || User.IsInRole("MIS"))
                 {
-                    var result = _flagRepo.GetAll().ToList();
-                    List<FlagDTO> flags = new List<FlagDTO>();
-                    foreach(var user in result)
-                    {
-                        string studentFirstName = _userManager.FindByIdAsync(user.StudentID.ToString()).Result.FirstName;
-                        string studentLastName = _userManager.FindByIdAsync(user.StudentID.ToString()).Result.LastName;
-
-                        string securityFirstName = _userManager.FindByIdAsync(user.SecurityID.ToString()).Result.FirstName;
-                        string securityLastName = _userManager.FindByIdAsync(user.SecurityID.ToString()).Result.LastName;
-                            
-                        var flag = new FlagDTO();
-                        flag.StudentName = studentFirstName + " " + studentLastName;
-                        flag.FlagLevel = _flagLevelRepo.FindBy(x => x.Id == user.FlagLevelID).Select(x => x.Name).FirstOrDefault();
-                        flag.SecurityName = securityFirstName + " " + securityLastName;
-
-                        flags.Add(flag);
-                    }
-                    return Ok(flags);
+                    var result = _vFlagRepo.GetAll().ToList();
+                    return Ok(result);
                 }
                 return StatusCode(400, new ApiError(400, "Unauthorized Access"));
             }
@@ -72,32 +62,94 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-        [Route("Student/Status/{ID}")]
-        [HttpPost]
-        public async Task<IActionResult> GetStudentStatus(Guid ID)
+        [Route("Students/Get/{ID}")]
+        [ProducesResponseType(typeof(vFlag), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
+        [HttpGet]
+        public IActionResult GetFlaggedStudentsByID(Guid ID)
+        {
+            try
+            {
+                if (User.IsInRole("Security") || User.IsInRole("MIS"))
+                {
+                    var result = _vFlagRepo.FindBy(x => x.Id == ID).FirstOrDefault();
+                    return Ok(result);
+                }
+                return StatusCode(400, new ApiError(400, "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [Route("Students/Get/StudentID/{StudentID}")]
+        [ProducesResponseType(typeof(vFlag), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
+        [HttpGet]
+        public IActionResult GetFlagByStudentID(Guid StudentID)
+        {
+            try
+            {
+                if (User.IsInRole("Security") || User.IsInRole("MIS") || User.IsInRole("Student"))
+                {
+                    var result = _vFlagRepo.FindBy(x => x.StudentID == StudentID).FirstOrDefault();
+                    return Ok(result);
+                }
+                return StatusCode(400, new ApiError(400, "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [Route("Security/Get/Flags/{SecurityID}")]
+        [ProducesResponseType(typeof(vFlag), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
+        [HttpGet]
+        public IActionResult SecurityFlags(Guid SecurityID)
+        {
+            try
+            {
+                if (User.IsInRole("Security") || User.IsInRole("MIS"))
+                {
+                    var result = _vFlagRepo.FindBy(x => x.SecurityID == SecurityID).ToList();
+                    return Ok(result);
+                }
+                return StatusCode(400, new ApiError(400, "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [Route("Student/Status/{StudentID}")]
+        [HttpGet]
+        public async Task<IActionResult> GetStudentStatus(Guid StudentID)
         {
             try
             {
                 if (User.IsInRole("Security") || User.IsInRole("Staff"))
                 {
-                    var result = _flagRepo.FindBy(x => x.StudentID == ID).FirstOrDefault();
+                    var result = _vFlagRepo.FindBy(x => x.StudentID == StudentID).FirstOrDefault();
                     if(result == null)
                     {
                         return Ok(new {
                             Message= "Student Not Flagged"
                         });
                     }
-                    string studentFirstName = _userManager.FindByIdAsync(result.StudentID.ToString()).Result.FirstName;
-                    string studentLastName = _userManager.FindByIdAsync(result.StudentID.ToString()).Result.LastName;
-
-                    string securityFirstName = _userManager.FindByIdAsync(result.SecurityID.ToString()).Result.FirstName;
-                    string securityLastName = _userManager.FindByIdAsync(result.SecurityID.ToString()).Result.LastName;
-
-                    var flagDto = new FlagDTO();
-                    flagDto.StudentName = studentFirstName + " " + studentLastName;
-                    flagDto.FlagLevel = _flagLevelRepo.FindBy(x => x.Id == result.FlagLevelID).Select(x => x.Name).FirstOrDefault();
-                    flagDto.SecurityName = securityFirstName + " " + securityLastName;
-                    return Ok(flagDto);
+                    return Ok(result); 
                 }
                 return StatusCode(400, new ApiError(400, "Unauthorized Access"));
             }
@@ -111,23 +163,127 @@ namespace ACEdatabaseAPI.Controllers
 
         [Route("Student/Flag/")]
         [HttpPost]
-        public IActionResult FlagStudent(FlagStudent model)
+        public IActionResult FlagStudent(FlagByID model)
         {
             try
             {
                 var user = User.Identity.Name;
                 if (User.IsInRole("Security"))
                 {
-                    var result = _flagRepo.FindBy(x => x.StudentID == model.StudentID).FirstOrDefault();
-                    var flag = new Flag();
-                    var flagResult = _mapper.Map(model, flag);
-                    if (result == null)
+                    var flag = _flagRepo.FindBy(x => x.StudentID == model.StudentID).FirstOrDefault();
+                    if(flag == null)
                     {
-                        _flagRepo.Add(flagResult);
+                        var newFlag = new Flag();
+                        newFlag.FlagLevelID = model.FlagLevelID;
+                        newFlag.SecurityID = model.SecurityID;
+                        newFlag.StudentID = model.StudentID;
+
+                        _flagRepo.Add(newFlag);
                         _flagRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                     }
-                    _flagRepo.Edit(flagResult);
-                    _flagRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
+                    else
+                    {
+                        flag.FlagLevelID = model.FlagLevelID;
+                        flag.SecurityID = model.SecurityID;
+                        _flagRepo.Edit(flag);
+                        _flagRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
+                    }
+
+                }
+                return StatusCode(400, new ApiError(400, "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [Route("Student/Flag/")]
+        [HttpPost]
+        public IActionResult FlagStudentBymatricNumber(FlagByMatricNumber model)
+        {
+            try
+            {
+                var user = User.Identity.Name;
+                if (User.IsInRole("Security"))
+                {
+                    var student = _userManager.Users.Where(x => x.MatricNumber.ToUpper() == model.MatricNumber.ToUpper()).FirstOrDefault();
+                    if(student == null)
+                    {
+                        return BadRequest(new { 
+                            Message = "Student Not Found"
+                        });
+                    }
+
+                    var flag = _flagRepo.FindBy(x => x.StudentID == Guid.Parse(student.Id)).FirstOrDefault();
+                    if (flag == null)
+                    {
+                        var newFlag = new Flag();
+                        newFlag.FlagLevelID = model.FlagLevelID;
+                        newFlag.SecurityID = model.SecurityID;
+                        newFlag.StudentID = Guid.Parse(student.Id);
+
+                        _flagRepo.Add(newFlag);
+                        _flagRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
+                    }
+                    else
+                    {
+                        flag.FlagLevelID = model.FlagLevelID;
+                        flag.SecurityID = model.SecurityID;
+                        _flagRepo.Edit(flag);
+                        _flagRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
+                    }
+
+                }
+                return StatusCode(400, new ApiError(400, "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [Route("Student/Flag/")]
+        [HttpPost]
+        public IActionResult FlagStudentBymatricNumber(FlagByBiometric model)
+        {
+            try
+            {
+                var user = User.Identity.Name;
+                if (User.IsInRole("Security"))
+                {
+                    var student = _userManager.Users.Where(x => x.LeftThumbFingerBiometrics == model.Biometric || x.RightThumbFingerBiometrics == model.Biometric).FirstOrDefault();
+                    if (student == null)
+                    {
+                        return BadRequest(new
+                        {
+                            Message = "Student Not Found"
+                        });
+                    }
+
+                    var flag = _flagRepo.FindBy(x => x.StudentID == Guid.Parse(student.Id)).FirstOrDefault();
+                    if (flag == null)
+                    {
+                        var newFlag = new Flag();
+                        newFlag.FlagLevelID = model.FlagLevelID;
+                        newFlag.SecurityID = model.SecurityID;
+                        newFlag.StudentID = Guid.Parse(student.Id);
+
+                        _flagRepo.Add(newFlag);
+                        _flagRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
+                    }
+                    else
+                    {
+                        flag.FlagLevelID = model.FlagLevelID;
+                        flag.SecurityID = model.SecurityID;
+                        _flagRepo.Edit(flag);
+                        _flagRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
+                    }
+
                 }
                 return StatusCode(400, new ApiError(400, "Unauthorized Access"));
             }

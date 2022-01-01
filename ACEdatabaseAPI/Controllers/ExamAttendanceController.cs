@@ -5,6 +5,7 @@ using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.DTOModel;
 using ACEdatabaseAPI.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -48,6 +49,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vExamAttendance>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("CurrentSession/Get/{CourseID}")]
         public IActionResult Get(Guid CourseID)
         {
@@ -56,7 +60,7 @@ namespace ACEdatabaseAPI.Controllers
                 if (User.IsInRole("Exam&Records"))
                 {
                     var currentAcad = _currentAcadRepo.GetAll().FirstOrDefault();
-                    var result = _vExamAttRepo.GetAll().Where(x => x.CourseID == CourseID && x.AcademicYearID == currentAcad.AcademicYearID && x.SemesterID == currentAcad.SemesterID);
+                    var result = _vExamAttRepo.GetAll().Where(x => x.CourseID == CourseID && x.AcademicYearID == currentAcad.AcademicYearID && x.SemesterID == currentAcad.SemesterID).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -81,7 +85,7 @@ namespace ACEdatabaseAPI.Controllers
                 if (User.IsInRole("Exam&Records"))
                 {
                    
-                    var result = _examAttRepo.GetAll().Where(x => x.CourseID == CourseID && x.AcademicYearID == AcademicYearID && x.SemesterID == SemesterID);
+                    var result = _vExamAttRepo.GetAll().Where(x => x.CourseID == CourseID && x.AcademicYearID == AcademicYearID && x.SemesterID == SemesterID).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -97,6 +101,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<CourseExamAttendanceDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Record/Student")]
         public IActionResult StudentAttendanceRecord()
         {
@@ -170,6 +177,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(StudentExamAttendance), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Course/{CourseID}")]
         public IActionResult CourseAttendanceRecord(Guid CourseID)
         {

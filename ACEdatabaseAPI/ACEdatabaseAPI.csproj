@@ -42,6 +42,7 @@
 
   <ItemGroup>
     <Folder Include="Resources\Images\" />
+    <Folder Include="wwwroot\assets\images\displayImages\" />
   </ItemGroup>
 
 </Project>

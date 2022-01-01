@@ -29,6 +29,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(AcademicSessionDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Current")]
         public IActionResult CurrentSession()
         {

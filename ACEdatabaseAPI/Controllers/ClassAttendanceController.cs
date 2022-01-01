@@ -98,6 +98,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<AttendanceDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Record/CurrentAcademicYear/{CourseID}")]
         public IActionResult AttendanceRecord(Guid CourseID)
         {
@@ -142,6 +145,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<CourseAttendanceDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Record/Student/Courses")]
         public IActionResult StudentCourseAttendance()
         {
@@ -195,6 +201,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(AttendanceDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Record/CurrentAcademicYear/{CourseID}/{ClassWeek}")]
         public IActionResult AttendanceRecord(Guid CourseID, int ClassWeek)
         {

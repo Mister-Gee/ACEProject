@@ -25,11 +25,14 @@ namespace ACEdatabaseAPI.Controllers
         IAcademicYearRepo _acadYearRepo;
         ISemesterRepo _semesterRepo;
         ICourseRepo _courseRepo;
+        IvExamRecordsRepo _vExamRecordsRepo;
+        ICurrentAcademicSessionRepo _currentAcadYearRepo;
         private readonly IExamGradingService _examGradingService;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public ExamRecordsController(IExamRecordsRepo examRecordsRepo, IGradingUnitRepo gradingUnitRepo, IAcademicYearRepo acadYearRepo,
-        ISemesterRepo semesterRepo, ICourseRepo courseRepo, UserManager<ApplicationUser> userManager, IExamGradingService examGradingService)
+        ISemesterRepo semesterRepo, ICourseRepo courseRepo, UserManager<ApplicationUser> userManager, IExamGradingService examGradingService,
+        IvExamRecordsRepo vExamRecordsRepo, ICurrentAcademicSessionRepo currentAcadYearRepo)
         {
             _examRecordsRepo = examRecordsRepo;
             _gradingUnitRepo = gradingUnitRepo;
@@ -38,20 +41,28 @@ namespace ACEdatabaseAPI.Controllers
             _courseRepo = courseRepo;
             _userManager = userManager;
             _examGradingService = examGradingService;
+            _vExamRecordsRepo = vExamRecordsRepo;
+            _currentAcadYearRepo = currentAcadYearRepo;
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("CurrentAcademicYear/CurrentSemester/Get/{StudentID}")]
         public IActionResult Get(Guid StudentID)
         {
             try
             {
-                var currentSemester = _semesterRepo.GetAll().LastOrDefault();
-                var currentAcademicYear = _acadYearRepo.GetAll().LastOrDefault();
+                if(User.IsInRole("Student") || User.IsInRole("Exam&Records"))
+                {
+                    var currentAcadYear = _currentAcadYearRepo.GetAll().FirstOrDefault();
+                    var result = _vExamRecordsRepo.GetAll().Where(x => x.StudentID == StudentID
+                        && x.AcademicYearID == currentAcadYear.AcademicYearID && x.SemesterID == currentAcadYear.SemesterID).ToList();
 
-                var result = _examRecordsRepo.GetAll().Where(x => x.StudentID == StudentID && x.AcademicYearID == currentAcademicYear.Id && x.SemesterID == currentSemester.Id);
-                
-                return Ok(result);
+                    return Ok(result);
+                }
+                return Unauthorized();
             }
             catch (Exception x)
             {
@@ -62,13 +73,21 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("{AcademicYearID}/{SemesterID}/Get/{StudentID}")]
         public IActionResult Get(Guid StudentID, Guid AcademicYearID, Guid SemesterID)
         {
             try
             {
-                var result = _examRecordsRepo.GetAll().Where(x => x.StudentID == StudentID && x.AcademicYearID == AcademicYearID && x.SemesterID == SemesterID);
-                return Ok(result);
+                if(User.IsInRole("Student") || User.IsInRole("Exam&Records"))
+                {
+                    var result = _vExamRecordsRepo.GetAll().Where(x => x.StudentID == StudentID
+                    && x.AcademicYearID == AcademicYearID && x.SemesterID == SemesterID).ToList();
+                    return Ok(result);
+                }
+                return Unauthorized();
             }
             catch (Exception x)
             {
@@ -79,6 +98,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/All/{SchoolID}")]
         public IActionResult GetBySchool( Guid SchoolID)
         {
@@ -86,7 +108,7 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Exam&Records"))
                 {
-                    var result = _examRecordsRepo.GetAll().Where(x => x.SchoolID == SchoolID);
+                    var result = _vExamRecordsRepo.GetAll().Where(x => x.SchoolID == SchoolID).ToList();
 
                     return Ok(result);
                 }
@@ -103,14 +125,129 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Get/All/{SchoolID}/{DepartmentID}")]
-        public IActionResult GetBySchoolAndDepartment(Guid SchoolID, Guid DepartmentID)
+        [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+           StatusCodes.Status500InternalServerError)]
+        [Route("{AcademicYearID}/{SemesterID}/Get/All/{SchoolID}")]
+        public IActionResult GetBySchool(Guid SchoolID, Guid AcademicYearID, Guid SemesterID)
         {
             try
             {
                 if (User.IsInRole("Exam&Records"))
                 {
-                    var result = _examRecordsRepo.GetAll().Where(x => x.SchoolID == SchoolID && x.DepartmentID == DepartmentID);
+                    var result = _vExamRecordsRepo.GetAll().Where(x => x.SchoolID == SchoolID 
+                        && x.SemesterID == SemesterID && x.AcademicYearID == AcademicYearID).ToList();
+
+                    return Ok(result);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+           StatusCodes.Status500InternalServerError)]
+        [Route("CurrentAcademicYear/Get/All/{SchoolID}")]
+        public IActionResult GetCurrentYearBySchool(Guid SchoolID)
+        {
+            try
+            {
+                if (User.IsInRole("Exam&Records"))
+                {
+                    var currentAcadYear = _currentAcadYearRepo.GetAll().FirstOrDefault();
+                    var result = _vExamRecordsRepo.GetAll().Where(x => x.SchoolID == SchoolID
+                        && x.SemesterID == currentAcadYear.SemesterID && x.AcademicYearID == currentAcadYear.AcademicYearID).ToList();
+
+                    return Ok(result);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+           StatusCodes.Status500InternalServerError)]
+        [Route("Get/All/{DepartmentID}")]
+        public IActionResult GetByDepartment(Guid DepartmentID)
+        {
+            try
+            {
+                if (User.IsInRole("Exam&Records"))
+                {
+                    var result = _vExamRecordsRepo.GetAll().Where(x => x.DepartmentID == DepartmentID).ToList();
+                    return Ok(result);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+           StatusCodes.Status500InternalServerError)]
+        [Route("CurrentAcademicYear/Get/All/{DepartmentID}")]
+        public IActionResult GetCurrentYearByDepartment(Guid DepartmentID)
+        {
+            try
+            {
+                if (User.IsInRole("Exam&Records"))
+                {
+                    var currenAcadYear = _currentAcadYearRepo.GetAll().FirstOrDefault();
+                    var result = _vExamRecordsRepo.GetAll().Where(x => x.DepartmentID == DepartmentID 
+                        && x.AcademicYearID == currenAcadYear.AcademicYearID && x.SemesterID == currenAcadYear.SemesterID ).ToList();
+                    return Ok(result);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+           StatusCodes.Status500InternalServerError)]
+        [Route("{AcademicYearID}/{SemesterID}/Get/All/{DepartmentID}")]
+        public IActionResult GetByDepartment(Guid DepartmentID, Guid AcademicYearID, Guid SemesterID)
+        {
+            try
+            {
+                if (User.IsInRole("Exam&Records"))
+                {
+                    var result = _vExamRecordsRepo.GetAll().Where(x => x.DepartmentID == DepartmentID
+                        && x.AcademicYearID == AcademicYearID && x.SemesterID == SemesterID).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -151,16 +288,16 @@ namespace ACEdatabaseAPI.Controllers
                     if (_userManager.IsInRoleAsync(student, "Student").Result)
                     {
                         return StatusCode((int)HttpStatusCode.Unauthorized,
-                                                    new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                                        "You Grade a non student"));
+                                    new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                        "You Grade a non student"));
                     }
                     if (ModelState.IsValid)
                     {
                         if(student.DepartmentID == null || student.SchoolID == null)
                         {
                             return StatusCode((int)HttpStatusCode.Unauthorized,
-                                                                                new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                                                                    "Student Not fully registered"));
+                                    new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                        "Student Not fully registered"));
                         }
 
                         double studentTotalScore = model.ExamScore + model.OtherAssessmentScore;

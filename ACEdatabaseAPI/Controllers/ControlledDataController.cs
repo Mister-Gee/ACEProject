@@ -29,11 +29,12 @@ namespace ACEdatabaseAPI.Controllers
         IFlagLevelRepo _flagLevelRepo;
         IAcademicYearRepo _acadYearRepo;
         ISemesterRepo _semesterRepo;
+        IMedicalConditionRepo _medConRepo;
 
 
         public ControlledDataController(IReligionRepo religionRepo, IMaritalStatusRepo maritalStatusRepo, IStudentCategoryRepo studentCategoryRepo,
             ILevelRepo levelRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IGenderRepo genderRepo, IProgrammeRepo progRepo,
-            IBloodGroupRepo bloodGroupRepo, IGenotypeRepo genotypeRepo, IFlagLevelRepo flagLevelRepo, 
+            IBloodGroupRepo bloodGroupRepo, IGenotypeRepo genotypeRepo, IFlagLevelRepo flagLevelRepo, IMedicalConditionRepo medConRepo,
             IAcademicYearRepo acadYearRepo, ISemesterRepo semesterRepo)
         {
             _religionRepo = religionRepo;
@@ -49,9 +50,13 @@ namespace ACEdatabaseAPI.Controllers
             _flagLevelRepo = flagLevelRepo;
             _acadYearRepo = acadYearRepo;
             _semesterRepo = semesterRepo;
+            _medConRepo = medConRepo;
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<Religion>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Religion/All")]
         public IActionResult GetAllReligion(){
             try
@@ -169,6 +174,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<StudentCategory>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("StudentCategory/All")]
         public IActionResult GetAllStudentCategories()
         {
@@ -286,6 +294,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<Gender>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Gender/All")]
         public IActionResult GetAllGender()
         {
@@ -404,6 +415,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<MaritalStatus>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("MaritalStatus/All")]
         public IActionResult GetAllMaritalStatus()
         {
@@ -522,6 +536,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<Level>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Level/All")]
         public IActionResult GetAllLevel()
         {
@@ -639,6 +656,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<Programme>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Programme/All")]
         public IActionResult GetAllProgramme()
         {
@@ -756,6 +776,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<School>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("School/All")]
         public IActionResult GetAllSchool()
         {
@@ -873,6 +896,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<Department>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Department/All")]
         public IActionResult GetAllDepartment()
         {
@@ -1016,6 +1042,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<BloodGroup>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("BloodGroup/All")]
         public IActionResult GetAllBloodGroup()
         {
@@ -1133,6 +1162,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<Genotype>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Genotype/All")]
         public IActionResult GetAllGenotype()
         {
@@ -1251,6 +1283,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<FlagLevel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("FlagLevel/All")]
         public IActionResult GetAllFlagLevel()
         {
@@ -1368,6 +1403,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<AcademicYear>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("AcademicYear/All")]
         public IActionResult GetAllAcademicYear()
         {
@@ -1443,7 +1481,7 @@ namespace ACEdatabaseAPI.Controllers
                                      HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
                 }
                 return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
-                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
+                                     HttpStatusCode.BadRequest.ToString(), "Academic Year Does Not Exist"));
             }
             catch (Exception x)
             {
@@ -1473,7 +1511,7 @@ namespace ACEdatabaseAPI.Controllers
                     );
                 }
                 return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
-                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
+                                     HttpStatusCode.BadRequest.ToString(), "Academic Year Does Not Exist"));
             }
             catch (Exception x)
             {
@@ -1486,6 +1524,9 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<Semester>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Semester/All")]
         public IActionResult GetAllSemester()
         {
@@ -1561,7 +1602,7 @@ namespace ACEdatabaseAPI.Controllers
                                      HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
                 }
                 return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
-                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
+                                     HttpStatusCode.BadRequest.ToString(), "Semester Does Not Exist"));
             }
             catch (Exception x)
             {
@@ -1587,6 +1628,125 @@ namespace ACEdatabaseAPI.Controllers
                         new
                         {
                             Message = "Semester Deleted Successfully"
+                        }
+                    );
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Semester Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<MedicalCondition>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
+        [Route("MedicalCondition/All")]
+        public IActionResult GetAllMedicalCondition()
+        {
+            try
+            {
+                var result = _medConRepo.GetAll().ToList();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPost]
+        [Route("MedicalCondition/Create")]
+        public IActionResult CreateMedicalCondition(CreateControlledData Model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string username = User.Identity.Name;
+                    var medCon = new MedicalCondition()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = Model.Name
+                    };
+                    _medConRepo.Add(medCon);
+                    _medConRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Medical Condition Created Successfully"
+                        }
+                    );
+                }
+                return BadRequest();
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpPut]
+        [Route("MedicalCondition/Edit/{Id}")]
+        public IActionResult EditMedicalCondition(Guid Id, CreateControlledData Model)
+        {
+            try
+            {
+                var medCon = _medConRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (medCon != null)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        string username = User.Identity.Name;
+                        medCon.Name = Model.Name;
+                        _medConRepo.Edit(medCon);
+                        _medConRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                        return Ok(
+                            new
+                            {
+                                Message = "Medical Condition Edit Successfully"
+                            }
+                        );
+                    }
+                    return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Name Field is Required"));
+                }
+                return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+                                     HttpStatusCode.BadRequest.ToString(), "Medical Condition Does Not Exist"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpDelete]
+        [Route("MedicalCondition/Delete/{Id}")]
+        public IActionResult DeleteMedicalCondition(Guid Id)
+        {
+            try
+            {
+                var medCon = _medConRepo.FindBy(x => x.Id == Id).FirstOrDefault();
+                if (medCon != null)
+                {
+                    string username = User.Identity.Name;
+                    _medConRepo.Delete(medCon);
+                    _medConRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
+                    return Ok(
+                        new
+                        {
+                            Message = "Medical Condition Deleted Successfully"
                         }
                     );
                 }

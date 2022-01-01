@@ -34,6 +34,7 @@ using ACEdatabaseAPI.Helpers.FileUploadService;
 using ACEdatabaseAPI.Helpers.ExamGradeService;
 using ACEdatabaseAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.FileProviders;
 
 namespace ACE
 {
@@ -210,6 +211,10 @@ namespace ACE
             services.AddScoped<IvCourseRegisterationRepo, EFvCourseRegisterationRepo>();
             services.AddScoped<IvStudentRegisteredCourseRepo, EFvStudentRegisteredCourseRepo>();
             services.AddScoped<IvExamAttendanceRepo, EFvExamAttendanceRepo>();
+            services.AddScoped<IvMedicalRecordRepo, EFvMedicalRecordRepo>();
+            services.AddScoped<IvExamRecordsRepo, EFvExamRecordsRepo>();
+            services.AddScoped<IvExamTimetableRepo, EFvExamTimetableRepo>();
+            services.AddScoped<IvFlagRepo, EFvFlagRepo>();
 
 
 
@@ -224,6 +229,7 @@ namespace ACE
             services.AddScoped<IStudentCategoryRepo, EFStudentCategoryRepo>();
             services.AddScoped<IFlagLevelRepo, EFFlagLevelRepo>();
             services.AddScoped<IMedicalRecordRepo, EFMedicalRecordRepo>();
+            services.AddScoped<IMedicalConditionRepo, EFMedicalConditionRepo>();
             services.AddScoped<IMedicalHistoryRepo, EFMedicalHistoryRepo>();
             services.AddScoped<IFlagRepo, EFFlagRepo>();
             services.AddScoped<IBloodGroupRepo, EFBloodGroupRepo>();
@@ -299,7 +305,13 @@ namespace ACE
                 Console.WriteLine(x.ToString());
             }
 
-
+            app.UseStaticFiles();
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //    Path.Combine(Directory.GetCurrentDirectory(), "assets")),
+            //    RequestPath = "/Assets"
+            //});
             //loggerFactory.AddFile($"{path}\\Logs\\{date}-Log.txt");
 
             //if (env.IsDevelopment())
@@ -338,8 +350,18 @@ namespace ACE
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers();
+            //});
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute("area", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
+
                 endpoints.MapControllers();
             });
         }

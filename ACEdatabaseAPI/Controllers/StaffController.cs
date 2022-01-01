@@ -1,9 +1,12 @@
-﻿using ACE.Domain.Abstract.IControlledRepo;
+﻿using ACE.Domain.Abstract;
+using ACE.Domain.Abstract.IControlledRepo;
+using ACE.Domain.Entities;
 using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.DTOModel;
 using ACEdatabaseAPI.Model;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,44 +26,30 @@ namespace ACEdatabaseAPI.Controllers
         private readonly ApplicationDbContext _context;
         IDepartmentRepo _deptRepo;
         private readonly IMapper _mapper;
+        IvStaffRepo _vStaffRepo;
 
-        public StaffController(UserManager<ApplicationUser> userManager, IMapper mapper, ApplicationDbContext context, IDepartmentRepo deptRepo)
+        public StaffController(UserManager<ApplicationUser> userManager, IMapper mapper, ApplicationDbContext context, IDepartmentRepo deptRepo, IvStaffRepo vStaffRepo)
         {
             _userManager = userManager;
             _mapper = mapper;
             _context = context;
             _deptRepo = deptRepo;
+            _vStaffRepo = vStaffRepo;
         }
 
 
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vStaff>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/All")]
         public async Task<IActionResult> GetStaffs()
         {
             try
             {
-                var users = _userManager.Users.ToList();
-                List<StaffDTO> staffDto = new List<StaffDTO>();
-                foreach (var user in users)
-                {
-                    var isStaff = await _userManager.IsInRoleAsync(user, "Staff");
-                    if (isStaff)
-                    {
-                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-
-
-                        var staff = new StaffDTO();
-                        var newDTO = _mapper.Map(user, staff);
-                        staffDto.Add(newDTO);
-                    }
-                }
-
-                return Ok(staffDto);
+                var result = _vStaffRepo.FindBy(x => x.StaffID != null && x.Status == "Active").ToList();
+                return Ok(result);
             }
             catch (Exception x)
             {
@@ -70,69 +59,18 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("Get/Lecturers/All")]
-        public async Task<IActionResult> GetLecturers()
-        {
-            try
-            {
-                var users = _userManager.Users.ToList();
-                List<StaffDTO> staffDto = new List<StaffDTO>();
-                foreach (var user in users)
-                {
-                    var isStaff = await _userManager.IsInRoleAsync(user, "Lecturer");
-                    if (isStaff)
-                    {
-                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-
-
-                        var staff = new StaffDTO();
-                        var newDTO = _mapper.Map(user, staff);
-                        staffDto.Add(newDTO);
-                    }
-                }
-
-                return Ok(staffDto);
-            }
-            catch (Exception x)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    new ApiError((int)HttpStatusCode.InternalServerError,
-                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
-            }
-        }
 
         [HttpGet]
-        [Route("Get/Lecturers/{DepartmentID}/All")]
+        [ProducesResponseType(typeof(List<vStaff>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
+        [Route("Get/Staff/{DepartmentID}/All")]
         public async Task<IActionResult> GetLecturersByDepartment(Guid DepartmentID)
         {
             try
             {
-                var users = _userManager.Users.Where(x => x.DepartmentID == DepartmentID).ToList();
-                List<StaffDTO> staffDto = new List<StaffDTO>();
-                foreach (var user in users)
-                {
-                    var isStaff = await _userManager.IsInRoleAsync(user, "Lecturer");
-                    if (isStaff)
-                    {
-                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-
-
-                        var staff = new StaffDTO();
-                        var newDTO = _mapper.Map(user, staff);
-                        staffDto.Add(newDTO);
-                    }
-                }
-
-                return Ok(staffDto);
+                var result = _vStaffRepo.FindBy(x => x.StaffID != null && x.Status == "Active" && x.DepartmentID == DepartmentID).ToList();
+                return Ok(result);
             }
             catch (Exception x)
             {
@@ -143,30 +81,36 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
+        [Route("Cafe/Get")]
+        public async Task<IActionResult> CafeGetStaff(SearchByEmail model)
+        {
+            try
+            {
+                var result = _userManager.Users.Where(x => x.Email == model.Email).FirstOrDefault();
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(vStaff), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/ID/{ID}")]
         public async Task<IActionResult> GetStaffByID(Guid ID)
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(ID.ToString());
-                if (user != null)
-                {
-                    var isStaff = await _userManager.IsInRoleAsync(user, "Staff");
-                    if (isStaff)
-                    {
-                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-
-                        var staff = new StaffDTO();
-                        var newDTO = _mapper.Map(user, staff);
-                        return Ok(staff);
-                    }
-                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Staff Not Found"));
-                }
-                return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Staff Not Found"));
+                var staff = _vStaffRepo.FindBy(x => x.Id == ID.ToString()).FirstOrDefault();
+                return Ok(staff);
             }
             catch (Exception x)
             {
@@ -177,6 +121,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(vStaff), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/Email")]
         public async Task<IActionResult> GetStaffByEmail(SearchByEmail model)
         {
@@ -187,25 +134,8 @@ namespace ACEdatabaseAPI.Controllers
                     return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
                 }
 
-                var user = await _userManager.FindByNameAsync(model.Email);
-                if (user != null)
-                {
-                    var isStaff = await _userManager.IsInRoleAsync(user, "Staff");
-                    if (isStaff)
-                    {
-                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-
-                        var staff = new StaffDTO();
-                        var newDTO = _mapper.Map(user, staff);
-                        return Ok(staff);
-                    }
-                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Staff Not Found"));
-                }
-                return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Staff Not Found"));
+                var staff = _vStaffRepo.FindBy(x => x.Email.ToUpper() == model.Email.ToUpper()).FirstOrDefault();
+                return Ok(staff);
             }
             catch (Exception x)
             {
@@ -216,6 +146,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(vStaff), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/StaffID")]
         public async Task<IActionResult> GetStudentsByMatricNumber(SearchByStaffID model)
         {
@@ -226,25 +159,8 @@ namespace ACEdatabaseAPI.Controllers
                     return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
                 }
 
-                var user = _userManager.Users.Where(x => x.StaffID.ToUpper() == model.StaffID.ToUpper()).FirstOrDefault();
-                if (user != null)
-                {
-                    var isStaff = await _userManager.IsInRoleAsync(user, "Staff");
-                    if (isStaff)
-                    {
-                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-
-                        var staff = new StaffDTO();
-                        var newDTO = _mapper.Map(user, staff);
-                        return Ok(staff);
-                    }
-                    return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Staff Not Found"));
-                }
-                return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Staff Not Found"));
+                var staff = _vStaffRepo.FindBy(x => x.StaffID.ToUpper() == model.StaffID.ToUpper()).FirstOrDefault();
+                return Ok(staff);
             }
             catch (Exception x)
             {
@@ -255,6 +171,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(vStaff), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Get/Biometric")]
         public async Task<IActionResult> GetStaffByBiometric(SearchByBiometrics model)
         {
@@ -265,30 +184,18 @@ namespace ACEdatabaseAPI.Controllers
                     return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
                 }
 
-                var user = _userManager.Users.Where(x => x.RightThumbFingerBiometrics == model.Biometric).FirstOrDefault();
-                if (user == null)
+                var staff = _userManager.Users.Where(x => x.RightThumbFingerBiometrics == model.Biometric || x.LeftThumbFingerBiometrics == model.Biometric)
+                    .FirstOrDefault();
+                if(staff == null)
                 {
-                    user = _userManager.Users.Where(x => x.LeftThumbFingerBiometrics == model.Biometric).FirstOrDefault();
-
-                    if (user != null)
-                    {
-                        var isStaff = await _userManager.IsInRoleAsync(user, "Staff");
-                        if (isStaff)
-                        {
-                            //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                            //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                            //await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                            //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                            //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-
-                            var staff = new StaffDTO();
-                            var newDTO = _mapper.Map(user, staff);
-                            return Ok(staff);
-                        }
-                        return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Staff Not Found"));
-                    }
+                    return NotFound(new { 
+                        Message = "User Not Found"
+                    });
                 }
-                return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Staff Not Found"));
+
+                var result = _vStaffRepo.FindBy(x => x.Id == staff.Id).FirstOrDefault();
+                return Ok(result);
+                
             }
             catch (Exception x)
             {
@@ -299,6 +206,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vStaff>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Department/Get/{DepartmentID}")]
         public async Task<IActionResult> GetStaffsInDepartMent(Guid DepartmentID)
         {
@@ -310,28 +220,9 @@ namespace ACEdatabaseAPI.Controllers
                     return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Department does not Exist"));
                 }
 
-                var users = _userManager.Users.Where(x => x.DepartmentID == DepartmentID).ToList();
+                var result = _vStaffRepo.FindBy(x => x.DepartmentID == DepartmentID && x.StaffID != null && x.Status == "Active").ToList();
 
-                List<StaffDTO> staffDto = new List<StaffDTO>();
-                foreach (var user in users)
-                {
-                    var isStaff = await _userManager.IsInRoleAsync(user, "Staff");
-                    if (isStaff)
-                    {
-                        //await _context.Entry(user).Reference(x => x.Gender).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Religion).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.School).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.Departments).LoadAsync();
-                        //await _context.Entry(user).Reference(x => x.MaritalStatus).LoadAsync();
-
-
-                        var staff = new StaffDTO();
-                        var newDTO = _mapper.Map(user, staff);
-                        staffDto.Add(newDTO);
-                    }
-                }
-
-                return Ok(staffDto);
+                return Ok(result);
             }
             catch (Exception x)
             {

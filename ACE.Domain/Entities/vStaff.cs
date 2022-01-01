@@ -18,13 +18,18 @@ namespace ACE.Domain.Entities
         public string NIN { get; set; }
         public string Status { get; set; }
         public string School { get; set; }
+        public Guid SchoolID { get; set; }
         public string Department { get; set; }
+        public Guid DepartmentID { get; set; }
         public string PhoneNumber { get; set; }
         public string UserImageURL { get; set; }
         public string MaritalStatus { get; set; }
+        public Guid MaritalStatusID { get; set; }
         public string Religion { get; set; }
+        public Guid ReligionID { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
+        public Guid GenderID { get; set; }
         public bool isDisabled { get; set; }
         public string Disability { get; set; }
         public string AlternatePhoneNumber { get; set; }

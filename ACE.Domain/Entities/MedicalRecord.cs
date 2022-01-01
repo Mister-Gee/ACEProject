@@ -14,8 +14,6 @@ namespace ACE.Domain.Entities
         [Key]
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public string MatricNumber { get; set; }
-        public string StaffID { get; set; }
         public Guid BloodGroupID { get; set; }
         public Guid GenotypeID { get; set; }
         public double Weight { get; set; }
@@ -23,6 +21,8 @@ namespace ACE.Domain.Entities
         public string FamilyDoctorName { get; set; }
         public string FamilyDoctorPhoneNumber { get; set; }
         public string AdditionalNote { get; set; }
+        public string MedicalConditions { get; set; }
+        public string OtherMedicalConditions { get; set; }
 
     }
 }

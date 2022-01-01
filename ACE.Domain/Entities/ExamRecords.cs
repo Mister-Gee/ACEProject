@@ -20,7 +20,6 @@ namespace ACE.Domain.Entities
         public double TotalScore { get; set; }
         public int CourseUnit { get; set; }
         public char LetterGrade { get; set; }
-
         public int GradePoint { get; set; }
         public Guid AcademicYearID { get; set; }
         public Guid SemesterID { get; set; }

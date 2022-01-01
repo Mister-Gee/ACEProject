@@ -15,8 +15,8 @@ using System.Threading.Tasks;
 namespace ACEdatabaseAPI.Controllers
 {
 	[Route("[controller]")]
-	//[Authorize("MIS")]
-	public class RoleController : Controller
+	[Authorize("MIS")]
+    public class RoleController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
@@ -32,8 +32,11 @@ namespace ACEdatabaseAPI.Controllers
 
 
 		[HttpGet]
+		[ProducesResponseType(typeof(List<ApplicationRole>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ApiError),
+			StatusCodes.Status500InternalServerError)]
 		[Route("Get")]
-		public async Task<IActionResult> CreateRole()
+		public async Task<IActionResult> GetRole()
 		{
             try
             {
@@ -108,7 +111,7 @@ namespace ACEdatabaseAPI.Controllers
         }
 
 		[HttpPost]
-		[Route("addRoles/{userName}/{roles}")]
+		[Route("addRoles/byUserName/{userName}/{roles}")]
 		public async Task<IActionResult> UserRoles(string userName, string roles)
 		{
 			if (!string.IsNullOrEmpty(roles) && !string.IsNullOrEmpty(userName))
@@ -168,6 +171,137 @@ namespace ACEdatabaseAPI.Controllers
 			return BadRequest(new ApiError((int)HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(),
 				$"userName and roles cannot be empty"));
 
+		}
+
+		[HttpPost]
+		[Route("addRoles/byUserId/{userId}/{roles}")]
+		public async Task<IActionResult> UserRoles(Guid userId, string roles)
+		{
+			if (!string.IsNullOrEmpty(roles))
+			{
+
+				var usr = await _userManager.FindByIdAsync(userId.ToString());
+				if (usr != null)
+				{
+					string result = "";
+					var rls = new List<string>();
+					foreach (var item in roles.Split(','))
+					{
+						if (!string.IsNullOrEmpty(item))
+						{
+							//check if the role exists
+							if (await _roleManager.RoleExistsAsync(item))
+							{
+								if (!await _userManager.IsInRoleAsync(usr, item))
+								{
+									rls.Add(item);
+								}
+							}
+							else
+							{
+								if (string.IsNullOrEmpty(result))
+								{
+									result = item;
+								}
+								else
+								{
+									result += $",{Environment.NewLine} {item} does not Exist as a role";
+								}
+							}
+
+							if (rls.Count > 0)
+							{
+								await _userManager.AddToRolesAsync(usr, rls);
+							}
+							else
+							{
+								return BadRequest(new ApiError(StatusCodes.Status400BadRequest,
+									HttpStatusCode.BadRequest.ToString(), result));
+							}
+						}
+					}
+
+					return Ok(rls);
+				}
+				else
+				{
+					return NotFound(new ApiError((int)HttpStatusCode.NotFound, HttpStatusCode.NotFound.ToString(),
+						$"Unable to load user with ID."));
+
+				}
+			}
+
+			return BadRequest(new ApiError((int)HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(),
+				$"userName and roles cannot be empty"));
+
+		}
+
+		[HttpPost]
+		[Route("removeRole/byUserID/{userId}/{role}")]
+		public async Task<IActionResult> RemoveRoleByUserID (Guid userId, string role)
+        {
+            try
+            {
+				var user = await _userManager.FindByIdAsync(userId.ToString());
+				if(user == null)
+                {
+					return NotFound(new
+					{
+						Message = "User Not Found"
+					});
+                }
+				var result = await _userManager.RemoveFromRoleAsync(user, role);
+                if (result.Succeeded)
+                {
+					return Ok(new { 
+						Message = "Success"
+					});
+                }
+				return BadRequest(new { 
+					Message = "Fail"
+				});
+            }
+			catch(Exception x)
+            {
+				return StatusCode((int)HttpStatusCode.InternalServerError,
+					new ApiError((int)HttpStatusCode.InternalServerError,
+						HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+			}
+        }
+
+		[HttpPost]
+		[Route("removeRole/byUserName/{userName}/{role}")]
+		public async Task<IActionResult> RemoveRoleByUserName(string userName, string role)
+		{
+			try
+			{
+				var user = await _userManager.FindByNameAsync(userName);
+				if (user == null)
+				{
+					return NotFound(new
+					{
+						Message = "User Not Found"
+					});
+				}
+				var result = await _userManager.RemoveFromRoleAsync(user, role);
+				if (result.Succeeded)
+				{
+					return Ok(new
+					{
+						Message = "Success"
+					});
+				}
+				return BadRequest(new
+				{
+					Message = "Fail"
+				});
+			}
+			catch (Exception x)
+			{
+				return StatusCode((int)HttpStatusCode.InternalServerError,
+					new ApiError((int)HttpStatusCode.InternalServerError,
+						HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+			}
 		}
 	}
 }

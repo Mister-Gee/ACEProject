@@ -13,11 +13,8 @@ namespace ACE.Domain.Entities
     {
         [Key]
         public Guid Id { get; set; }
-
         public Guid StudentID { get; set; }
-
         public Guid FlagLevelID { get; set; }
-        public int TotalFlags { get; set; }
         public Guid SecurityID { get; set; }
     }
 }

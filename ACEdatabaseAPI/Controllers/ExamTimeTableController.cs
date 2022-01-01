@@ -28,10 +28,12 @@ namespace ACEdatabaseAPI.Controllers
         ISemesterRepo _semesterRepo;
         ICurrentAcademicSessionRepo _currentAcadYear;
         IStudentRegCourseRepo _courseRegItemRepo;
+        IvExamTimetableRepo _vExamTTRepo;
         private readonly UserManager<ApplicationUser> _userManager;
         public ExamTimeTableController(IExamTimetableRepo examTTRepo, ICourseRepo courseRepo, IAcademicYearRepo acadYearRepo,
                                     ISemesterRepo semesterRepo, UserManager<ApplicationUser> userManager, IExcelHelper excelHelper, 
-                                    ICurrentAcademicSessionRepo currentAcadYear, IStudentRegCourseRepo courseRegItemRepo)
+                                    ICurrentAcademicSessionRepo currentAcadYear, IStudentRegCourseRepo courseRegItemRepo,
+                                    IvExamTimetableRepo vExamTTRepo)
         {
             _examTTRepo = examTTRepo;
             _courseRepo = courseRepo;
@@ -41,9 +43,13 @@ namespace ACEdatabaseAPI.Controllers
             _excelHelper = excelHelper;
             _currentAcadYear = currentAcadYear;
             _courseRegItemRepo = courseRegItemRepo;
+            _vExamTTRepo = vExamTTRepo;
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vExamTimetable>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("CurrentAcademicYear/CurrentSemester/All")]
         public IActionResult GetAllExams()
         {
@@ -51,9 +57,8 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Exam&Records") || User.IsInRole("MIS"))
                 {
-                    var acadYear = _acadYearRepo.GetAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
-                    var semester = _semesterRepo.GetAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
-                    var result = _examTTRepo.GetAll().Where(x => x.AcademicYearID == acadYear && x.SemesterID == semester);
+                    var currentAcadYear = _currentAcadYear.GetAll().FirstOrDefault();
+                    var result = _vExamTTRepo.GetAll().Where(x => x.AcademicYearID == currentAcadYear.AcademicYearID && x.SemesterID == currentAcadYear.SemesterID).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -69,6 +74,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vExamTimetable>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("CurrentAcademicYear/CurrentSemester/{CourseID}")]
         public IActionResult GetAllExamByCourse(Guid CourseID)
         {
@@ -76,9 +84,10 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Exam&Records") || User.IsInRole("Student") || User.IsInRole("MIS"))
                 {
-                    var acadYear = _acadYearRepo.GetAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
-                    var semester = _semesterRepo.GetAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
-                    var result = _examTTRepo.GetAll().Where(x => x.AcademicYearID == acadYear && x.SemesterID == semester && x.CourseID == CourseID).FirstOrDefault();
+                    var currentAcadYear = _currentAcadYear.GetAll().FirstOrDefault();
+
+                    var result = _examTTRepo.GetAll().Where(x => x.AcademicYearID == currentAcadYear.AcademicYearID 
+                        && x.SemesterID == currentAcadYear.SemesterID && x.CourseID == CourseID).FirstOrDefault();
                     
                     return Ok(result);
                 }
@@ -95,6 +104,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vExamTimetable>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Student/Current")]
         public IActionResult StudentTimeTable()
         {
@@ -102,14 +114,14 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if ( User.IsInRole("Student") )
                 {
-                    List<ExamTimetable> timetables = new List<ExamTimetable>();
+                    List<vExamTimetable> timetables = new List<vExamTimetable>();
                     var student = _userManager.FindByNameAsync(User.Identity.Name).Result;
                     var currentAcadYear = _currentAcadYear.GetAll().FirstOrDefault();
                     var studentRegCourses = _courseRegItemRepo.FindBy(x => x.StudentId == Guid.Parse(student.Id)
                         && x.AcademicYearID == currentAcadYear.AcademicYearID && x.SemesterID == currentAcadYear.SemesterID).ToList();
                     foreach(var item in studentRegCourses)
                     {
-                        var timetable = _examTTRepo.FindBy(x => x.CourseID == item.CourseID
+                        var timetable = _vExamTTRepo.FindBy(x => x.CourseID == item.CourseID
                             && x.AcademicYearID == currentAcadYear.AcademicYearID && x.SemesterID == currentAcadYear.SemesterID)
                             .OrderBy(x => x.ExamDateTime).FirstOrDefault();
                         timetables.Add(timetable);
@@ -175,9 +187,7 @@ namespace ACEdatabaseAPI.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        var acadYear = _acadYearRepo.GetAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
-                        var semester = _semesterRepo.GetAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
-
+                        var currentAcadYear = _currentAcadYear.GetAll().FirstOrDefault();
                         var supervisor = _userManager.FindByIdAsync(model.SupervisorID.ToString()).Result;
                         if(supervisor == null)
                         {
@@ -197,10 +207,10 @@ namespace ACEdatabaseAPI.Controllers
 
 
                         var timetable = new ExamTimetable();
-                        timetable.AcademicYearID = acadYear;
+                        timetable.AcademicYearID = currentAcadYear.AcademicYearID;
                         timetable.CourseID = model.CourseID;
                         timetable.ExamDateTime = model.ExamDateTime;
-                        timetable.SemesterID = semester;
+                        timetable.SemesterID = currentAcadYear.SemesterID;
                         timetable.SupervisorID = model.SupervisorID;
                         _examTTRepo.Add(timetable);
                         _examTTRepo.Save(User.Identity.Name, HttpContext.Connection.RemoteIpAddress.ToString());

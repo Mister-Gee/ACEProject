@@ -48,6 +48,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourseRegisteration>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("All")]
         public IActionResult StudentRegisteredAllCourse()
         {
@@ -71,6 +74,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourseRegisteration>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Student/CourseRegisterationHistory/All/{StudentID}")]
         public IActionResult StudentRegisteredCourseHistory(Guid StudentID)
         {
@@ -94,6 +100,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vStudentRegisteredCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Student/RegisteredCourses/Detail/{ID}")]
         public IActionResult StudentRegisteredCourseDetail(Guid ID)
         {
@@ -117,6 +126,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vStudentRegisteredCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Student/CurrentAcademicYear/{StudentID}")]
         public IActionResult StudentRegisteredCourse(Guid StudentID)
         {
@@ -141,6 +153,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vStudentRegisteredCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Student/CurrentAcademicYear/CurrentSemester/{StudentID}")]
         public IActionResult CurrentRegisteredCourses(Guid StudentID)
         {
@@ -165,6 +180,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vStudentRegisteredCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Student/CurrentAcademicYear/All/{StudentID}/{SemesterID}")]
         public IActionResult StudentRegisteredCourseBySemester(Guid StudentID, Guid SemesterID)
         {
@@ -189,6 +207,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<StudentNameDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Student/Registered/All/{CourseID}")]
         public IActionResult RegisteredStudent(Guid CourseID)
         {
@@ -225,6 +246,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<StudentNameDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Student/Registered/{AcademicYearID}/{CourseID}")]
         public IActionResult RegisteredStudent(Guid CourseID, Guid AcademicYearID)
         {
@@ -260,6 +284,9 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourseRegisteration>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("Student/{StudentID}/{AcademicYearID}/{SemesterID}")]
         public IActionResult StudentRegisteredCourseBySemesterAndAcademicYear(Guid StudentID,  Guid SemesterID, Guid AcademicYearID)
         {
