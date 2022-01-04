@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace ACE.Domain.Entities
 {
     public class CourseRegisteration
     {
+        [Key]
         public Guid Id { get; set; }
         public int Courses { get; set; }
         public Guid StudentID { get; set; }

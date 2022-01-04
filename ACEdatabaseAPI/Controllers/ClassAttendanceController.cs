@@ -174,7 +174,15 @@ namespace ACEdatabaseAPI.Controllers
                         var studentCourseAtt = courseAttendance.Where(x => JsonConvert.DeserializeObject<List<Guid>>(x.PresentStudent).Contains(Guid.Parse(student.Id))).ToList();
                         int totalClassesHeld = courseAttendance.Count;
                         int totalClassesAttended = studentCourseAtt.Count;
-                        double attPercent = (totalClassesAttended / totalClassesHeld) * 100;
+                        double attPercent;
+                        if (totalClassesHeld == 0)
+                        {
+                            attPercent = 0;
+                        }
+                        else
+                        {
+                            attPercent = (totalClassesAttended / totalClassesHeld) * 100;
+                        }
                         studentAtt.AttendancePercent = attPercent;
                         studentAtt.Course = course.CourseTitle;
                         studentAtt.CourseUnit = item.CourseUnit;

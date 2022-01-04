@@ -282,7 +282,7 @@ namespace ACEdatabaseAPI.Controllers
                         regProgress.Medical = true;
                     }
 
-                    int regPercent = (userRegCount / totalRegCount) * 100;
+                    int regPercent = userRegCount * 100 / totalRegCount;
                     regProgress.ProgressPercent = regPercent;
                     regProgress.TotalRegProcess = totalRegCount;
                     regProgress.CompletedRegProcess = userRegCount;

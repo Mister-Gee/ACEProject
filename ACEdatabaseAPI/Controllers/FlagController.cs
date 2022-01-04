@@ -177,6 +177,7 @@ namespace ACEdatabaseAPI.Controllers
                         newFlag.FlagLevelID = model.FlagLevelID;
                         newFlag.SecurityID = model.SecurityID;
                         newFlag.StudentID = model.StudentID;
+                        newFlag.Date = DateTime.UtcNow.AddHours(1);
 
                         _flagRepo.Add(newFlag);
                         _flagRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
@@ -185,6 +186,7 @@ namespace ACEdatabaseAPI.Controllers
                     {
                         flag.FlagLevelID = model.FlagLevelID;
                         flag.SecurityID = model.SecurityID;
+                        flag.Date = DateTime.UtcNow.AddHours(1);
                         _flagRepo.Edit(flag);
                         _flagRepo.Save(user, HttpContext.Connection.RemoteIpAddress.ToString());
                     }

@@ -15,6 +15,6 @@ namespace ACE.Domain.Entities
         public string FlagLevel { get; set; }
         public Guid SecurityID { get; set; }
         public string Security { get; set; }
-
+        public DateTime Date { get; set; }
     }
 }

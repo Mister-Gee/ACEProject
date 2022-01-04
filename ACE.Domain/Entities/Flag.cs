@@ -16,5 +16,6 @@ namespace ACE.Domain.Entities
         public Guid StudentID { get; set; }
         public Guid FlagLevelID { get; set; }
         public Guid SecurityID { get; set; }
+        public DateTime Date { get; set; }
     }
 }

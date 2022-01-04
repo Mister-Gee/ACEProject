@@ -3,14 +3,16 @@ using System;
 using ACE.Domain.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ACE.Domain.Migrations
 {
     [DbContext(typeof(ACEContext))]
-    partial class ACEContextModelSnapshot : ModelSnapshot
+    [Migration("20220101225120_modelDump14")]
+    partial class modelDump14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

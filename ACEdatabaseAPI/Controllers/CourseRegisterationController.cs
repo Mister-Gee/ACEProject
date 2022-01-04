@@ -287,14 +287,48 @@ namespace ACEdatabaseAPI.Controllers
         [ProducesResponseType(typeof(List<vCourseRegisteration>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
-        [Route("Student/{StudentID}/{AcademicYearID}/{SemesterID}")]
-        public IActionResult StudentRegisteredCourseBySemesterAndAcademicYear(Guid StudentID,  Guid SemesterID, Guid AcademicYearID)
+        [Route("Student/Pack/{StudentID}")]
+        public IActionResult StudentRegisteredCourseBySemesterAndAcademicYear(Guid StudentID, [FromQuery] Guid? AcademicYearID, [FromQuery] Guid? SemesterID)
         {
             try
             {
                 if (User.IsInRole("MIS") || User.IsInRole("Student"))
                 {
-                    var result = _vCourseRegRepo.GetAll().Where(x => x.StudentID == StudentID && x.AcademicYearID == AcademicYearID && x.SemesterID == SemesterID).ToList();
+                    var currentAcadYear = _currentAcadRepo.GetAll().FirstOrDefault();
+                    var session = AcademicYearID ?? currentAcadYear.AcademicYearID;
+                    var semester = SemesterID ?? currentAcadYear.SemesterID;
+
+                    var result = _vCourseRegRepo.GetAll().Where(x => x.StudentID == StudentID && x.AcademicYearID == session && x.SemesterID == semester).ToList();
+                    return Ok(result);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<vCourseRegisteration>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
+        [Route("Student/List/{StudentID}")]
+        public IActionResult StudentRegisteredCourseListBySemesterAndAcademicYear(Guid StudentID, [FromQuery] Guid? AcademicYearID, [FromQuery] Guid? SemesterID)
+        {
+            try
+            {
+                if (User.IsInRole("MIS") || User.IsInRole("Student"))
+                {
+                    var currentAcadYear = _currentAcadRepo.GetAll().FirstOrDefault();
+                    var session = AcademicYearID ?? currentAcadYear.AcademicYearID;
+                    var semester = SemesterID ?? currentAcadYear.SemesterID;
+
+                    var result = _vCourseRegItemRepo.GetAll().Where(x => x.StudentId == StudentID && x.AcademicYearID == session && x.SemesterID == semester).ToList();
                     return Ok(result);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -353,14 +387,12 @@ namespace ACEdatabaseAPI.Controllers
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
                                 "Student does not exist"));
                         }
-                        else
+
+                        if (student.Status.ToUpper() != "ACTIVE")
                         {
-                            if (student.Status != "Active") { }
-                            {
-                                return StatusCode((int)HttpStatusCode.Unauthorized,
-                                    new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                    "Student is no Longer Active"));
-                            }
+                            return StatusCode((int)HttpStatusCode.Unauthorized,
+                                new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Student is no Longer Active"));
                         }
 
                         int totalUnit = 0;
@@ -484,15 +516,14 @@ namespace ACEdatabaseAPI.Controllers
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
                                 "Student does not exist"));
                         }
-                        else
+
+                        if (student.Status.ToUpper() != "ACTIVE")
                         {
-                            if (student.Status != "Active")
-                            {
-                                return StatusCode((int)HttpStatusCode.Unauthorized,
-                                    new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
-                                    "Student is no Longer Active"));
-                            }
+                            return StatusCode((int)HttpStatusCode.Unauthorized,
+                                new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Student is no Longer Active"));
                         }
+                        
 
                         foreach(var item in model.Courses)
                         {
