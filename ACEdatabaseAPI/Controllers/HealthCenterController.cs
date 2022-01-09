@@ -1,10 +1,12 @@
 ﻿using ACE.Domain.Abstract;
 using ACE.Domain.Abstract.IControlledRepo;
 using ACE.Domain.Entities;
+using ACE.Domain.Entities.ControlledEntities;
 using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.DTOModel;
 using ACEdatabaseAPI.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -147,18 +149,25 @@ namespace ACEdatabaseAPI.Controllers
                 if (User.IsInRole("Health"))
                 {
                     var medicalRecord = new MedicalRecordDTO();
+                    List<MedicalCondition> medCon = new List<MedicalCondition>();
                     var result = _vMedRepo.FindBy(x => x.Id == ID).FirstOrDefault();
                     medicalRecord.Record = result;
-
+                    if(result == null)
+                    {
+                        return StatusCode((int)HttpStatusCode.BadRequest,
+                           new ApiError((int)HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(),
+                               "Record Does not exist"));
+                    }
                     var userMedCondID = JsonConvert.DeserializeObject<List<Guid>>(result.MedicalConditions);
                     if(userMedCondID.Count > 0)
                     {
                         foreach (var id in userMedCondID)
                         {
                             var cond = _medConRepo.FindBy(x => x.Id == id).FirstOrDefault();
-                            medicalRecord.MedicalConditionsList.Add(cond);
+                            medCon.Add(cond);
                         }
                     }
+                    medicalRecord.MedicalConditionsList = medCon;
                     return Ok(medicalRecord);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -219,7 +228,14 @@ namespace ACEdatabaseAPI.Controllers
                 if (User.IsInRole("Health"))
                 {
                     var medicalRecord = new MedicalRecordDTO();
+                    List<MedicalCondition> medCon = new List<MedicalCondition>();
                     var result = _vMedRepo.FindBy(x => x.UserId == UserID).FirstOrDefault();
+                    if (result == null)
+                    {
+                        return StatusCode((int)HttpStatusCode.BadRequest,
+                           new ApiError((int)HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(),
+                               "Record Does not exist"));
+                    }
                     medicalRecord.Record = result;
 
                     var userMedCondID = JsonConvert.DeserializeObject<List<Guid>>(result.MedicalConditions);
@@ -227,10 +243,14 @@ namespace ACEdatabaseAPI.Controllers
                     {
                         foreach (var id in userMedCondID)
                         {
-                            var cond = _medConRepo.FindBy(x => x.Id == id).FirstOrDefault();
-                            medicalRecord.MedicalConditionsList.Add(cond);
+                            if(id != null)
+                            {
+                                var cond = _medConRepo.FindBy(x => x.Id == id).FirstOrDefault();
+                                medCon.Add(cond);
+                            }
                         }
                     }
+                    medicalRecord.MedicalConditionsList = medCon;
                     return Ok(medicalRecord);
 
                 }
@@ -290,9 +310,16 @@ namespace ACEdatabaseAPI.Controllers
                         return BadRequest(new ApiError(400, HttpStatusCode.BadRequest.ToString(), "Bad Request"));
                     }
 
-                    var user = _userManager.Users.Where(x => x.MatricNumber == model.MatricNumber).FirstOrDefault();
+                    var user = _userManager.Users.Where(x => x.MatricNumber.ToUpper() == model.MatricNumber.ToUpper()).FirstOrDefault();
                     var medicalRecord = new MedicalRecordDTO();
+                    List<MedicalCondition> medCon = new List<MedicalCondition>();
                     var result = _vMedRepo.FindBy(x => x.UserId == Guid.Parse(user.Id)).FirstOrDefault();
+                    if (result == null)
+                    {
+                        return StatusCode((int)HttpStatusCode.BadRequest,
+                           new ApiError((int)HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(),
+                               "Record Does not exist"));
+                    }
                     medicalRecord.Record = result;
 
                     var userMedCondID = JsonConvert.DeserializeObject<List<Guid>>(result.MedicalConditions);
@@ -301,9 +328,10 @@ namespace ACEdatabaseAPI.Controllers
                         foreach (var id in userMedCondID)
                         {
                             var cond = _medConRepo.FindBy(x => x.Id == id).FirstOrDefault();
-                            medicalRecord.MedicalConditionsList.Add(cond);
+                            medCon.Add(cond);
                         }
                     }
+                    medicalRecord.MedicalConditionsList = medCon;
                     return Ok(medicalRecord);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -390,7 +418,15 @@ namespace ACEdatabaseAPI.Controllers
 
                     var user = _userManager.Users.Where(x => x.StaffID == model.StaffID).FirstOrDefault();
                     var medicalRecord = new MedicalRecordDTO();
+                    List<MedicalCondition> medCon = new List<MedicalCondition>();
+
                     var result = _vMedRepo.FindBy(x => x.UserId == Guid.Parse(user.Id)).FirstOrDefault();
+                    if (result == null)
+                    {
+                        return StatusCode((int)HttpStatusCode.BadRequest,
+                           new ApiError((int)HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(),
+                               "Record Does not exist"));
+                    }
                     medicalRecord.Record = result;
 
                     var userMedCondID = JsonConvert.DeserializeObject<List<Guid>>(result.MedicalConditions);
@@ -399,9 +435,10 @@ namespace ACEdatabaseAPI.Controllers
                         foreach (var id in userMedCondID)
                         {
                             var cond = _medConRepo.FindBy(x => x.Id == id).FirstOrDefault();
-                            medicalRecord.MedicalConditionsList.Add(cond);
+                            medCon.Add(cond);
                         }
                     }
+                    medicalRecord.MedicalConditionsList = medCon;
                     return Ok(medicalRecord);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
@@ -509,7 +546,7 @@ namespace ACEdatabaseAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("Records/Student/Edit/{ID}")]
         public IActionResult EditStudentMedicalRecord(Guid ID, EditStudentMedicalRecord model)
         {

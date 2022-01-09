@@ -362,7 +362,7 @@ namespace ACE
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}"
                 );
-
+                endpoints.MapFallbackToController("Index", "Fallback");
                 endpoints.MapControllers();
             });
         }

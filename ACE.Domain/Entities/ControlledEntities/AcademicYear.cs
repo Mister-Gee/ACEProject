@@ -8,6 +8,6 @@ namespace ACE.Domain.Entities.ControlledEntities
 {
     public class AcademicYear : baseClass
     {
-        public string Year { get; set; }
+        public DateTime Year { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using ACEdatabaseAPI.Model;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -768,6 +769,73 @@ namespace ACEdatabaseAPI.Controllers
                         });
                     }
                     return BadRequest();
+                }
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,
+                    new ApiError(500, HttpStatusCode.InternalServerError.ToString(),
+                        ex.Message.ToString()));
+
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(UserCountDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+           StatusCodes.Status500InternalServerError)]
+        [Route("UserCount")]
+        public IActionResult UserCount()
+        {
+            try
+            {
+                if (User.IsInRole("Staff"))
+                {
+                    var users = _userManager.Users.ToList();
+                    List<ApplicationUser> activeStudents = new List<ApplicationUser>();
+                    List<ApplicationUser> inActiveStudents = new List<ApplicationUser>();
+                    List<ApplicationUser> allStudents = new List<ApplicationUser>();
+                    List<ApplicationUser> allStaffs = new List<ApplicationUser>();
+
+                    foreach (var user in users)
+                    {
+                        if (_userManager.IsInRoleAsync(user, "Student").Result)
+                        {
+                            allStudents.Add(user);
+                        }
+                        else
+                        {
+                            allStaffs.Add(user);
+                        }
+                    }
+
+                    int totalStudents = allStudents.Count;
+                    int totalStaffs = allStaffs.Count;
+
+                    foreach (var student in allStudents)
+                    {
+                        if (student.Status.ToUpper() == "ACTIVE")
+                        {
+                            activeStudents.Add(student);
+                        }
+                        else
+                        {
+                            inActiveStudents.Add(student);
+                        }
+                    }
+
+                    int totalActiveStudents = activeStudents.Count;
+                    int totalInactiveStudents = inActiveStudents.Count;
+
+                    var userCount = new UserCountDTO();
+                    userCount.TotalActiveStudent = totalActiveStudents;
+                    userCount.TotalInactiveStudent = totalInactiveStudents;
+                    userCount.TotalStaff = totalStaffs;
+                    userCount.TotalStudent = totalStudents;
+
+                    return Ok(userCount);
                 }
                 return Unauthorized();
             }

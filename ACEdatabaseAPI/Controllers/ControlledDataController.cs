@@ -1424,7 +1424,7 @@ namespace ACEdatabaseAPI.Controllers
 
         [HttpPost]
         [Route("AcademicYear/Create/")]
-        public IActionResult CreateAcademicYear(CreateControlledData Model)
+        public IActionResult CreateAcademicYear(CreateAcademicYear Model)
         {
             try
             {
@@ -1434,7 +1434,8 @@ namespace ACEdatabaseAPI.Controllers
                     var acadYear = new AcademicYear()
                     {
                         Id = Guid.NewGuid(),
-                        Name = Model.Name
+                        Name = Model.Name,
+                        Year = Model.Year
                     };
                     _acadYearRepo.Add(acadYear);
                     _acadYearRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
@@ -1457,7 +1458,7 @@ namespace ACEdatabaseAPI.Controllers
 
         [HttpPut]
         [Route("AcademicYear/Edit/{Id}")]
-        public IActionResult EditAcademicYear(Guid Id, CreateControlledData Model)
+        public IActionResult EditAcademicYear(Guid Id, CreateAcademicYear Model)
         {
             try
             {
@@ -1468,6 +1469,7 @@ namespace ACEdatabaseAPI.Controllers
                     {
                         string username = User.Identity.Name;
                         acadYear.Name = Model.Name;
+                        acadYear.Year = Model.Year;
                         _acadYearRepo.Edit(acadYear);
                         _acadYearRepo.Save(username, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(

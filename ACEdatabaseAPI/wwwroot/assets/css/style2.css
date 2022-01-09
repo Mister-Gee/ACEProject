@@ -1,0 +1,2835 @@
+    body,
+    html {
+        margin: 0px;
+        padding: 0px;
+    }
+    
+    #root {
+        height: 100%;
+    }
+    /*----------- Alert --------------*/
+    
+    .login-section .login .alert-section {
+        position: relative;
+        font-size: 12px;
+        text-align: center;
+        font-weight: bold;
+        font-family: Poppins;
+        top: 200px;
+        left: 230px;
+    }
+    
+    .login-section .login .header {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 24px;
+        line-height: 36px;
+        color: #16BC5D;
+        text-align: center;
+    }
+    
+    .header-forgotten-password {
+        /* margin-top: 50%; */
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 24px;
+        line-height: 36px;
+        color: #16BC5D;
+        text-align: center;
+    }
+    
+    .submit-forgotten-password {
+        background: #16BC5D;
+        border: 1px solid #16BC5D;
+        box-shadow: 0px 4px 4px rgb(0 0 0 / 15%);
+        border-radius: 40px;
+        width: 161px;
+        height: 40px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #FFFFFF;
+    }
+    
+    .submit-forgotten-password:hover {
+        background: #fff;
+        color: #16BC5D;
+    }
+    
+    .form-control2 {
+        display: block;
+        width: 350px;
+        /* margin-bottom: 20px; */
+        height: calc(1.5em + .75rem + 2px);
+        padding: 20px .75rem;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background: #FFFFFF;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+    
+    .login-section .login2 {
+        width: 100%;
+        height: 90vh;
+        padding-top: 150px;
+        margin: auto auto;
+        background: url(../images/loginbg.png);
+    }
+    
+    .login-section .login .alert-section .alert {
+        height: 50px;
+    }
+    /*--------- Dashboard Frame ----------*/
+    
+    .wrapper {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .wrapper .topbar {
+        flex: 80%;
+    }
+    /*----------- Top Nav ------------*/
+    
+    .top-menu {
+        position: sticky;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        max-width: 2560px;
+        width: 100%;
+        height: 64px;
+        background: #FFFFFF;
+        display: flex;
+        flex-direction: row;
+        flex-direction: wrap;
+        justify-content: space-between;
+    }
+    
+    .top-menu .menu-btn,
+    .top-menu .user-group {
+        padding: 19px 17px;
+    }
+    
+    .top-menu .menu-btn .iconify {
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    .top-menu .menu-btn .user-name {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 24px;
+        color: #333333;
+        padding: 20px 5px;
+    }
+    
+    .top-menu .user-group {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    
+    .top-menu .user-group .search .input-group {
+        background: #F1F2F4;
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        width: 307px;
+        height: 35px;
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
+        -ms-border-radius: 15px;
+        -o-border-radius: 15px;
+        margin-right: 19px;
+        margin-top: -7px;
+    }
+    
+    .top-menu .user-group .search .input-group .form-control {
+        border: none;
+        background: transparent;
+    }
+    
+    .top-menu .user-group .search .input-group input[placeholder] {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: #BDBDBD;
+    }
+    
+    .top-menu .user-group .search .input-group .input-group-text {
+        border: none;
+        background: transparent;
+        margin-left: 20px;
+    }
+    
+    .top-menu .user-group .iconify {
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-right: 29px;
+    }
+    
+    .top-menu .user-group .user-dp {
+        width: 37px;
+        padding: 5px 5px;
+        margin-top: -5px;
+        background: #16BC5D;
+        margin-right: 29px;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        -o-border-radius: 50%;
+        text-align: center;
+    }
+    
+    .top-menu .user-group .user-dp span {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+    }
+    
+    .top-menu .user-group .user-dropdown .iconify {
+        font-size: 8px;
+        color: #16BC5D;
+        margin-left: -25px;
+    }
+    /*---------- Side Menu ------------*/
+    
+    .side-menu {
+        position: sticky;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        height: 100vh;
+        width: 250px;
+        margin-left: 0px;
+        background: #16BC5D;
+    }
+    
+   
+    
+    .side-menu .logo-section img {
+        width: 20%;
+        /* height: ; */
+        position: relative;
+        top: -10px;
+        left: -20px;
+    }
+    
+    .side-menu .logo-section .logo-txt {
+        margin-top: 10px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 13px;
+        line-height: 18px;
+        color: #16BC5D;
+        position: relative;
+        top: -10px;
+        left: -20px;
+    }
+    
+    .nav-links {
+        margin: 0px auto 0px auto;
+    }
+    
+    .nav-links li {
+        list-style: none;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 21px;
+        color: #F2F2F2;
+        margin-bottom: 35px;
+    }
+    
+    .nav-links li a {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 21px;
+        color: #F2F2F2;
+    }
+    
+    .nav-links li a:hover {
+        color: #FDC600;
+        text-decoration: none;
+    }
+    
+   
+    
+    .dropdown-link {
+        margin-right: 80px;
+    }
+    
+    .toggle-icon {
+        position: relative;
+        top: 5px;
+    }
+    
+    .sub-link {
+        margin-top: 10px;
+    }
+    
+    .nav-links li .iconify {
+        margin: 0 15px 5px 0;
+    }
+    
+    .nav-links li a.active {
+        color: #FDC600;
+    }
+    /*-------------BreadCrumbs--------------*/
+    
+    .breadcrumbs {
+        background: #F0F1F3;
+        padding: 23px 0px 10px 18px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .breadcrumbs .section .title {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #1619AB;
+    }
+    
+    .breadcrumbs .section {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: #333333;
+    }
+    
+    .last-login-detail {
+        background: #FAFAFA;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 7px;
+        position: relative;
+        right: 11px;
+        bottom: 9px;
+    }
+    
+    .last-login-detail .last-login,
+    .last-login-detail .today-date {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: #000000;
+    }
+    
+    .last-login-detail .vl {
+        margin: 0px 30px;
+        background: #BDBDBD;
+        width: 1px;
+        height: 25px;
+    }
+    /*-------- Footer ----------*/
+    
+    .footer {
+        background: #F0F1F3;
+        padding: 34px 0px 36px 20px;
+    }
+    
+    .footer .txt {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #828282;
+        text-align: start;
+        max-width: 2560px;
+    }
+    
+    .content-page {
+        background-color: #F0F1F3 !important;
+    }
+    /*---------- Dashboard ------------*/
+    
+    .detail-card {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        border: none;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+    
+    .detail-card .card-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .detail-card .card-content .desc .icon .iconify {
+        font-size: 40px;
+        color: #FDC600;
+        margin-left: 40px;
+    }
+    
+    .detail-card .card-content .desc .text {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: center;
+        color: #333333;
+        width: 130px;
+    }
+    
+    #root>div>div>div.topbar>div.content-page>div>div>div:nth-child(3)>div>div>p>div>div.desc>div.icon>svg {
+        margin-left: 30px;
+    }
+    
+    .detail-card .card-content .value {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 26px;
+        line-height: 39px;
+        text-align: center;
+        color: #333333;
+        position: relative;
+        top: 20px;
+        right: 70px;
+    }
+    
+    .detail-card .card-content .vl {
+        background: #BDBDBD;
+        width: 1px;
+        height: 70px;
+        margin-left: -80px;
+    }
+    
+    #root>div>div>div.topbar>div.content-page>div>div>div:nth-child(3)>div>div>p>div>div.vl {
+        margin-left: -20px;
+    }
+    
+    #root>div>div>div.topbar>div.content-page>div>div>div:nth-child(3)>div>div>p>div>div.value {
+        right: 30px;
+    }
+    
+    .table-section {
+        margin-top: 40px;
+        padding: 30px;
+        background: #FFFFFF;
+    }
+    
+    .table-section .header {
+        /* Paragraph Medium */
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        color: #1619AB;
+        margin-bottom: 27px;
+    }
+    
+    .table-section table thead {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #333333;
+        background: #F2F2F2;
+    }
+    
+    .table-section table tbody {
+        font-size: 12px;
+        font-family: Poppins;
+    }
+    
+    .table-section table tbody .school {
+        font-size: 12px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #16BC5D;
+    }
+    
+    .table-section table tbody .module {
+        padding-left: 70px;
+    }
+    
+    .status-active {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #219653;
+    }
+    
+    .status-inactive {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #EB5757;
+    }
+    /*----------- Admin Login -----------*/
+    
+    .admin .container {
+        max-width: 2560px;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    /*....................... New StudentLogin start ..........*/
+    
+    .StudentLoginForm-container {
+        width: 100vw;
+        height: 100vh;
+        background: #F0F1F3;
+    }
+    
+    .StudentLoginForm-wrapper {
+        display: flex;
+        width: 100%;
+    }
+    
+    .StudentLoginForm-Welcome {
+        margin-top: 20px;
+    }
+    
+    .StudentLoginForm-Welcome-container {
+        width: 45%;
+    }
+    
+    .StudentLoginForm-Welcome-wrapper {
+        background: #16BC5D;
+        padding: 40px;
+        height: 50vh;
+        color: #FFFFFF;
+        font-size: 15px;
+    }
+    
+    .StudentLoginForm-Logo-Img {
+        width: 13%;
+    }
+    
+    .StudentLoginForm-TURON {
+        font-size: 1.4rem;
+        line-height: 36px;
+        color: #FDC600;
+        font-style: normal;
+        font-weight: normal;
+        margin: 0 7px;
+    }
+    
+    .StudentLoginForm-University {
+        font-size: 1.4rem;
+        line-height: 36px;
+        color: #FFFFFF;
+        font-style: normal;
+        font-weight: bold;
+    }
+    
+    .StudentLoginForm-Welcome-content {
+        margin-top: 30px;
+    }
+    
+    .StudentLoginForm-bottom-img-wrapper {
+        background: #FFFFFF;
+        height: 50vh;
+        font-size: 15px;
+    }
+    
+    .StudentLoginForm-bottom-img {
+        width: 100%;
+        margin-top: 20%;
+    }
+    
+    .StudentLoginForm-bottom-Student-img {
+        position: absolute;
+        top: 43%;
+        left: 22%;
+    }
+    
+    .StudentLoginForm-Form-input-container {
+        margin: 30px;
+        width: 50%;
+        background-image: url("../images/loginbg.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 70vh;
+    }
+    
+    .StudentLoginForm-Form-input-Wrapper {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .StudentLoginForm-Form-input-footer {
+        /* position: absolute;
+  bottom: 20px;
+  right: 20%; */
+    }
+    
+    .ppoi {
+        text-align: center;
+    }
+    
+    .StudentLoginForm-Form-input-content-Wrapper {
+        text-align: center;
+    }
+    
+    .StudentLoginForm-Form-icon {
+        font-size: 45px;
+        color: #16BC5D;
+        margin: 10px 0;
+    }
+    
+    .StudentLoginForm-Form-icon-text {
+        font-size: 25px;
+        color: #16BC5D
+    }
+    
+    #StudentLoginForm-Login-Form-input-container>section>form>div>div:nth-child(1)>div>div {
+        width: 100%;
+    }
+    
+    #StudentLoginForm-Login-Form-input-container>section>form>div>div:nth-child(2)>div>div {
+        width: 350px;
+    }
+    
+    .forgot-pwd {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #333333;
+        display: block;
+        margin: 30px 0 0 0;
+    }
+    
+    .forgot-pwd:hover {
+        font-weight: bold;
+        text-decoration: none;
+    }
+    
+    .login-btn {
+        background: #16BC5D;
+        border: 1px solid #16BC5D;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+        border-radius: 40px;
+        width: 161px;
+        height: 40px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #FFFFFF;
+        margin: 20px 0;
+    }
+    
+    .login-btn .iconify {
+        color: #FDC600;
+    }
+    
+    .login-btn:hover {
+        background: transparent;
+        border: 1px solid #16BC5D;
+        color: #16BC5D;
+    }
+    
+    .login-btn:hover .iconify {
+        color: #c49a03;
+    }
+    
+    @media (max-width: 1228px) {
+        .StudentLoginForm-Welcome-container {
+            display: none;
+        }
+        .StudentLoginForm-Form-input-container {
+            width: 100%;
+            height: 90vh;
+        }
+        #StudentLoginForm-Login-Form-input-container>section>form>div>div:nth-child(1)>div>div {
+             width: 100%;
+        }
+        #StudentLoginForm-Login-Form-input-container>section>form>div>div:nth-child(2)>div>div {
+             width: 100%;
+        }
+    }
+    
+    @media (max-width: 800px) {
+        #StudentLoginForm-Login-Form-input-container>section>form>div>div:nth-child(1)>div>div {
+            width: 100%;
+        }
+        #StudentLoginForm-Login-Form-input-container>section>form>div>div:nth-child(2)>div>div {
+            width: 100%;
+        }
+    }
+    /*....................... New StudentLogin End ..........*/
+    
+    .uni-landing {
+        height: 100vh;
+    }
+    
+    .uni-landing .uni-logo-section {
+        height: 50vh;
+        background: #16BC5D;
+    }
+    
+    .uni-landing .uni-logo-section img {
+        margin: 52px 300px 21px 300px;
+        width: 75px;
+    }
+    
+    .uni-landing .uni-logo-section .uni-name {
+        text-align: center;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 24px;
+        line-height: 36px;
+        color: #FFFFFF;
+    }
+    
+    .uni-landing .uni-logo-section .uni-name span {
+        color: #FDC600;
+    }
+    
+    .uni-landing .login-img {
+        background: #FFFFFF;
+        height: 50vh;
+    }
+    
+    .uni-landing .login-img img {
+        width: 100%;
+        height: 95%;
+    }
+    
+    .sch-admin .login-footer {
+        margin-top: -30px;
+    }
+    /*--------- Student Login ----------*/
+    
+    .student-landing {
+        height: 100vh;
+    }
+    
+    .student-landing .student-logo-section {
+        height: 50vh;
+        background: #16BC5D;
+    }
+    
+    .student-landing .student-logo-section .logo {
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        top: 41px;
+        left: 33px;
+        margin-bottom: 49px;
+    }
+    
+    .student-landing .student-logo-section .logo img {
+        width: 65px;
+    }
+    
+    .student-landing .student-logo-section .uni-name {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 24px;
+        line-height: 36px;
+        color: #FFFFFF;
+        position: relative;
+        left: 19px;
+        top: 20px;
+    }
+    
+    .student-landing .student-logo-section .uni-name span {
+        color: #FDC600
+    }
+    
+    .student-landing .student-logo-section .intro {
+        width: 579px;
+        height: 66px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 22px;
+        color: #FFFFFF;
+        position: relative;
+        top: 35px;
+        left: 40px;
+    }
+    
+    .student-landing .login-img {
+        background: #FFFFFF;
+        height: 50vh;
+    }
+    
+    .student-landing .login-img .student-img {
+        position: absolute;
+        width: 258px;
+        height: 187px;
+        left: 382px;
+        top: 295px;
+        filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.15));
+        -webkit-filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.15));
+    }
+    
+    .student-landing .login-img .login-design {
+        position: absolute;
+        width: 684px;
+        height: 243.83px;
+        left: 0px;
+        top: 404px;
+    }
+    
+    .admin-login .student-icon .iconify {
+        font-size: 50px;
+        position: relative;
+        top: 172px;
+        left: 150px;
+        color: #16BC5D;
+        background: transparent;
+    }
+    /*-------------- Institution Page --------------*/
+    
+    .content-page .institution-section {
+        background: #FFFFFF;
+        margin: auto 20px;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+    }
+    
+    .content-page .institution-section .add-new-btn {
+        background: transparent;
+        border: 1px solid #FDC600;
+        box-sizing: border-box;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #16BC5D;
+        margin: 25px 0px 21px 7px;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+    
+    .content-page .institution-section .add-new-btn:hover {
+        background: #FDC600;
+    }
+    
+    .table-header {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .table-header .entries {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .table-header .entries .entries-label {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #4F4F4F;
+        margin: 0px 15px 0px 7px;
+    }
+    
+    .table-header .entries .entries-input .entries-box {
+        width: 35px;
+        height: 30px;
+        border: 1px solid #BDBDBD;
+        box-sizing: border-box;
+        border-radius: 3px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #4F4F4F;
+        position: relative;
+        bottom: 5px;
+        right: 3px;
+    }
+    
+    .table-header .entries .entries-input .entries-box option {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #4F4F4F;
+    }
+    
+    .search .search-label {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #828282;
+        margin-right: 5px;
+    }
+    
+    .search .search-box {
+        width: 165px;
+        height: 30px;
+        border: 1px solid #BDBDBD;
+        box-sizing: border-box;
+        border-radius: 3px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #4F4F4F;
+        margin-right: 5px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+    
+    .institution-table {
+        padding: 10px 5px 0px 5px;
+    }
+    
+    .institution-table .table {
+        margin: 0;
+    }
+    
+    .institution-table table thead {
+        background: #F2F2F2;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #333333;
+        text-align: center;
+    }
+    
+    .institution-table table tbody {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #333333;
+        text-align: center;
+    }
+    
+    .institution-table table tbody .id,
+    .institution-table table tbody .uni-name {
+        color: #1619AB;
+    }
+    
+    .institution-table table tbody .time {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #828282;
+    }
+    
+    .institution-table .edit {
+        color: #1619AB;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    
+    .institution-table .delete {
+        color: #EB5757;
+        font-size: 20px;
+        cursor: pointer;
+        margin-left: 4px;
+    }
+    
+    .institution-table .reset {
+        color: #219653;
+        font-size: 20px;
+        cursor: pointer;
+        margin-left: 4px;
+    }
+    /*------- Pagination/Entries ---------*/
+    
+    .pagination-section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px 5px 116px 5px;
+    }
+    
+    .pagination-section .page-entry {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #4F4F4F;
+    }
+    
+    .pagination-section .page-nav .page-link {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #4F4F4F;
+        border: none;
+    }
+    
+    .pagination-section .page-nav .page-item.active .page-link {
+        background: #1619AB;
+        border-radius: 4px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #F2F2F2;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+    }
+    /*------------- New Institution Modal --------------*/
+    
+    .add-new-modal .modal-header {
+        background: #16BC5D;
+        color: white;
+    }
+    
+    .add-new-modal .modal-header .modal-title {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        color: #FFFFFF;
+    }
+    
+    .add-new-modal .modal-header button span {
+        color: #FFFFFF;
+        text-transform: capitalize !important;
+        opacity: 10 !important;
+    }
+    
+    .add-new-modal .modal-body input,
+    .add-new-modal .modal-body select {
+        box-sizing: border-box;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: #333333;
+    }
+    
+    .add-new-modal .modal-body label {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: #333333;
+    }
+    
+    .add-new-modal .modal-body input[placeholder] {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: #333333;
+    }
+    
+    .add-new-modal .modal-footer {
+        background: #F2F2F2;
+    }
+    
+    .add-new-modal .modal-footer .cancel-btn {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        text-align: center;
+        color: #333333;
+        border: none;
+        background: transparent;
+    }
+    
+    .add-new-modal .modal-footer .cancel-btn:hover {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 21px;
+        text-align: center;
+        color: #333333;
+        border: none;
+        background: transparent;
+    }
+    
+    .add-new-modal .modal-footer .submit-btn {
+        background: #16BC5D;
+        border: 1px solid #16BC5D;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+        border-radius: 40px;
+        width: 161px;
+        height: 40px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #FFFFFF;
+        -webkit-border-radius: 40px;
+        -moz-border-radius: 40px;
+        -ms-border-radius: 40px;
+        -o-border-radius: 40px;
+    }
+    
+    .add-new-modal .modal-footer .submit-btn .iconify {
+        color: #FDC600;
+    }
+    
+    .add-new-modal .modal-footer .submit-btn:hover {
+        background: transparent;
+        border: 1px solid #16BC5D;
+        color: #16BC5D;
+    }
+    
+    .add-new-modal .modal-footer .submit-btn:hover .iconify {
+        color: #c49a03;
+    }
+    
+    body>div.fade.add-new-modal.modal.show>div>div>form>div.modal-body>div>div:nth-child(5)>div:nth-child(2)>div>label>span.MuiTypography-root.MuiFormControlLabel-label.MuiTypography-body1 {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #000000;
+    }
+    
+    .generate-btn {
+        border: 1px solid #16BC5D;
+        box-sizing: border-box;
+        border-radius: 3px;
+        background: transparent;
+        width: 124px;
+        height: 25px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 15px;
+        color: #000000;
+    }
+    
+    .generate-btn:hover {
+        border: 1px solid #16BC5D;
+        background: #16BC5D;
+        color: #FFFFFF;
+    }
+    
+    .link-select-section .link-select select {
+        border: 1px solid #16BC5D;
+        box-sizing: border-box;
+        width: 460px;
+        height: 40px;
+        margin-right: 15px;
+    }
+    
+    .link-select-section .link-select .add-btn {
+        background: transparent;
+        width: 67px;
+        height: 40px;
+        border: 1px solid #16BC5D;
+        box-sizing: border-box;
+        border-radius: 3px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: center;
+        color: #000000;
+    }
+    
+    .link-select-section .link-select .add-btn:hover {
+        background: #16BC5D;
+        color: #FFFFFF;
+        border: 1px solid #FFFFFF;
+    }
+    
+    .selected-school-section .selected-school {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: #16BC5D;
+    }
+    
+    .selected-school-section .selected-btn {
+        width: 67px;
+        height: 25px;
+        border: 1px solid #EB5757;
+        box-sizing: border-box;
+        border-radius: 3px;
+        background: transparent;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 15px;
+        color: #EB5757;
+        position: absolute;
+        top: 23px;
+        right: 300px;
+    }
+    
+    .selected-school-section .selected-btn:hover {
+        color: #FFFFFF;
+        background: #EB5757;
+        border: 1px solid #FFFFFF;
+    }
+    
+    .add-module-section {
+        margin-top: -20px;
+    }
+    
+    .add-module-section .table-header {
+        margin-bottom: 12px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: center;
+        color: #333333;
+    }
+    
+    .add-module-section .add-module-table table {
+        border: 1px solid #F2F2F2;
+        box-sizing: border-box;
+        font-size: 12px;
+        font-family: Poppins;
+        font-style: normal;
+        font-size: 12px;
+        color: #333333;
+    }
+    
+    .add-module-section .add-module-table table thead {
+        background: #F2F2F2;
+    }
+    
+    .buttons .generate-btn {
+        width: 91px;
+        height: 25px;
+        border: 1px solid #16BC5D;
+        box-sizing: border-box;
+        border-radius: 3px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 15px;
+        color: #000000;
+        background: transparent;
+        margin-right: 14px;
+    }
+    
+    .buttons .generate-btn:hover {
+        color: #FFFFFF;
+        border: 1px solid #FFFFFF;
+        background: #16BC5D;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+    
+    .buttons .delete-btn {
+        width: 32px;
+        height: 15px;
+        left: 516px;
+        top: 245px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 15px;
+        color: #EB5757;
+        border: none;
+        background: transparent;
+        margin-bottom: 13px;
+    }
+    
+    .buttons .delete-btn:hover {
+        background: none;
+        border: none;
+        font-weight: bold;
+        color: #EB5757;
+    }
+    /*.......... Student Info Card ........*/
+    
+    .StudentInfoCard {
+        background-color: #FFFFFF;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        height: 192px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+    
+    .StudentInfoTitle {}
+    
+    .StudentInfoWrapper {
+        padding: 10px 20px;
+    }
+    
+    .StudentInfoTitle {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #16BC5D;
+        text-align: left;
+    }
+    
+    .StudentInfoWrapper th {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 18px;
+        color: #333333;
+    }
+    
+    .StudentInfoWrapper td {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #333333;
+        margin-right: 30px;
+    }
+    
+    .StudentInfoBody {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    
+    .StudentInfoBody div {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 18px;
+        text-align: left;
+    }
+    
+    .StudentInfoBody .StudentInfoBodyTile {
+        width: 120px;
+        font-size: 12px;
+        color: #333333;
+        margin-bottom: 3px;
+    }
+    
+    .StudentInfoBody .StudentInfoBodyTileAns {
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 18px;
+        color: #4F4F4F;
+    }
+    /*..........StudentFeesCard........*/
+    
+    .StudentFeesTable {
+        margin: 0 3px;
+        text-align: left;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 30px;
+        color: #333333;
+    }
+    
+    .StudentFeesWarning {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        margin: 0 5px;
+        line-height: 18px;
+        text-align: center;
+        color: #EB5757;
+        width: 171px;
+        height: 18px;
+    }
+    
+    /* .NoPaidFees {
+        margin: 0 12px 0 0;
+    }
+    
+    .NoUnpaidFees {
+        margin: 0 15px 0 0;
+    } */
+    
+    .StudentFeesButton {
+        padding: 5px 30px !important;
+        border: 1px solid #FDC600 !important;
+        box-sizing: border-box !important;
+        border-radius: 25px !important;
+        background: #FFFFFF !important;
+        color: #FDC600 !important;
+        margin: 10px 0 !important;
+    }
+    
+    .StudentFeesButtonText {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: center;
+    }
+    
+    button:focus {
+        outline: 0;
+    }
+    
+    .StudentFeesButton:hover {
+        color: #fff !important;
+        background: #FDC600 !important;
+    }
+    /*..........PublicAnnouncementCard........*/
+    
+    .PublicAnnouncementCard {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        height: 296px;
+        text-align: center;
+    }
+    
+    .PublicAnnouncementWrapper {
+        padding-top: .2rem;
+    }
+    
+    .AnnouncementIcon {
+        color: #FDC600 !important;
+        font-size: 17px;
+    }
+    
+    .PublicAnnouncementWrapper .PublicAnnouncementTitle {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        color: #1619AB;
+        height: 24px;
+        border-bottom: 2px solid #FFFFFF;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
+        border-width: 20px;
+        text-align: center;
+        margin: 0 0 0 1rem;
+    }
+    
+    .PublicAnnouncementBody {
+        margin-top: 1rem;
+    }
+    
+    .PublicAnnouncementBody .pol {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        border-bottom: 1px solid #F2F2F2;
+        line-height: 18px;
+        color: #4F4F4F;
+        margin: 0 0 0 0;
+        padding: 5px;
+    }
+    
+    .PublicAnnouncementBody .PublicAnnouncementNote {
+        text-align: left;
+        font-size: 12px;
+        width: 169px;
+    }
+    
+    .PublicAnnouncementBody .PublicAnnouncementDate {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #828282;
+    }
+    
+    .PublicAnnouncementCard .PublicAnnouncementButton {
+        width: 40%;
+        margin-bottom: 30px !important;
+    }
+    /*..........Progress Bar Card........*/
+    
+    .bar {
+        width: 97px !important;
+    }
+    
+    .ProgressBarCard {
+        background-color: #FFFFFF;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        height: 192px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+    
+    .ProgressbarTitle {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #16BC5D;
+    }
+    
+    .ProgressBarWrapper {
+        padding: 10px 20px;
+    }
+    
+    .ProgressBarDelatils {
+        display: flex;
+    }
+    
+    .ProgressBarDelatils li {
+        list-style-type: none;
+        margin-bottom: 6px;
+    }
+    
+    .ProgressBarDelatils2 {
+        margin-top: 10px;
+    }
+    
+    .completed,
+    .Uncompleted,
+    .Satisfied,
+    .requirements {
+        color: green;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        height: 18px;
+    }
+    
+    .completed {
+        color: green;
+    }
+    
+    .Uncompleted {
+        color: #16BC5D;
+    }
+    
+    .Satisfied {
+        color: #FDC600;
+    }
+    
+    .requirements {
+        color: #333333;
+    }
+    /*........ Registered courses......*/
+    
+    .RegisteredCoursesCard {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        height: 296px;
+    }
+    
+    .RegisteredCoursesTitle {
+        height: 24px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        color: #1619AB;
+        margin-bottom: 10px;
+    }
+    
+    .my-custom-scrollbar {
+        position: relative;
+        height: 200px;
+        overflow: auto;
+    }
+    
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+    
+    .table-wrapper-scroll-y th {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 15px;
+        color: #333333;
+        background: #F2F2F2!important;
+        height: 30px !important;
+        border: none !important;
+    }
+    
+    .table-wrapper-scroll-y td {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #333333;
+        height: 30px !important;
+    }
+    
+    .table-wrapper-scroll-y .TableContentColor {
+        color: #16BC5D;
+    }
+    
+    .menu-btnFlex {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-around !important;
+    }
+    
+    .user-group .notification2 .Bellnotification,
+    .HambugerBody,
+    .CloseButton,
+    .HambugerButton,
+    .CloseButtonBody,
+    .studentInfoContainer {
+        display: none;
+    }
+    /*---------- Student Profile Card ------------*/
+    
+    .StudentProfileDetailsCard {
+        background-color: #F0F1F3;
+        padding: 0 15px;
+        height: 100vh;
+    }
+    
+    .StudentProfileBody {
+        background: #fff;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        height: 100vh;
+        padding: 15px;
+    }
+    
+    .StudentProfileDetailsContainer {
+        display: flex;
+        flex-wrap: nowrap;
+        background: #FFFFFF;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .StudentProfileContainer {
+        width: 80px;
+        height: 80px;
+        box-sizing: border-box;
+        border-radius: 2px;
+        margin: 0 0.5rem;
+    }
+    
+    .StudentProfileContainer img {
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 2px;
+    }
+    
+    .StudentDetailsWrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    
+    .StudentLiWrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+    
+    .StudentDetailsWrapper li {
+        padding: 5px 1rem;
+        list-style-type: none;
+        text-align: left;
+    }
+    
+    .StudentDetailsWrapper .detailssubLabel {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: #16BC5D;
+    }
+    
+    .detailsLabel {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 15px;
+        color: #333333
+    }
+    /*....*/
+    
+    .NewstudentProfileContainer {
+        margin-top: 20px;
+        background: #FFFFFF;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .NewstudentProfileWrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    
+    .NewstudentProfileWrapper ul {
+        /* padding: 0;
+  margin: 0; */
+    }
+    
+    .NewstudentProfileWrapper li {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        color: #16BC5D;
+    }
+    
+    .NewstudentProfileWrapper ul div {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 15px;
+        color: #333333;
+        margin-top: 15px;
+    }
+    /*........... StdentProfile Form Container ........*/
+    
+    .StdentProfileFormContainer {
+        margin: 30px 0;
+    }
+    
+    .StdentProfileButtonContainer {
+        display: flex;
+    }
+    
+    .StudentFormBorder {
+        border: 1px solid #F2F2F2;
+        box-sizing: border-box;
+    }
+    
+    .StudentFormContainer {
+        margin: 10px 0 !important;
+    }
+    
+    .StdentProfileFormWrapper .editButton {
+        text-align: center;
+        color: #FDC600;
+        font-weight: 500 !important;
+        font-size: 12px !important;
+        line-height: 18px !important;
+        border: 1px solid #FDC600;
+        box-sizing: border-box;
+        background-color: #FFFFFF;
+        border-radius: 3px;
+        padding: 3px 9px;
+        margin: 20px 0 0px 40px;
+    }
+    
+    .StdentProfileFormWrapper .cancelButton {
+        text-align: center;
+        color: #EB5757 !important;
+        font-weight: 500 !important;
+        font-size: 12px !important;
+        line-height: 18px !important;
+        border: 1px solid #EB5757;
+        box-sizing: border-box;
+        background-color: #FFFFFF;
+        border-radius: 3px;
+        padding: 3px 9px;
+        margin: 20px 0 0px 2px;
+    }
+    
+    .StdentProfileFormWrapper .editButton {
+        margin: 20px 0px;
+    }
+    
+    .OnButton,
+    .OFFButton {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: #333333;
+        padding: 10px;
+        height: 35px;
+        cursor: pointer;
+    }
+    
+    .OnButton {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        border: 1px solid #F2F2F2;
+        border-bottom: 1px solid #FFFFFF;
+    }
+    
+    .OFFButton {
+        background: #F0F1F3;
+        border: 1px solid #F2F2F2;
+        box-sizing: border-box;
+        border-radius: 5px 5px 0px 0px;
+    }
+    /* .MuiTextField-root {
+        width: 15ch !important;
+        margin: 5px !important;
+    } */
+    /*................ Student Academics subContainer ...............*/
+    
+    .RegisterContainer {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        height: 123px;
+        margin-bottom: 30px;
+    }
+    
+    .RegisterWrapper {
+        padding: 0 15px 0 0;
+    }
+    
+    .RegisterRequireUL {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .RegisterRequireTitle {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 50px;
+        margin-left: 37px;
+        margin-bottom: 10px;
+        color: #16BC5D;
+    }
+    
+    .RegisterRequireUL li {
+        list-style-type: none;
+        text-align: center;
+        padding: 0 10px 0 0;
+        border-right: 1px solid #F2F2F2;
+        font-size: 10px;
+        line-height: 15px;
+        text-align: center;
+        color: #333333;
+        margin-bottom: 10px;
+    }
+    
+    .RegisterRequireUL .RegisterRequireDIV {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 24px;
+        text-align: center;
+        color: #16BC5D;
+    }
+    /*............. EduObjective subContainer ..........*/
+    
+    .EduObjectiveContainer {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        margin-bottom: 30px;
+        /* height: 125px; */
+    }
+    
+    .EduObjectiveWrapper {
+        padding: 1px 5px
+    }
+    
+    .EduObjectiveTitle {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+        color: hsl(239, 94%, 19%);
+        line-height: 44px;
+    }
+    
+    .EduObjectiveWrapper th,
+    td {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 11px;
+        line-height: 18px;
+        color: #333333;
+    }
+    
+    .EduObjectiveTableBody {
+        border: 1px solid #E0E0E0;
+    }
+    
+    .EduObjectiveWrapper thead {
+        background-color: #F2F2F2;
+    }
+    
+    .EduObjectiveWrapper tbody tr th {
+        height: 10px !important;
+        padding: 3.5px 5px;
+        background-color: #F2F2F2 !important;
+    }
+    
+    .EduObjectiveWrapper tbody tr td {
+        height: 10px !important;
+        padding: 8px 5px;
+    }
+    
+    .EduObjectiveWrapper span {
+        margin: 0;
+        border: 1px solid #828282;
+        padding: 2px 9px;
+        box-sizing: border-box;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+    /*............. EduTable subContainer ..........*/
+    
+    .EdutableContainer {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 10px -10px rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+    }
+    
+    .EdutableWrapper {
+        padding: 30px 15px;
+        font-size: 12px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        color: #333333;
+    }
+    
+    .EdutableBodyTitle {
+        border: 1px solid #E0E0E0;
+        box-sizing: border-box;
+        border-radius: 3px;
+    }
+    
+    .EdutableWrapper span {
+        padding: 5px 25px;
+        border-radius: 25px;
+        text-align: center;
+        cursor: auto;
+    }
+    
+    .EdutableIconClose {
+        margin: 8px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+    
+    .EdutableBodyTotal {
+        margin: 15px;
+    }
+    
+    .Edutable-button-select-Wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+    
+    .EdutableButtonRC {
+        color: #FFFFFF;
+        background: #FDC600;
+        border: 1px solid #FDC600;
+        box-sizing: border-box;
+        cursor: pointer !important;
+        margin-bottom: 20px;
+    }
+    
+    .EdutableButtonRCA {
+        background: #F2F2F2;
+        margin-left: 15px;
+        margin-bottom: 15px;
+        color: #4F4F4F;
+        margin-bottom: 20px;
+    }
+    
+    .EdutableBodyContainer {
+        margin: 30px 0;
+    }
+    
+    .EdutableDateNdUnit {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        margin-top: 20px;
+    }
+    /*.................. Edu Modal Container .................*/
+    /* .EduModalContainer{
+    width: 80%;
+    background-color: #FFFFFF;
+    transform: translate(-50%, -50%)
+} */
+    /*........... Accademicst Table Container ............*/
+    
+    .AccademicstTableContainer {
+        margin-top: 2px;
+        border: 1px solid #E0E0E0;
+        box-sizing: border-box;
+        border-radius: 3px;
+        padding: 7px;
+    }
+    
+    .AccademicstTableWrapper {
+        overflow-x: auto;
+    }
+    
+    .AccademicstTableContent th,
+    .AccademicstTableContent td {
+        padding: 7px !important;
+    }
+    
+    .AccademicstTableContent span {
+        border: 1px solid #1619AB;
+        color: #1619AB;
+    }
+    
+    .AccademicstTableDeleteIcon {
+        font-size: large;
+        color: #EB5757 !important;
+        cursor: pointer;
+    }
+    
+    .AccademicstTableSwapIcon {
+        font-size: large;
+        color: #1619AB !important;
+    }
+    
+    .AccademicstTableContent .ApprovedColor {
+        color: #219653;
+    }
+    
+    .AccademicstTableContent .NotApprovedColor {
+        color: #EB5757;
+    }
+    
+    .AcademicModalTable th {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #333333;
+    }
+    
+    .AcademicModalTable th,
+    .AcademicModalTable td {
+        padding: 7px !important;
+    }
+    /*.............Courses Registration Modal ..........*/
+    
+    .AcademicsModalWrapper {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .AcademicsModalTitle {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        color: #FFFFFF;
+        background: #16BC5D;
+        padding: 15px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+    }
+    
+    .CloseIcon {
+        font-size: 24px !important;
+        font-weight: 600 !important;
+        cursor: pointer;
+    }
+    
+    .AcademicsModalAlert {
+        border-radius: 2px;
+        padding: 5px 10px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: center;
+        margin-bottom: 20px;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        -ms-border-radius: 2px;
+        -o-border-radius: 2px;
+}
+    
+    .CircleAlertIcon {
+        font-size: 19px;
+        margin-right: 10px;
+    }
+    
+    .CloseAlertIcon {
+        font-size: 16px;
+        cursor: pointer;
+    }
+    
+    .AcademicsModalsubTitle {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 21px;
+        color: #16BC5D;
+        margin-bottom: 20px;
+    }
+    
+    .AcademicsModalFlex {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        margin-bottom: 20px;
+    }
+    
+    .AcademicsModalFlex2 {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        text-align: right;
+        color: #333333;
+    }
+    
+    .AcademicsModaRegisterButtonCon {
+        text-align: right;
+        font-size: 12px;
+    }
+    
+    .AcademicsModaRegisterButton {
+        padding: 9px 25px;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 21px;
+        color: #FFFFFF;
+        background: #16BC5D;
+        border-radius: 25px;
+    }
+    
+    .AcademicsModaRegisterButton:hover {
+        cursor: pointer;
+        border: 1px solid #16BC5D;
+        color: #16BC5D;
+        background: #FFFFFF;
+    }
+    
+    .AcademicsModalInput {
+        margin-bottom: 20px;
+    }
+    
+    .AcademicsModalFlex2 .entryInput {
+        width: 50px;
+    }
+    
+    .AcademicsModalFlex2 .AcademicsModalEntries select {
+        margin: 0 10px;
+        padding: 5px;
+        border: 1px solid #828282 !important;
+        box-sizing: border-box;
+        border-radius: 3px;
+    }
+    
+    .AcademicsModalFlex2 input {
+        margin: 0 10px;
+        padding: 5px;
+        border: 1px solid #828282 !important;
+        box-sizing: border-box;
+        border-radius: 3px;
+    }
+    
+    .AcademicsModalPagination {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 18px;
+        color: #333333;
+    }
+    
+    .AcademicModalTable .AcademicModalCheckBox {
+        width: 20px;
+    }
+    
+    .FINANCES-Table-collumn {
+        display: none;
+    }
+    
+    .AcademicModalCheckBoxBorder {
+        /* border: 1px solid #df4d0a !important; */
+    }
+    /*............. Mobile View ..........*/
+    /*............. Burger Nav ..........*/
+    
+    .TopMenuInputContainer {
+        display: none;
+    }
+    
+    @media (max-width: 1074px) {
+        .MuiTextField-root {
+            width: 14ch !important;
+            margin: 4px !important;
+        }
+    }
+    
+    @media (max-width: 1044px) {
+        /*---------- Side Menu ------------*/
+        .menu-btnFlex {
+            display: flex;
+            flex-wrap: nowrap;
+        }
+    }
+    /*............ 1024px ...........*/
+    
+    @media (max-width: 1024px) {
+        .admin-login {
+            margin: 0px 70px;
+        }
+        .student-landing .login-img .student-img {
+            position: absolute;
+            width: 258px;
+            height: 197px;
+            left: 300px;
+            top: 395px;
+            filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.15));
+            -webkit-filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.15));
+        }
+        .student-landing .student-logo-section .intro {
+            width: 379px;
+        }
+        .student-landing .login-img .login-design {
+            position: absolute;
+            width: 463px;
+            height: 250px;
+            left: 0px;
+            top: 434px;
+        }
+        .MuiTextField-root {
+            width: 13ch !important;
+            margin: 6px !important;
+        }
+    }
+    
+    @media (max-width: 1000px) {
+        .hideImage {
+            display: none;
+        }
+    }
+    
+    @media (max-width: 970px) {
+        table {
+            display: inline-block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .search,
+        .user-dp,
+        .user-dropdown,
+        .EdutableModalContainer {
+            display: none;
+        }
+        .user-group .notification .Bellnotification {
+            color: #16BC5D !important;
+            margin-right: 3px;
+            font-size: 23px !important;
+        }
+        .user-group .notification2 .Bellnotification {
+            display: inline-flex;
+            margin-right: 5px;
+            font-size: 25px !important;
+        }
+        /* .side-menu{
+            display: none;
+        } */
+        .top-menu .Hambuger {
+            color: #16BC5D !important;
+        }
+        .TopMenuInput {
+            width: 210px;
+            background: #F1F2F4;
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #F1F2F4;
+            border-radius: 50px;
+            margin: 8px 0;
+            padding: 5px 10px;
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 21px;
+            color: #BDBDBD;
+            outline: none;
+        }
+        .TopMenuInputContainer {
+            display: flex;
+            justify-content: center;
+        }
+        .HambugerBody {
+            margin: 0 5px 0 0;
+            display: inline;
+        }
+        .breadcrumbs {
+            width: 100%;
+            display: block;
+        }
+        .title-section {
+            margin-bottom: 20px;
+        }
+        .last-login-detail .last-login,
+        .last-login-detail .today-date {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 10px;
+            line-height: 21px;
+            color: #000000;
+        }
+        .side-menu {
+            /* display:none;
+        position: absolute;
+        z-index: 10; */
+        }
+        .side-menuClose {
+            position: absolute;
+            top: 0;
+            left: -250px;
+            z-index: 1;
+            height: 250vh;
+            width: 250px;
+            margin-left: 0px;
+            background: #16BC5D;
+            transition: all .5s ease;
+        }
+        .side-menuOpen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            height: 250vh;
+            width: 250px;
+            margin-left: 0px;
+            background: #16BC5D;
+            transition: all .5s ease;
+        }
+        .HambugerButton {
+            display: inline;
+            border: none;
+            background-color: #fff;
+        }
+        .CloseButtonBody {
+            display: inline;
+            border: none;
+            background-color: #FDC600;
+        }
+        .CloseButton {
+            display: inline;
+            margin: 0 0 10px 20px;
+            font-size: larger !important;
+        }
+        /*---------- Student Info ------------*/
+        .studentInfoContainer {
+            display: block;
+            text-align: center;
+            margin: 0 2rem 20px 2rem;
+            border-bottom: 1px solid #FDC600;
+        }
+        .studentInfoNameContainer {
+            color: #000000;
+            margin-bottom: 15px;
+        }
+        .studentInfoName {
+            background-color: #FDC600;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 10px;
+            line-height: 15px;
+            color: #000000;
+            margin: 10px 0;
+        }
+        .studentInfoFullName {
+            font-size: 10px;
+            line-height: 15px;
+            color: #FFFFFF;
+            margin: 10px 0;
+        }
+        /*---------- Student Mobile View ------------*/
+        .StudentDetailsWrapper li {
+            padding: 0 0.2rem;
+            list-style-type: none;
+        }
+        .StudentProfileContainer img {
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 2px;
+            margin: 0px 3px 3px 10px;
+        }
+        .StudentProfileDetailsContainer {
+            display: flex;
+            flex-wrap: nowrap;
+            padding: 10px;
+        }
+        .StudentDetailsWrapper li {
+            padding: 0 1rem;
+            list-style-type: none;
+        }
+        /*.....NEW STUDENT......*/
+        .StudentMargin {
+            margin: 0 10px 0 3px;
+        }
+        .StudentProfileContainer {
+            width: 60px;
+            height: 80px;
+        }
+        .NewstudentProfileWrapper {
+            padding: 5px 0 15px 0;
+            width: 80vw;
+        }
+        .NewstudentProfileWrapper li {
+            font-size: 10px;
+            line-height: 10px;
+        }
+        .NewstudentProfileWrapper ul {
+            padding: 8px;
+            margin: 0 0 0 10px;
+        }
+        .NewstudentProfileWrapper ul div {
+            margin-top: 10px;
+        }
+        .StudentProfileDetailsCard {
+            background-color: #F0F1F3;
+            padding: 0 15px;
+            height: 100vh;
+        }
+        /*............. Student Form Container ............*/
+        .StudentFormContainer,
+        .StdentProfileFormWrapper .editButton {
+            margin: 10px 0px;
+        }
+        /*............. EduTable subContainer ..........*/
+        .EdutableDateNdUnit {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: nowrap;
+            margin-top: 20px;
+        }
+        /*............. EduTable Date Nd Unit ..........*/
+        .EdutableDateNdUnit {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 5px;
+        }
+        /*................ FINANCE TABLE ..............*/
+    }
+    
+    @media (max-width: 800px) {
+        .admin-login {
+            height: 100vh;
+            overflow: hidden;
+            margin: 10px 30px;
+        }
+        /*............. Student Objective .........*/
+        .StudentProfileBody {
+            height: 170vh;
+        }
+        body {
+            width: 100%;
+        }
+    }
+    /*............ 801PX ...........*/
+    
+    @media (max-width: 810px) {
+        /*................ FINANCE TABLE ..............*/
+        .FINANCES-Table-collumn {
+            display: none;
+        }
+        .FINANCESmy-custom-scrollbar {
+            position: relative;
+            height: 200px;
+            width: 120vw;
+            overflow: auto;
+        }
+        .FINANCEStable-wrapper-scroll-y {
+            display: block;
+        }
+        .FINANCEStable-wrapper-scroll-y th {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 15px;
+            color: #333333;
+            background: #F2F2F2!important;
+            height: 30px !important;
+            border: none !important;
+        }
+        .FINANCEStable-wrapper-scroll-y td {
+            font-family: Poppins;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 18px;
+            color: #333333;
+            height: 30px !important;
+        }
+        .FINANCEStable-wrapper-scroll-y .FINANCESTableContentColor {
+            color: #16BC5D;
+        }
+    }
+    
+    @media (max-width: 769px) {
+        .admin-login .student-icon .iconify {
+            margin-left: 20%;
+        }
+        .admin-login .header {
+            margin-left: 0%;
+        }
+        .admin-login {
+            margin: 0 0 0 10%;
+        }
+        .MuiTextField-root {
+            width: 13ch !important;
+            margin: 6px !important;
+        }
+    }
+    
+    @media (max-width: 650) {
+        .StudentProfileDetailsCard {
+            background-color: #ffffff;
+            padding: 0 10px;
+            height: 10vh;
+        }
+    }
+    
+    @media (max-width: 615px) {
+        .MuiTextField-root {
+            width: 15ch !important;
+            margin: 8px !important;
+        }
+    }
+    
+    @media (max-width: 546px) {
+        .MuiTextField-root {
+            width: 15ch !important;
+            margin: 5px !important;
+        }
+        .makeInvisible {
+            display: none;
+        }
+    }
+    
+    @media (max-width: 465px) {
+        /*............. Student Objective .........*/
+        .EduObjoverflow {
+            width: 500px;
+            overflow: auto;
+        }
+        .overflow {
+            width: 460px;
+            height: 200px;
+            overflow: auto;
+        }
+        body {
+            width: 100%;
+        }
+        .StudentProfileDetailsCard {
+            background-color: #F0F1F3;
+            padding: 0 10px;
+            height: 180vh;
+        }
+        .MuiTextField-root {
+            width: 17ch !important;
+            margin: 5px !important;
+        }
+        .my-custom-scrollbar {
+            position: relative;
+            width: 340px;
+            height: 200px;
+            overflow: auto;
+        }
+        .EdutableButtonRC {
+            width: 100%;
+        }
+        .EdutableButtonRCA {
+            width: 85%;
+        }
+    }
+    
+    @media (max-width: 402px) {
+        /*............. Student Objective .........*/
+        .EduObjoverflow {
+            width: 400px;
+            overflow: auto;
+        }
+        .overflow {
+            width: 400px;
+            height: 200px;
+            overflow: auto;
+        }
+        body {
+            width: 100%;
+        }
+        .MuiTextField-root {
+            width: 15ch !important;
+            margin: 4px !important;
+        }
+        .StudentProfileDetailsCard {
+            background-color: #F0F1F3;
+            padding: 0 10px;
+            height: 180vh;
+        }
+    }
+    
+    @media (max-width: 376px) {
+        table {
+            display: inline-block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        table tbody,
+        table thead {
+            display: table;
+            width: 100%;
+        }
+        .MuiTextField-root {
+            width: 15ch !important;
+            margin: 4px !important;
+        }
+        .my-custom-scrollbar {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            overflow: auto;
+        }
+    }
+    
+    @media (max-width: 360px) {
+        /*............. Student Profile .........*/
+        .MuiTextField-root {
+            width: 15ch !important;
+            margin: 4px !important;
+        }
+        .StudentProfileDetailsCard {
+            background-color: #FFFFFF;
+            padding: 0 10px;
+            height: 200vh;
+        }
+        .my-custom-scrollbar {
+            position: relative;
+            width: 340px;
+            height: 200px;
+            overflow: auto;
+        }
+        /* .Edumy-custom-scrollbar {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    overflow: auto;
+    } */
+    }
+    
+    @media (max-width: 359px) {
+        /*............. Student Profile .........*/
+        .MuiTextField-root {
+            width: 13ch !important;
+            margin: 5px !important;
+        }
+        .StudentProfileDetailsCard {
+            background-color: #FFFFFF;
+            padding: 0 1px;
+            height: 200vh;
+        }
+    }
+    
+    @media (max-width: 325px) {
+        .my-custom-scrollbar {
+            position: relative;
+            width: 250px;
+            height: 200px;
+            overflow: auto;
+        }
+    }
+    
+    @media (max-width: 300px) {
+        /*............. Student Profile .........*/
+        .MuiTextField-root {
+            width: 12ch !important;
+            margin: 5px !important;
+        }
+        .StudentProfileDetailsCard {
+            background-color: #FFFFFF;
+            padding: 0 1px;
+            height: 200vh;
+        }
+    }
+    
+    @media (max-width: 290px) {
+        .my-custom-scrollbar {
+            position: relative;
+            width: 220px;
+            height: 200px;
+            overflow: auto;
+        }
+    }
+    
+    .Edu-Table-Height {
+        height: 100% !important;
+    }
+    
+    .finance-select-field {
+        margin: 0 100px 0 0 !important;
+    }
+    /* #login-select-field{
+    width: 900px!important;
+} */
+    
+    #student-login-text>div>div {
+        width: 190%;
+        height: 50px;
+        margin: 0 0 0 -50%;
+    }
+    
+    #student-login-text>div>label {
+        margin: 0 0 0 -50%;
+    }
+
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(1) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(2) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(3) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(4) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(5) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(6) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(7) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(8) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(9) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(10) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(11) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(12) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(13) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(14) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(15) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(16) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(17) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(18) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(19) > div,
+    #root > div > div > div.topbar > div.StudentProfileDetailsCard > div > div.StdentProfileFormContainer > div > div:nth-child(2) > div > form > div:nth-child(2) > div:nth-child(20) > div{
+        width: 150px;
+        margin: 5px;
+        background-color: #fff;
+    }
+    .login-section .login section input[placeholder] {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    width: 100%;
+    line-height: 21px;
+    background-color: #fff;
+    color: #333333;
+}

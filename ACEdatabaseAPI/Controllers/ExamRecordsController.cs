@@ -49,6 +49,34 @@ namespace ACEdatabaseAPI.Controllers
         [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
+        [Route("Student/Records/Get")]
+        public IActionResult Get()
+        {
+            try
+            {
+                if (User.IsInRole("Student"))
+                {
+                    var currentAcadYear = _currentAcadYearRepo.GetAll().FirstOrDefault();
+                    var student = _userManager.FindByNameAsync(User.Identity.Name).Result;
+                    var result = _vExamRecordsRepo.GetAll().Where(x => x.StudentID == Guid.Parse(student.Id)
+                        && x.AcademicYearID == currentAcadYear.AcademicYearID && x.SemesterID == currentAcadYear.SemesterID).ToList();
+
+                    return Ok(result);
+                }
+                return Unauthorized();
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<vExamRecords>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
         [Route("CurrentAcademicYear/CurrentSemester/Get/{StudentID}")]
         public IActionResult Get(Guid StudentID)
         {

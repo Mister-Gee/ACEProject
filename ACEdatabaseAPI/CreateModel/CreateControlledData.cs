@@ -11,4 +11,10 @@ namespace ACEdatabaseAPI.CreateModel
         [Required]
         public string Name { get; set; }
     }
+
+    public class CreateAcademicYear : CreateControlledData
+    {
+        public DateTime Year { get; set; }
+
+    }
 }

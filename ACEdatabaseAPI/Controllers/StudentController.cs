@@ -6,6 +6,7 @@ using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.DTOModel;
 using ACEdatabaseAPI.Model;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,15 +26,17 @@ namespace ACEdatabaseAPI.Controllers
         IDepartmentRepo _deptRepo;
         private readonly IMapper _mapper;
         IvStudentRepo _vStudentRepo;
+        IAcademicYearRepo _acadRepo;
 
         public StudentController(UserManager<ApplicationUser> userManager, IMapper mapper, ApplicationDbContext context, IDepartmentRepo deptRepo,
-            IvStudentRepo vStudentRepo)
+            IvStudentRepo vStudentRepo, IAcademicYearRepo acadRepo)
         {
             _userManager = userManager;
             _mapper = mapper;
             _context = context;
             _deptRepo = deptRepo;
             _vStudentRepo = vStudentRepo;
+            _acadRepo = acadRepo;
         }
 
 
@@ -200,6 +203,50 @@ namespace ACEdatabaseAPI.Controllers
                 var result = _vStudentRepo.FindBy(x => x.DepartmentID == DepartmentID && x.MatricNumber != null && x.Status == "Active").ToList();
                 
                 return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(RegisteredStudentChartLineDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
+        [Route("RegisteredStudent/LineChart")]
+        public IActionResult RegisteredStudentLineChart()
+        {
+            try
+            {
+                var dto = new RegisteredStudentChartLineDTO();
+                List<string> sessionCount = new List<string>();
+                List<int> femaleStudentCount = new List<int>();
+                List<int> maleStudentCount = new List<int>();
+                var femaledata = new GenderData();
+                var maledata = new GenderData();
+                femaledata.Label = "Female";
+                maledata.Label = "Male";
+
+                var acadYear = _acadRepo.GetAll().OrderByDescending(x => x.Year).Take(10);
+                foreach(var year in acadYear)
+                {
+                    sessionCount.Add(year.Name);
+                    var student = _vStudentRepo.FindBy(x => x.AdmissionDate.Year == year.Year.Year);
+                    var maleStudent = student.Where(x => x.Gender.ToUpper() == "MALE").ToList();
+                    var femaleStudent = student.Where(x => x.Gender.ToUpper() == "FEMALE").ToList();
+                    femaleStudentCount.Add(femaleStudent.Count);
+                    maleStudentCount.Add(maleStudent.Count);
+                }
+                dto.Session = sessionCount;
+                femaledata.RegisteredStudentPerSession = femaleStudentCount;
+                maledata.RegisteredStudentPerSession = maleStudentCount;
+
+                dto.FemaleStudents = femaledata;
+                dto.MaleStudents = maledata;
+                return Ok(dto);
             }
             catch (Exception x)
             {
