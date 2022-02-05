@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace ACE.Domain.Concrete
 {
-    public class EFvUserRoleRepo : GenericRepository<vUserRole>, IvUserRoleRepo
+    public class EFvUserRoleRepo : GenericViewRepository<vUserRole>, IvUserRoleRepo
     {
-        public EFvUserRoleRepo(ACEContext context) : base(context)
+        public EFvUserRoleRepo(ACEViewContext context) : base(context)
         {
 
         }

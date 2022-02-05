@@ -206,6 +206,8 @@ namespace ACE.Domain.Data
         }
 
         public virtual DbSet<vStaff> vStaffs { get; set; }
+        public virtual DbSet<vDepartment> vDepartments { get; set; }
+        public virtual DbSet<vUserRole> VUserRoles { get; set; }
         public virtual DbSet<vStudent> vStudents { get; set; }
         public virtual DbSet<vCourse> vCourses { get; set; }
         public virtual DbSet<vCourseRegisteration> vCourseRegisterations { get; set; }

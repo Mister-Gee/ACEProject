@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ACE.Domain.Abstract
 {
-    public interface IvUserRoleRepo : IGenericRepository<vUserRole>
+    public interface IvUserRoleRepo : IGenericViewRepository<vUserRole>
     {
 
     }

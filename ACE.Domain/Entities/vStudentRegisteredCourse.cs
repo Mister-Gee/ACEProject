@@ -11,6 +11,8 @@ namespace ACE.Domain.Entities
         public Guid Id { get; set; }
         public Guid StudentId { get; set; }
         public string StudentMatricNumber { get; set; }
+        public string StudentDepartment { get; set; }
+        public Guid StudentDepartmentId { get; set; }
         public Guid CourseRegisterationID { get; set; }
         public Guid CourseID { get; set; }
         public string Course { get; set; }

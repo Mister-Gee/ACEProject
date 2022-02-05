@@ -1,4 +1,5 @@
 ﻿using ACE.Domain.Abstract;
+using ACE.Domain.Entities;
 using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.Model;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace ACEdatabaseAPI.Controllers
 {
 	[Route("[controller]")]
-	[Authorize("MIS")]
+	//[Authorize("MIS")]
     public class RoleController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -53,6 +54,38 @@ namespace ACEdatabaseAPI.Controllers
 			}
 			catch(Exception x)
             {
+				return StatusCode((int)HttpStatusCode.InternalServerError,
+					new ApiError((int)HttpStatusCode.InternalServerError,
+						HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+			}
+
+		}
+
+		[HttpGet]
+		[ProducesResponseType(typeof(List<vUserRole>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ApiError),
+			StatusCodes.Status500InternalServerError)]
+		[Route("Staff")]
+		public IActionResult GetStaffRole()
+		{
+			try
+			{
+				var userRoles = _vUserRoleRepo.FindBy(x => x.Role.ToUpper() != "STUDENT").ToList();
+				var result = userRoles.GroupBy(x => x.UserId).Select(x => new vUserRole { 
+					UserId = x.First().UserId,
+					RoleId = x.First().RoleId,
+					Email = x.First().Email,
+					FirstName = x.First().FirstName,
+					LastName = x.First().LastName,
+					Role = string.Join(", ", x.Select(y => y.Role)),
+					StaffID = x.First().StaffID,
+					MatricNumber = x.First().MatricNumber
+				}).ToList();
+
+				return Ok(result);
+			}
+			catch (Exception x)
+			{
 				return StatusCode((int)HttpStatusCode.InternalServerError,
 					new ApiError((int)HttpStatusCode.InternalServerError,
 						HttpStatusCode.InternalServerError.ToString(), x.ToString()));

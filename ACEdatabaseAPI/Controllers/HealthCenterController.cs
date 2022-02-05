@@ -609,7 +609,7 @@ namespace ACEdatabaseAPI.Controllers
 
         [HttpPut]
         [Route("Records/Staff/Edit/{ID}")]
-        public IActionResult EditStaffMedicalRecord(Guid ID, CreateStaffMedicalRecord model)
+        public IActionResult EditStaffMedicalRecord(Guid ID, EditStaffMedicalRecord model)
         {
             try
             {

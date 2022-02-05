@@ -5,6 +5,7 @@ using ACEdatabaseAPI.CreateModel;
 using ACEdatabaseAPI.Data;
 using ACEdatabaseAPI.DTOModel;
 using ACEdatabaseAPI.Model;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,10 +33,11 @@ namespace ACEdatabaseAPI.Controllers
         ICurrentAcademicSessionRepo _currentAcadRepo;
         IvStudentRegisteredCourseRepo _vStudentRegCourseRepo;
         ICourseRepo _courseRepo;
+        IMapper _mapper;
         public ExamAttendanceController(IExamAttendanceRepo examAttRepo, UserManager<ApplicationUser> userManager,
                                     IAcademicYearRepo acadYearRepo,  ISemesterRepo semesterRepo, IExamTimetableRepo examTTRepo,
                                     IvExamAttendanceRepo vExamAttRepo, ICurrentAcademicSessionRepo currentAcadRepo,
-                                    IvStudentRegisteredCourseRepo vStudentRegCourseRepo, ICourseRepo courseRepo)
+                                    IvStudentRegisteredCourseRepo vStudentRegCourseRepo, ICourseRepo courseRepo, IMapper mapper)
         {
             _userManager = userManager;
             _examAttRepo = examAttRepo;
@@ -46,10 +48,11 @@ namespace ACEdatabaseAPI.Controllers
             _currentAcadRepo = currentAcadRepo;
             _vStudentRegCourseRepo = vStudentRegCourseRepo;
             _courseRepo = courseRepo;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<vExamAttendance>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<ExamAttendanceDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
         [Route("CurrentSession/Get/{CourseID}")]
@@ -60,8 +63,15 @@ namespace ACEdatabaseAPI.Controllers
                 if (User.IsInRole("Exam&Records"))
                 {
                     var currentAcad = _currentAcadRepo.GetAll().FirstOrDefault();
+                    List<ExamAttendanceDTO> listResult = new List<ExamAttendanceDTO>();
                     var result = _vExamAttRepo.GetAll().Where(x => x.CourseID == CourseID && x.AcademicYearID == currentAcad.AcademicYearID && x.SemesterID == currentAcad.SemesterID).ToList();
-                    return Ok(result);
+                    foreach(var item in result)
+                    {
+                        var data = new ExamAttendanceDTO();
+                        var newItem = _mapper.Map<vExamAttendance, ExamAttendanceDTO>(item, data);
+                        listResult.Add(newItem);
+                    }
+                    return Ok(listResult);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -84,9 +94,16 @@ namespace ACEdatabaseAPI.Controllers
             {
                 if (User.IsInRole("Exam&Records"))
                 {
-                   
+                    var currentAcad = _currentAcadRepo.GetAll().FirstOrDefault();
+                    List<ExamAttendanceDTO> listResult = new List<ExamAttendanceDTO>();
                     var result = _vExamAttRepo.GetAll().Where(x => x.CourseID == CourseID && x.AcademicYearID == AcademicYearID && x.SemesterID == SemesterID).ToList();
-                    return Ok(result);
+                    foreach (var item in result)
+                    {
+                        var data = new ExamAttendanceDTO();
+                        var newItem = _mapper.Map<vExamAttendance, ExamAttendanceDTO>(item, data);
+                        listResult.Add(newItem);
+                    }
+                    return Ok(listResult);
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
@@ -404,7 +421,6 @@ namespace ACEdatabaseAPI.Controllers
                         HttpStatusCode.InternalServerError.ToString(), x.ToString()));
             }
         }
-
 
     }
 }

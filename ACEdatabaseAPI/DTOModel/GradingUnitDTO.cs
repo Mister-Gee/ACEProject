@@ -7,6 +7,7 @@ namespace ACEdatabaseAPI.DTOModel
 {
     public class GradingUnitDTO
     {
+        public Guid Id { get; set; }
         public int StartingScore { get; set; }
         public int EndingScore { get; set; }
         public int GradePoint { get; set; }

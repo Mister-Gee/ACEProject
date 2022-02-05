@@ -384,3 +384,4 @@ C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Rel
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\bin\Release\net5.0\linux-x64\EPPlus.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\bin\Release\net5.0\linux-x64\Microsoft.IO.RecyclableMemoryStream.dll
 C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\bin\Release\net5.0\linux-x64\System.Xml.XPath.XmlDocument.dll
+C:\Users\Fakuade Gbenga\Documents\Projects\ACE\ACEProject\ACEdatabaseAPI\obj\Release\net5.0\linux-x64\ACEdatabaseAPI.csproj.CopyComplete

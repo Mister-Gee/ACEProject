@@ -639,7 +639,15 @@ namespace ACEdatabaseAPI.Controllers
                             Message = "User Not Found"
                         });
                     }
-                    user.isDisabled = model.ActiveStatus;
+                    if (model.ActiveStatus)
+                    {
+                        user.Status = "Active";
+                    }
+                    else
+                    {
+                        user.Status = "Inactive";
+                    }
+                    
 
                     var result = _userManager.UpdateAsync(user).Result;
                     if (result.Succeeded)
@@ -678,7 +686,14 @@ namespace ACEdatabaseAPI.Controllers
                             Message = "User Not Found"
                         });
                     }
-                    user.isDisabled = model.ActiveStatus;
+                    if (model.ActiveStatus)
+                    {
+                        user.Status = "Active";
+                    }
+                    else
+                    {
+                        user.Status = "Inactive";
+                    }
 
                     var result = _userManager.UpdateAsync(user).Result;
                     if (result.Succeeded)
@@ -718,7 +733,14 @@ namespace ACEdatabaseAPI.Controllers
                             Message = "User Not Found"
                         });
                     }
-                    user.isDisabled = model.ActiveStatus;
+                    if (model.ActiveStatus)
+                    {
+                        user.Status = "Active";
+                    }
+                    else
+                    {
+                        user.Status = "Inactive";
+                    }
 
                     var result = _userManager.UpdateAsync(user).Result;
                     if (result.Succeeded)
@@ -758,7 +780,14 @@ namespace ACEdatabaseAPI.Controllers
                             Message = "User Not Found"
                         });
                     }
-                    user.isDisabled = model.ActiveStatus;
+                    if (model.ActiveStatus)
+                    {
+                        user.Status = "Active";
+                    }
+                    else
+                    {
+                        user.Status = "Inactive";
+                    }
 
                     var result = _userManager.UpdateAsync(user).Result;
                     if (result.Succeeded)

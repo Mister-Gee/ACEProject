@@ -212,6 +212,9 @@ namespace ACEdatabaseAPI.Controllers
                         timetable.ExamDateTime = model.ExamDateTime;
                         timetable.SemesterID = currentAcadYear.SemesterID;
                         timetable.SupervisorID = model.SupervisorID;
+                        timetable.ExamDuration = model.ExamDuration;
+                        timetable.ExamStartTime = model.ExamStartTime;
+                        timetable.Venue = model.Venue;
                         _examTTRepo.Add(timetable);
                         _examTTRepo.Save(User.Identity.Name, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new
@@ -270,6 +273,9 @@ namespace ACEdatabaseAPI.Controllers
                         timetable.CourseID = model.CourseID;
                         timetable.ExamDateTime = model.ExamDateTime;
                         timetable.SupervisorID = model.SupervisorID;
+                        timetable.ExamDuration = model.ExamDuration;
+                        timetable.ExamStartTime = model.ExamStartTime;
+                        timetable.Venue = model.Venue;
                         _examTTRepo.Edit(timetable);
                         _examTTRepo.Save(User.Identity.Name, HttpContext.Connection.RemoteIpAddress.ToString());
                         return Ok(new

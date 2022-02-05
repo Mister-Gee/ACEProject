@@ -39,6 +39,7 @@ namespace ACEdatabaseAPI.Controllers
                 {
                     var gradingunitDTO = new GradingUnitDTO();
                     var scoreRangeArray = JsonConvert.DeserializeObject<List<int>>(unit.ScoreRange);
+                    gradingunitDTO.Id = unit.ID;
                     gradingunitDTO.StartingScore = scoreRangeArray.FirstOrDefault();
                     gradingunitDTO.EndingScore = scoreRangeArray.LastOrDefault();
                     gradingunitDTO.GradePoint = unit.GradePoint;

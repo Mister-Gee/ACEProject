@@ -31,7 +31,7 @@ namespace ACEdatabaseAPI.MapProfile
 
     public class StudentDTOProfile : Profile
     {
-      
+
         public StudentDTOProfile()
         {
             CreateMap<ApplicationUser, StudentDTO>()
@@ -87,6 +87,17 @@ namespace ACEdatabaseAPI.MapProfile
         {
             CreateMap<StudentRegisteredCourse, RegisterCourse>()
               .ReverseMap();
+        }
+    }
+
+    public class ExamAttendanceProfile : Profile
+    {
+        public ExamAttendanceProfile()
+        {
+            CreateMap<vExamAttendance, ExamAttendanceDTO>()
+                .ForMember(destinationMember => destinationMember.ExamStartingStudents, memberOptions => memberOptions.MapFrom(x => JsonConvert.DeserializeObject<List<Guid>>(x.ExamStartingStudents)))
+                .ForMember(destinationMember => destinationMember.ExamEndingStudents, memberOptions => memberOptions.MapFrom(x => JsonConvert.DeserializeObject<List<Guid>>(x.ExamEndingStudents)))
+                .ReverseMap();
         }
     }
 }

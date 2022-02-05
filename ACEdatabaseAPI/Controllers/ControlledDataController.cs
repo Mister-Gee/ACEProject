@@ -21,6 +21,7 @@ namespace ACEdatabaseAPI.Controllers
         ILevelRepo _levelRepo;
         ISchoolRepo _schoolRepo;
         IDepartmentRepo _deptRepo;
+        IvDepartmentRepo _vDeptRepo;
         IGenderRepo _genderRepo;
         IProgrammeRepo _progRepo;
         IStudentCategoryRepo _studentCategoryRepo;
@@ -35,13 +36,14 @@ namespace ACEdatabaseAPI.Controllers
         public ControlledDataController(IReligionRepo religionRepo, IMaritalStatusRepo maritalStatusRepo, IStudentCategoryRepo studentCategoryRepo,
             ILevelRepo levelRepo, ISchoolRepo schoolRepo, IDepartmentRepo deptRepo, IGenderRepo genderRepo, IProgrammeRepo progRepo,
             IBloodGroupRepo bloodGroupRepo, IGenotypeRepo genotypeRepo, IFlagLevelRepo flagLevelRepo, IMedicalConditionRepo medConRepo,
-            IAcademicYearRepo acadYearRepo, ISemesterRepo semesterRepo)
+            IAcademicYearRepo acadYearRepo, ISemesterRepo semesterRepo, IvDepartmentRepo vDeptRepo)
         {
             _religionRepo = religionRepo;
             _maritalStatusRepo = maritalStatusRepo;
             _levelRepo = levelRepo;
             _schoolRepo = schoolRepo;
             _deptRepo = deptRepo;
+            _vDeptRepo = vDeptRepo;
             _genderRepo = genderRepo;
             _progRepo = progRepo;
             _studentCategoryRepo = studentCategoryRepo;
@@ -896,7 +898,7 @@ namespace ACEdatabaseAPI.Controllers
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<Department>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<vDepartment>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
         [Route("Department/All")]
@@ -904,7 +906,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                var result = _deptRepo.GetAll().ToList();
+                var result = _vDeptRepo.GetAll().ToList();
                 return Ok(result);
             }
             catch (Exception x)

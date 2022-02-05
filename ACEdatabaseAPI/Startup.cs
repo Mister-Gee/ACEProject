@@ -215,6 +215,8 @@ namespace ACE
             services.AddScoped<IvExamRecordsRepo, EFvExamRecordsRepo>();
             services.AddScoped<IvExamTimetableRepo, EFvExamTimetableRepo>();
             services.AddScoped<IvFlagRepo, EFvFlagRepo>();
+            services.AddScoped<IvDepartmentRepo, EFvDepartmentRepo>();
+
 
 
 

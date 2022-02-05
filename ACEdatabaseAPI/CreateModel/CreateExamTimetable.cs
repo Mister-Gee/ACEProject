@@ -16,5 +16,8 @@ namespace ACEdatabaseAPI.CreateModel
 
         [Required]
         public Guid SupervisorID { get; set; }
+        public string ExamStartTime { get; set; }
+        public string ExamDuration { get; set; }
+        public string Venue { get; set; }
     }
 }

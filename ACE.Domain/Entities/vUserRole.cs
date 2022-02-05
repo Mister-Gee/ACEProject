@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,13 +9,14 @@ namespace ACE.Domain.Entities
 {
     public class vUserRole
     {
-        public string Id { get; set; }
-        public string UserName { get; set; }
+        [Key]
+        public string UserId { get; set; }
+        public string RoleId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string RoleName { get; set; }
-        public string RoleFriendlyName { get; set; }
-        public DateTime Date { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
+        public string StaffID { get; set; }
+        public string MatricNumber { get; set; }
     }
 }

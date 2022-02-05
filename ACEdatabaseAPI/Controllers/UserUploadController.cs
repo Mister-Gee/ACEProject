@@ -16,7 +16,7 @@ namespace ACEdatabaseAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize("MIS")]
+    //[Authorize("MIS")]
     public class UserUploadController : ControllerBase
     {
         IExcelHelper _excelHelper;

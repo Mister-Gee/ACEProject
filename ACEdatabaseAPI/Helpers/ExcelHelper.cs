@@ -31,7 +31,7 @@ namespace ACEdatabaseAPI.Helpers
             _courseRepo = courseRepo;
             _examTTRepo = examTTRepo;
         }
-        public async Task<(Status, List<string>, List<string>)> readStaffXLS(Stream fileStream) 
+        public async Task<(Status, List<string>, List<string>)> readStaffXLS(MemoryStream fileStream) 
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new ExcelPackage(fileStream))
@@ -85,7 +85,7 @@ namespace ACEdatabaseAPI.Helpers
             }
         }
 
-        public async Task<(Status, List<string>, List<string>)> readReturnStudentXLS(Guid ProgrammeID, Guid LevelID, Guid DepartmentID, Stream fileStream)
+        public async Task<(Status, List<string>, List<string>)> readReturnStudentXLS(Guid ProgrammeID, Guid LevelID, Guid DepartmentID, MemoryStream fileStream)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new ExcelPackage(fileStream))
@@ -173,7 +173,7 @@ namespace ACEdatabaseAPI.Helpers
             }
         }
 
-        public async Task<(Status, List<string>, List<string>)> readNewStudentXLS(Guid ProgrammeID, Guid LevelID, Guid DepartmentID, Stream fileStream)
+        public async Task<(Status, List<string>, List<string>)> readNewStudentXLS(Guid ProgrammeID, Guid LevelID, Guid DepartmentID, MemoryStream fileStream)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new ExcelPackage(fileStream))
@@ -182,7 +182,7 @@ namespace ACEdatabaseAPI.Helpers
                 List<string> successAccounts = new List<string>();
 
 
-                //get the first worksheet in the workbook
+                //get the fi rst worksheet in the workbook
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                 int colCount = worksheet.Dimension.End.Column;  //get Column Count
                 int rowCount = worksheet.Dimension.End.Row;     //get row count
@@ -234,7 +234,7 @@ namespace ACEdatabaseAPI.Helpers
             }
         }
 
-        public async Task<(Status, List<string>)> ExamTimeTable(string username, string ip, Stream fileStream)
+        public async Task<(Status, List<string>)> ExamTimeTable(string username, string ip, MemoryStream fileStream)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (ExcelPackage package = new ExcelPackage(fileStream))

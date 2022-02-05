@@ -9,6 +9,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,20 +27,24 @@ namespace ACEdatabaseAPI.Controllers
         ICourseRegisterationRepo _courseRegRepo;
         IAcademicYearRepo _acadYearRepo;
         ICourseRepo _courseRepo;
+        IvCourseRepo _vCourseRepo;
         ISemesterRepo _semesterRepo;
         ICurrentAcademicSessionRepo _currentAcadRepo;
         IvCourseRegisterationRepo _vCourseRegRepo;
         IvStudentRegisteredCourseRepo _vCourseRegItemRepo;
+        IDepartmentRepo _deptRepo;
         public CourseRegisterationController(IStudentRegCourseRepo courseRegItemRepo, 
             IAcademicYearRepo acadYearRepo, ICourseRepo courseRepo, 
             ISemesterRepo semesterRepo, UserManager<ApplicationUser> userManager,
-            IvCourseRegisterationRepo vCourseRegRepo, ICurrentAcademicSessionRepo currentAcadRepo,
-            ICourseRegisterationRepo courseRegRepo, IvStudentRegisteredCourseRepo vCourseRegItemRepo)
+            IvCourseRegisterationRepo vCourseRegRepo, ICurrentAcademicSessionRepo currentAcadRepo, IDepartmentRepo deptRepo,
+            ICourseRegisterationRepo courseRegRepo, IvStudentRegisteredCourseRepo vCourseRegItemRepo, IvCourseRepo vCourseRepo)
         {
             _userManager = userManager;
             _courseRegItemRepo = courseRegItemRepo;
             _acadYearRepo = acadYearRepo;
+            _deptRepo = deptRepo;
             _courseRepo = courseRepo;
+            _vCourseRepo = vCourseRepo;
             _semesterRepo = semesterRepo;
             _vCourseRegRepo = vCourseRegRepo;
             _currentAcadRepo = currentAcadRepo;
@@ -215,7 +220,7 @@ namespace ACEdatabaseAPI.Controllers
         {
             try
             {
-                if (User.IsInRole("MIS") || User.IsInRole("Lecturer"))
+                if (User.IsInRole("MIS") || User.IsInRole("Lecturer") || User.IsInRole("Exam&Records"))
                 {
                     List<StudentNameDTO> studentDetails = new List<StudentNameDTO>();
                     var currentAcadYear = _currentAcadRepo.GetAll().FirstOrDefault();
@@ -232,6 +237,118 @@ namespace ACEdatabaseAPI.Controllers
                     }
                     return Ok(studentDetails);
 
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<CourseEligibleStudentByDepartmentDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)]
+        [Route("Student/Department/Registered/All/{CourseID}")]
+        public IActionResult RegisteredStudentByDepartment(Guid CourseID)
+        {
+            try
+            {
+                if (User.IsInRole("MIS") || User.IsInRole("Lecturer") || User.IsInRole("Exam&Records"))
+                {
+                    List<CourseEligibleStudentByDepartmentDTO> result = new List<CourseEligibleStudentByDepartmentDTO>();
+
+                    var currentAcadYear = _currentAcadRepo.GetAll().FirstOrDefault();
+                    var course = _vCourseRepo.FindBy(x => x.Id == CourseID).FirstOrDefault();
+
+                    if(course == null)
+                    {
+                        return BadRequest(new { 
+                            Message = "Course Doesn't Exist"
+                        });
+                    }
+
+                    if (course.isDepartmental)
+                    {
+                        var eligibleStudent = new CourseEligibleStudentByDepartmentDTO();
+                        eligibleStudent.Department = course.Department;
+                       
+                        var studentIDs = _vCourseRegItemRepo.FindBy(x => x.CourseID == CourseID && x.StudentDepartmentId == course.DepartmentID
+                        && x.AcademicYearID == currentAcadYear.AcademicYearID && x.SemesterID == currentAcadYear.SemesterID).Select(x => x.StudentId).ToList();
+                        List<StudentNameDTO> studentDetails = new List<StudentNameDTO>();
+                        foreach (var id in studentIDs)
+                        {
+                            var student = _userManager.FindByIdAsync(id.ToString()).Result;
+                            var studentDetail = new StudentNameDTO();
+                            studentDetail.Id = id;
+                            studentDetail.Name = student.FirstName + " " + student.LastName;
+                            studentDetail.MatricNumber = student.MatricNumber;
+                            studentDetails.Add(studentDetail);
+                        }
+                        eligibleStudent.Students = studentDetails;
+                        result.Add(eligibleStudent);
+                        return Ok(result);
+                    }
+
+                    if (course.isGeneral)
+                    {
+                        var depts = _deptRepo.GetAll().ToList();
+                        foreach(var dept in depts)
+                        {
+                            var eligibleStudent = new CourseEligibleStudentByDepartmentDTO();
+                            eligibleStudent.Department = dept.Name;
+                            var studentIDs = _vCourseRegItemRepo.FindBy(x => x.CourseID == CourseID && x.StudentDepartmentId == dept.Id
+                            && x.AcademicYearID == currentAcadYear.AcademicYearID && x.SemesterID == currentAcadYear.SemesterID).Select(x => x.StudentId).ToList();
+
+                            List<StudentNameDTO> studentDetails = new List<StudentNameDTO>();
+                            foreach (var id in studentIDs)
+                            {
+                                var student = _userManager.FindByIdAsync(id.ToString()).Result;
+                                var studentDetail = new StudentNameDTO();
+                                studentDetail.Id = id;
+                                studentDetail.Name = student.FirstName + " " + student.LastName;
+                                studentDetail.MatricNumber = student.MatricNumber;
+                                studentDetails.Add(studentDetail);
+                            }
+
+                            eligibleStudent.Students = studentDetails;
+                            result.Add(eligibleStudent);
+                        }
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        var eligibleDepts = JsonConvert.DeserializeObject<List<Guid>>(course.EligibleDepartments);
+                        foreach (var deptID in eligibleDepts)
+                        {
+                            var eligibleStudent = new CourseEligibleStudentByDepartmentDTO();
+                            var dept = _deptRepo.FindBy(x => x.Id == deptID).FirstOrDefault();
+                            eligibleStudent.Department = dept.Name;
+                            var studentIDs = _vCourseRegItemRepo.FindBy(x => x.CourseID == CourseID && x.StudentDepartmentId == deptID
+                            && x.AcademicYearID == currentAcadYear.AcademicYearID && x.SemesterID == currentAcadYear.SemesterID).Select(x => x.StudentId).ToList();
+
+                            List<StudentNameDTO> studentDetails = new List<StudentNameDTO>();
+                            foreach (var id in studentIDs)
+                            {
+                                var student = _userManager.FindByIdAsync(id.ToString()).Result;
+                                var studentDetail = new StudentNameDTO();
+                                studentDetail.Id = id;
+                                studentDetail.Name = student.FirstName + " " + student.LastName;
+                                studentDetail.MatricNumber = student.MatricNumber;
+                                studentDetails.Add(studentDetail);
+                            }
+
+                            eligibleStudent.Students = studentDetails;
+                            result.Add(eligibleStudent);
+                        }
+                        return Ok(result);
+                    }
+                    
                 }
                 return StatusCode((int)HttpStatusCode.Unauthorized,
                             new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),

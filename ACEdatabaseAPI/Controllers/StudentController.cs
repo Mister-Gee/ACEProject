@@ -46,7 +46,7 @@ namespace ACEdatabaseAPI.Controllers
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
         [Route("Get/All")]
-        public async Task<IActionResult> GetStudents()
+        public IActionResult GetStudents()
         {
             try
             {
@@ -62,11 +62,45 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<PartialUserDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+           StatusCodes.Status500InternalServerError)]
+        [Route("Partial/Get/All")]
+        public async Task<IActionResult> GetPartiallyRegisteredStudents()
+        {
+            try
+            {
+                List<PartialUserDTO> result = new List<PartialUserDTO>();
+                var users = _userManager.Users.Where(x => x.Status.ToUpper() == "ACTIVE" && x.MatricNumber == null).ToList();
+                foreach(var item in users)
+                {
+                   if(await _userManager.IsInRoleAsync(item, "Student"))
+                    {
+                        var student = new PartialUserDTO();
+                        student.Id = Guid.Parse(item.Id);
+                        student.Email = item.Email;
+                        student.FullName = item.FirstName + " " + item.LastName;
+                        student.PhoneNumber = item.PhoneNumber;
+
+                        result.Add(student);
+                    }
+                }
+                return Ok(result);
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
         [ProducesResponseType(typeof(ApplicationUser), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
         [Route("Cafe/Get")]
-        public async Task<IActionResult> CafeGetStudent(SearchByEmail model)
+        public IActionResult CafeGetStudent(SearchByEmail model)
         {
             try
             {
@@ -86,7 +120,7 @@ namespace ACEdatabaseAPI.Controllers
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
         [Route("Get/ID/{ID}")]
-        public async Task<IActionResult> GetStudentByID(Guid ID)
+        public IActionResult GetStudentByID(Guid ID)
         {
             try
             {
@@ -106,7 +140,7 @@ namespace ACEdatabaseAPI.Controllers
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
         [Route("Get/Email")]
-        public async Task<IActionResult> GetStudentByEmail(SearchByEmail model)
+        public IActionResult GetStudentByEmail(SearchByEmail model)
         {
             try
             {
@@ -131,7 +165,7 @@ namespace ACEdatabaseAPI.Controllers
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
         [Route("Get/MatricNumber")]
-        public async Task<IActionResult> GetStudentByMatricNumber(SearchByMatricNumber model)
+        public IActionResult GetStudentByMatricNumber(SearchByMatricNumber model)
         {
             try
             {
@@ -156,7 +190,7 @@ namespace ACEdatabaseAPI.Controllers
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
         [Route("Get/Biometric")]
-        public async Task<IActionResult> GetStudentByBiometric(SearchByBiometrics model)
+        public IActionResult GetStudentByBiometric(SearchByBiometrics model)
         {
             try
             {
@@ -190,7 +224,7 @@ namespace ACEdatabaseAPI.Controllers
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
         [Route("Department/Get/{DepartmentID}")]
-        public async Task<IActionResult> GetStudentsInDepartMent(Guid DepartmentID)
+        public IActionResult GetStudentsInDepartMent(Guid DepartmentID)
         {
             try
             {
@@ -211,6 +245,7 @@ namespace ACEdatabaseAPI.Controllers
                         HttpStatusCode.InternalServerError.ToString(), x.ToString()));
             }
         }
+
 
         [HttpGet]
         [ProducesResponseType(typeof(RegisteredStudentChartLineDTO), StatusCodes.Status200OK)]

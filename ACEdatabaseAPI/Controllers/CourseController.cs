@@ -178,6 +178,34 @@ namespace ACEdatabaseAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<vCourse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiError),
+            StatusCodes.Status500InternalServerError)] 
+        [Route("LoggedInLecturer/Get")]
+        public IActionResult GetLoggedInLecturerCourse(Guid LecturerID)
+        {
+            try
+            {
+                if (User.IsInRole("Lecturer") || User.IsInRole("MIS"))
+                {
+                    var user = _userManager.FindByEmailAsync(User.Identity.Name).Result;
+                    var result = _vCourseRepo.GetAll().Where(x => x.LeadLecturerID == Guid.Parse(user.Id) 
+                        || x.AssistantLecturerID == Guid.Parse(user.Id) || x.OtherCourseLecturerID == Guid.Parse(user.Id)).ToList();
+                    return Ok(result);
+                }
+                return StatusCode((int)HttpStatusCode.Unauthorized,
+                            new ApiError((int)HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(),
+                                "Unauthorized Access"));
+            }
+            catch (Exception x)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    new ApiError((int)HttpStatusCode.InternalServerError,
+                        HttpStatusCode.InternalServerError.ToString(), x.ToString()));
+            }
+        }
+
+        [HttpGet]
         [ProducesResponseType(typeof(vCourse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiError),
             StatusCodes.Status500InternalServerError)]
